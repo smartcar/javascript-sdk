@@ -37,28 +37,7 @@
   </head>
 
   <body>
-    <script src="scripts/sdk.js"></script>
-    <script>
-      // window.smartcarAsyncInit = function() {
-        var sdk = new SDK(
-          'ab3f8354-49ed-4670-8f53-e8300d65b387',
-          'http://localhost:5000/callback',
-          ['read_vehicle_info', 'read_odometer']
-        );
-      // };
 
-      // (function(d, s, id){
-      //    var js, sjs = d.getElementsByTagName(s)[0];
-      //    if (d.getElementById(id)) {return;}
-      //    js = d.createElement(s); js.id = id;
-      //    js.src = "scripts/sdk.js";
-      //    sjs.parentNode.insertBefore(js, sjs);
-      //  }(document, 'script', 'smartcar-jssdk'));
-    </script>
-
-    <script>
-      console.log(sdk.links());
-    </script>
     <span id="browser-sync-binding"></span>
     <div class="container">
 
@@ -70,16 +49,19 @@
 
       <div class="row">
         <div class="four columns offset-by-four">
-          <a class="button connect-button" style="background-color: #003399">Connect with Ford</a>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="four columns offset-by-four">
           <div id="smartcar-buttons"></div>
         </div>
       </div>
     </div>
+
+    <script src="scripts/sdk.js"></script>
+    <script>
+      SDK.init({
+        clientId: 'ab3f8354-49ed-4670-8f53-e8300d65b387',
+        redirectUri: 'http://localhost:5000/callback',
+        scope: ['read_vehicle_info', 'read_odometer']
+      });
+   </script>
   </body>
 </html>
 
