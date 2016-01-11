@@ -1,6 +1,7 @@
 'use strict';
 
 var gulp = require('gulp');
+var mochaPhantomJS = require('gulp-mocha-phantomjs');
 var browserSync = require('browser-sync');
 var reload = browserSync.reload;
 
@@ -29,4 +30,11 @@ gulp.task('demo', function() {
   gulp.watch(['src/*'], reload);
   gulp.watch(['demo/*'], reload);
 
+});
+
+// TODO: Setup JS Minification task
+
+gulp.task('test', function() {
+  return gulp.src('test/test.html', {read: false})
+    .pipe(mochaPhantomJS({ui: 'tdd', reporter: 'nyan'}));
 });
