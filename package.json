@@ -1,12 +1,16 @@
 {
-  "private": true,
+  "name": "smartcar-javascript-sdk",
+  "version": "0.0.1",
+  "scripts": {
+    "test": "mocha-phantomjs test/test.html",
+    "cover": "istanbul instrument src/ -o src_tmp && mocha-phantomjs test/cover.html --hooks test/phantom_hooks.js && istanbul report text-summary lcov && rm -r src_tmp"
+  },
   "dependencies": {
     "browser-sync": "^2.7.7",
     "chai": "^3.4.1",
     "dirty-chai": "^1.2.2",
     "gulp": "^3.8.5",
-    "gulp-mocha": "^2.2.0",
-    "gulp-mocha-phantomjs": "^0.10.1",
+    "istanbul": "^0.4.2",
     "mocha": "^2.3.4",
     "mocha-phantomjs": "^4.0.2"
   }

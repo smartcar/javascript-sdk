@@ -1,7 +1,6 @@
 'use strict';
 
 var gulp = require('gulp');
-var mochaPhantomJS = require('gulp-mocha-phantomjs');
 var browserSync = require('browser-sync');
 var reload = browserSync.reload;
 
@@ -16,15 +15,15 @@ gulp.task('demo', function() {
         match: '<span id="browser-sync-binding"></span>',
         fn: function(snippet) {
           return snippet;
-        }
-      }
+        },
+      },
     },
     server: {
       baseDir: 'demo',
       routes: {
-        '/scripts': 'src'
-      }
-    }
+        '/scripts': 'src',
+      },
+    },
   });
 
   gulp.watch(['src/*'], reload);
@@ -33,8 +32,3 @@ gulp.task('demo', function() {
 });
 
 // TODO: Setup JS Minification task
-
-gulp.task('test', function() {
-  return gulp.src('test/test.html', {read: false})
-    .pipe(mochaPhantomJS({ui: 'tdd', reporter: 'nyan'}));
-});
