@@ -53,4 +53,30 @@ suite('Smartcar Auth SDK', function() {
 
   });
 
+  test('initialization' , function() {
+
+    Smartcar.init({
+      clientId: 'clientId',
+      redirectUri: 'redirectUri',
+      scope: 'scope',
+      selector: 'selector',
+      grantType: 'token',
+      popup: true,
+      oems: ['oem1', 'oem2'],
+      forcePrompt: true
+    });
+
+    expect(Smartcar.clientId).to.equal('clientId');
+    expect(Smartcar.redirectUri).to.equal('redirectUri');
+    expect(Smartcar.scope).to.equal('scope');
+    expect(Smartcar.selector).to.equal('selector');
+    expect(Smartcar.grantType).to.equal('token');
+    expect(Smartcar.popup).to.equal(true);
+    expect(Smartcar.oems[0]).to.equal('oem1');
+    expect(Smartcar.oems[1]).to.equal('oem2');
+    expect(Smartcar.approvalPrompt).to.equal('force');
+
+  });
+
+
 });
