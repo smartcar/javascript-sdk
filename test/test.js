@@ -77,7 +77,7 @@ suite('Smartcar Auth SDK', function() {
       Smartcar.oems.forEach(function(oem) {
         var button = document.getElementById(oem + '-button');
         count++;
-        expect(button).to.be.ok;
+        expect(button).to.be.ok();
       });
 
       expect(count).to.equal(Smartcar.oems.length);
@@ -96,7 +96,7 @@ suite('Smartcar Auth SDK', function() {
   test('openDialog', function() {
     sandbox.stub(window, 'open');
     Smartcar.openDialog('tesla');
-    expect(window.open).to.be.calledOnce;
+    expect(window.open).to.be.calledOnce();
   });
 
   test('registerPopups', function() {
@@ -120,7 +120,7 @@ suite('Smartcar Auth SDK', function() {
     );
 
     elem.dispatchEvent(ev);
-    expect(Smartcar.openDialog).to.be.calledOnce;
+    expect(Smartcar.openDialog).to.be.calledOnce();
 
   });
 
