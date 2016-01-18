@@ -100,10 +100,7 @@ suite('Smartcar Auth SDK', function() {
   });
 
   test('registerPopups', function() {
-    // var preventDefault = sandbox.spy();
-    // sandbox.stub(document.getElementById('tesla-button'), 'addEventListener', function() {
-    //   return { preventDefault: preventDefault };
-    // });
+
     sandbox.stub(Smartcar, 'openDialog');
 
     Smartcar.registerPopups([{
@@ -113,6 +110,7 @@ suite('Smartcar Auth SDK', function() {
 
     var elem = document.getElementById('tesla-button');
 
+    // Do not worry about this
     var ev = document.createEvent("MouseEvent");
     ev.initMouseEvent("click",
       true, true, window, null,
