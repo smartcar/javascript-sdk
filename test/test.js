@@ -1,3 +1,4 @@
+var sandbox;
 suite('Smartcar Auth SDK', function() {
 
   var clientId = 'ab3f8354-49ed-4670-8f53-e8300d65b387';
@@ -7,8 +8,8 @@ suite('Smartcar Auth SDK', function() {
   var grantType = 'token';
   var redirectType = 'popup';
 
-  suiteSetup(function() {
-
+  setup(function() {
+    sandbox = sinon.sandbox.create();
     Smartcar.init({
       clientId: clientId,
       redirectUri: redirectUri,
@@ -17,6 +18,38 @@ suite('Smartcar Auth SDK', function() {
       grantType: grantType,
       redirectType: redirectType
     });
+
+  });
+
+  teardown(function() {
+    sandbox.restore();
+  });
+
+  test('initialization' , function() {
+
+    Smartcar.init({
+      clientId: 'clientId',
+      redirectUri: 'redirectUri',
+      scope: 'scope',
+      selector: 'selector',
+      popup: true,
+      oems: ['oem1', 'oem2'],
+      forcePrompt: true,
+      callback: function() {
+        return;
+      }
+    });
+
+    expect(Smartcar.clientId).to.equal('clientId');
+    expect(Smartcar.redirectUri).to.equal('redirectUri');
+    expect(Smartcar.scope).to.equal('scope');
+    expect(Smartcar.selector).to.equal('selector');
+    expect(Smartcar.grantType).to.equal('code');
+    expect(Smartcar.popup).to.equal(true);
+    expect(Smartcar.oems[0]).to.equal('oem1');
+    expect(Smartcar.oems[1]).to.equal('oem2');
+    expect(Smartcar.approvalPrompt).to.equal('force');
+    expect(Smartcar.callback).to.be.function;
 
   });
 
@@ -37,7 +70,7 @@ suite('Smartcar Auth SDK', function() {
 
   });
 
-  test('button generation', function() {
+  test('button generation', function(done) {
 
     Smartcar.generateButtons(function() {
       var count = 0;
@@ -48,35 +81,49 @@ suite('Smartcar Auth SDK', function() {
       });
 
       expect(count).to.equal(Smartcar.oems.length);
-
+      done();
     });
 
   });
 
-  test('initialization' , function() {
+  test('button generation without popup', function() {
 
-    Smartcar.init({
-      clientId: 'clientId',
-      redirectUri: 'redirectUri',
-      scope: 'scope',
-      selector: 'selector',
-      grantType: 'token',
-      popup: true,
-      oems: ['oem1', 'oem2'],
-      forcePrompt: true
-    });
-
-    expect(Smartcar.clientId).to.equal('clientId');
-    expect(Smartcar.redirectUri).to.equal('redirectUri');
-    expect(Smartcar.scope).to.equal('scope');
-    expect(Smartcar.selector).to.equal('selector');
-    expect(Smartcar.grantType).to.equal('token');
-    expect(Smartcar.popup).to.equal(true);
-    expect(Smartcar.oems[0]).to.equal('oem1');
-    expect(Smartcar.oems[1]).to.equal('oem2');
-    expect(Smartcar.approvalPrompt).to.equal('force');
+    Smartcar.popup = false;
+    Smartcar.generateButtons();
 
   });
 
+  test('openDialog', function() {
+    sandbox.stub(window, 'open');
+    Smartcar.openDialog('tesla');
+    expect(window.open).to.be.calledOnce;
+  });
+
+  test('registerPopups', function() {
+    // var preventDefault = sandbox.spy();
+    // sandbox.stub(document.getElementById('tesla-button'), 'addEventListener', function() {
+    //   return { preventDefault: preventDefault };
+    // });
+    sandbox.stub(Smartcar, 'openDialog');
+
+    Smartcar.registerPopups([{
+      name: 'tesla',
+      link: 'https://tesla.com'
+    }]);
+
+    var elem = document.getElementById('tesla-button');
+
+    var ev = document.createEvent("MouseEvent");
+    ev.initMouseEvent("click",
+      true, true, window, null,
+      0, 0, 0, 0,
+      false, false, false, false,
+      0, null
+    );
+
+    elem.dispatchEvent(ev);
+    expect(Smartcar.openDialog).to.be.calledOnce;
+
+  });
 
 });
