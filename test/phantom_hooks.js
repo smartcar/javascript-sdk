@@ -1,7 +1,9 @@
+'use strict';
 module.exports = {
   afterEnd: function(runner) {
     var fs = require('fs');
     var coverage = runner.page.evaluate(function() {
+      // jshint browser:true
       return window.__coverage__;
     });
 

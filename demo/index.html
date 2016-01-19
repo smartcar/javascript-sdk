@@ -50,10 +50,12 @@
         selector: 'smartcar-buttons',
         grantType: 'token',
         callback: function() {
-          Smartcar.generateButtons(function() {
-            console.log('buttons generated');
-          });
+          window.location.reload();
         }
+      });
+
+      Smartcar.generateButtons(function() {
+        console.log('buttons generated');
       });
     </script>
   </body>

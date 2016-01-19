@@ -1,12 +1,15 @@
-var sandbox;
+/* jshint browser:true */
+/* globals Smartcar, expect, sinon */
+
 suite('Smartcar Auth SDK', function() {
+
+  var sandbox;
 
   var clientId = 'ab3f8354-49ed-4670-8f53-e8300d65b387';
   var redirectUri = 'http://localhost:5000/callback';
   var scope = ['read_vehicle_info', 'read_odometer'];
   var selector = 'smartcar-buttons';
   var grantType = 'token';
-  var redirectType = 'popup';
 
   setup(function() {
     sandbox = sinon.sandbox.create();
@@ -15,8 +18,7 @@ suite('Smartcar Auth SDK', function() {
       redirectUri: redirectUri,
       scope: scope,
       selector: selector,
-      grantType: grantType,
-      redirectType: redirectType
+      grantType: grantType
     });
 
   });
@@ -32,12 +34,10 @@ suite('Smartcar Auth SDK', function() {
       redirectUri: 'redirectUri',
       scope: 'scope',
       selector: 'selector',
-      popup: true,
       oems: ['oem1', 'oem2'],
       forcePrompt: true,
-      callback: function() {
-        return;
-      }
+      disablePopup: true,
+      callback: function() {}
     });
 
     expect(Smartcar.clientId).to.equal('clientId');
@@ -45,11 +45,11 @@ suite('Smartcar Auth SDK', function() {
     expect(Smartcar.scope).to.equal('scope');
     expect(Smartcar.selector).to.equal('selector');
     expect(Smartcar.grantType).to.equal('code');
-    expect(Smartcar.popup).to.equal(true);
+    expect(Smartcar.popup).to.equal(false);
     expect(Smartcar.oems[0]).to.equal('oem1');
     expect(Smartcar.oems[1]).to.equal('oem2');
     expect(Smartcar.approvalPrompt).to.equal('force');
-    expect(Smartcar.callback).to.be.function;
+    expect(Smartcar.callback).to.be.a('function');
 
   });
 

@@ -1,6 +1,9 @@
+/* jshint browser:true */
+
 // Smartcar JS SDK
 
 var Smartcar = (function(window, undefined) {
+  'use strict';
   var Smartcar = {};
 
   // OEM static configuration
@@ -34,10 +37,10 @@ var Smartcar = (function(window, undefined) {
    * @param  {String} options.selector id of buttons container div
    * @param  {String} options.scope app oauth scope
    * @param  {String} options.grantType oauth grant type -> defaults to 'code'
-   * @param  {Boolean} options.popup shows oauth dialog popup if true
+   * @param  {Boolean} options.disablePopup disables popups
    * @param  {Array} options.oems oems to generate buttons for
-   * @param  {Boolean} options.approvalPrompt forces permission screen if true
-   * @param  {Function} options.callback optional callback
+   * @param  {Boolean} options.forcePrompt forces permission screen if true
+   * @param  {Function} options.callback required function for if popup isn't disabled
    */
   Smartcar.init = function(options) {
     this.clientId = options.clientId;
@@ -45,13 +48,10 @@ var Smartcar = (function(window, undefined) {
     this.scope = options.scope;
     this.selector = options.selector;
     this.grantType = options.grantType || 'code';
-    this.popup = options.popup || true;
+    this.popup = options.disablePopup ? false : true;
     this.oems = options.oems || Object.keys(Smartcar.oemConfig);
     this.approvalPrompt = options.forcePrompt ? 'force' : 'auto';
-
-    if(options.callback) {
-      options.callback();
-    }
+    this.callback = options.callback || function() {};
   };
 
   /**

@@ -53,21 +53,20 @@ Defaults to `code`.
 
 `token` sends back a 2 hour token typically used for client-side applications.
 
-#### `popup` (optional)
-Defaults to `true`. To disable a popup, and redirect to a different page instead, set to `false`.
+#### `disablePopup` (optional)
+Defaults to `false`. To disable a popup, and redirect to a different page instead, set to `true`.
 
 #### `oems` (optional)
 Specify Smartcar-compatible OEMs to generate buttons for. Defaults to entire set of compatible Smartcar OEMs.
 
-#### `approvalPrompt` (optional)
+#### `forcePrompt` (optional)
 
 Set to `force` to force a user to re-grant permissions.
 
 
-#### `callback`	(optional)
+#### `callback`
 
-Optional function called upon `init` completion.
-
+A function that is called in `callback.js` in the redirect page.
 
 ## Auxillary Functions
 
