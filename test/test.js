@@ -2,6 +2,7 @@
 /* globals Smartcar, expect, sinon */
 
 suite('Smartcar Auth SDK', function() {
+  'use strict';
 
   var sandbox;
 
@@ -17,7 +18,7 @@ suite('Smartcar Auth SDK', function() {
       clientId: clientId,
       redirectUri: redirectUri,
       scope: scope,
-      grantType: grantType
+      grantType: grantType,
     });
     document.getElementById(selector).innerHTML = '';
   });
@@ -34,7 +35,7 @@ suite('Smartcar Auth SDK', function() {
       scope: 'scope',
       forcePrompt: true,
       disablePopup: true,
-      callback: function() {}
+      callback: function() {},
     });
 
     expect(Smartcar.clientId).to.equal('clientId');
@@ -51,13 +52,13 @@ suite('Smartcar Auth SDK', function() {
     var oem = 'tesla';
     var linkedOem = Smartcar.generateLink(oem);
 
-    var uri = 'https://' + oem
-      + '.smartcar.com/oauth/authorize?'
-      + 'response_type=' + grantType
-      + '&client_id=' + clientId
-      + '&redirect_uri=' + encodeURIComponent(redirectUri)
-      + '&scope=' + encodeURIComponent(scope.join(' '))
-      + '&approval_prompt=auto';
+    var uri = 'https://' + oem +
+    '.smartcar.com/oauth/authorize?' +
+      'response_type=' + grantType +
+      '&client_id=' + clientId +
+      '&redirect_uri=' + encodeURIComponent(redirectUri) +
+      '&scope=' + encodeURIComponent(scope.join(' ')) +
+      '&approval_prompt=auto';
 
     expect(linkedOem).to.equal(uri);
 
@@ -104,8 +105,8 @@ suite('Smartcar Auth SDK', function() {
     var elem = document.getElementById('tesla-button');
 
     // Do not worry about this
-    var ev = document.createEvent("MouseEvent");
-    ev.initMouseEvent("click",
+    var ev = document.createEvent('MouseEvent');
+    ev.initMouseEvent('click',
       true, true, window, null,
       0, 0, 0, 0,
       false, false, false, false,

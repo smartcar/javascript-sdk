@@ -1,4 +1,5 @@
 /* jshint browser:true */
+/* exported Smartcar */
 
 // Smartcar JS SDK
 
@@ -12,7 +13,7 @@ var Smartcar = (function(window, undefined) {
     ford: {   color: '#003399' },
     bmw: {    color: '#2E9BDA' },
     lexus: {  color: '#5B7F95' },
-    volvo: {  color: '#000F60' }
+    volvo: {  color: '#000F60' },
   };
 
   // Sets default popup window size
@@ -21,11 +22,15 @@ var Smartcar = (function(window, undefined) {
     height: 500,
   };
 
-  wnd_settings.left = window.screenX + (window.outerWidth - wnd_settings.width) / 2;
-  wnd_settings.top = window.screenY + (window.outerHeight - wnd_settings.height) / 8;
+  wnd_settings.left = window.screenX +
+    (window.outerWidth - wnd_settings.width) / 2;
+  wnd_settings.top = window.screenY +
+    (window.outerHeight - wnd_settings.height) / 8;
 
-  var wnd_options = 'width=' + wnd_settings.width + ',height=' + wnd_settings.height;
-  wnd_options += ',toolbar=0,scrollbars=1,status=1,resizable=1,location=1,menuBar=0';
+  var wnd_options = 'width=' + wnd_settings.width +
+    ',height=' + wnd_settings.height;
+  wnd_options += ',toolbar=0,scrollbars=1,status=1' +
+    ',resizable=1,location=1,menuBar=0';
   wnd_options += ',left=' + wnd_settings.left + ',top=' + wnd_settings.top;
 
   /**
@@ -35,7 +40,7 @@ var Smartcar = (function(window, undefined) {
    * @param {String} options.clientId app client ID
    * @param {String} options.redirectUri app redirect URI
    * @param {String} options.scope app oauth scope
-   * @param {String} [options.grantType=code] oauth grant type -> defaults to 'code'
+   * @param {String} [options.grantType=code] oauth grant type defaults to code
    * @param {Boolean} [options.disablePopup=false] disables popups
    * @param {Boolean} [options.forcePrompt=false] forces permission screen if
    * set to true
@@ -59,14 +64,13 @@ var Smartcar = (function(window, undefined) {
    * @return {String} generated authorize link
    */
   Smartcar.generateLink = function(oemName) {
-    var oem = Smartcar.oemConfig[oemName];
-    return 'https://' + oemName
-      + '.smartcar.com/oauth/authorize?'
-      + 'response_type=' + this.grantType
-      + '&client_id=' + this.clientId
-      + '&redirect_uri=' + encodeURIComponent(this.redirectUri)
-      + '&scope=' + encodeURIComponent(this.scope.join(' '))
-      + '&approval_prompt=' + this.approvalPrompt;
+    return 'https://' + oemName +
+      '.smartcar.com/oauth/authorize?' +
+      'response_type=' + this.grantType +
+      '&client_id=' + this.clientId +
+      '&redirect_uri=' + encodeURIComponent(this.redirectUri) +
+      '&scope=' + encodeURIComponent(this.scope.join(' ')) +
+      '&approval_prompt=' + this.approvalPrompt;
   };
 
   /**
@@ -99,18 +103,18 @@ var Smartcar = (function(window, undefined) {
 
     var html = '';
     oems.forEach(function(oemName) {
-      html += '<a id="'
-        + oemName + '-button" href="' + links[oemName]
-        + '" class="button connect-button" style="color: #FBFBFB;'
-        + 'border:0;display:block;font-size:15px;background-color:'
-        + Smartcar.oemConfig[oemName].color
-        + '">Connect with ' + oemName + '</a>';
+      html += '<a id="' +
+        oemName + '-button" href="' + links[oemName] +
+        '" class="button connect-button" style="color: #FBFBFB;' +
+        'border:0;display:block;font-size:15px;background-color:' +
+        Smartcar.oemConfig[oemName].color +
+        '">Connect with ' + oemName + '</a>';
     });
 
     container.innerHTML = html;
 
     // Register popup events if enabled
-    if(this.popup) {
+    if (this.popup) {
       Smartcar._registerPopups(oems);
     }
   };
