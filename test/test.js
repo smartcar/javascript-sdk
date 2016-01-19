@@ -20,7 +20,7 @@ suite('Smartcar Auth SDK', function() {
       selector: selector,
       grantType: grantType
     });
-
+    document.getElementById(Smartcar.selector).innerHTML = '';
   });
 
   teardown(function() {
@@ -65,24 +65,19 @@ suite('Smartcar Auth SDK', function() {
       + '&scope=' + encodeURIComponent(scope.join(' '))
       + '&approval_prompt=auto';
 
-    expect(linkedOem.name).to.equal(oem);
-    expect(linkedOem.link).to.equal(uri);
+    expect(linkedOem).to.equal(uri);
 
   });
 
-  test('button generation', function(done) {
+  test('button generation', function() {
 
-    Smartcar.generateButtons(function() {
-      var count = 0;
-      Smartcar.oems.forEach(function(oem) {
-        var button = document.getElementById(oem + '-button');
-        count++;
-        expect(button).to.be.ok();
-      });
-
-      expect(count).to.equal(Smartcar.oems.length);
-      done();
+    sandbox.stub(Smartcar, '_registerPopups');
+    Smartcar.generateButtons();
+    Smartcar.oems.forEach(function(oem) {
+      var button = document.getElementById(oem + '-button');
+      expect(button).to.be.ok();
     });
+    expect(Smartcar._registerPopups).to.be.calledOnce();
 
   });
 
@@ -90,23 +85,27 @@ suite('Smartcar Auth SDK', function() {
 
     Smartcar.popup = false;
     Smartcar.generateButtons();
+    Smartcar.oems.forEach(function(oem) {
+      var button = document.getElementById(oem + '-button');
+      expect(button).to.be.ok();
+    });
 
   });
 
   test('openDialog', function() {
+
     sandbox.stub(window, 'open');
     Smartcar.openDialog('tesla');
     expect(window.open).to.be.calledOnce();
+
   });
 
-  test('registerPopups', function() {
+  test('_registerPopups', function() {
 
     sandbox.stub(Smartcar, 'openDialog');
 
-    Smartcar.registerPopups([{
-      name: 'tesla',
-      link: 'https://tesla.com'
-    }]);
+    // generateButtons calls _registerPopups
+    Smartcar.generateButtons();
 
     var elem = document.getElementById('tesla-button');
 
