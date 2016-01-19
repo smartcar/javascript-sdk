@@ -76,10 +76,7 @@ Call `Smartcar.generateLink('bmw')` to receive an object with the oemName and a 
 
 ##### Example
 ```
-{
-	name: 'bmw',
-	link: 'https://bmw.smartcar.com/oauth/authorize?response_type=token...'
-}
+'https://bmw.smartcar.com/oauth/authorize?response_type=token...'
 ```
 
 ### `generateButtons(callback)`
