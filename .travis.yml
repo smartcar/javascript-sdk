@@ -30,8 +30,13 @@ before_deploy:
   - export PATH=/usr/local/rvm/gems/ruby-2.2.3/bin:$PATH
 
 deploy:
-  provider: script
-  skip_cleanup: true
-  script: make push-tag
-  on:
-    branch: master
+  - provider: script
+    skip_cleanup: true
+    script: gulp publish
+    on:
+      branch: master
+  - provider: script
+    skip_cleanup: true
+    script: make push-tag
+    on:
+      branch: master
