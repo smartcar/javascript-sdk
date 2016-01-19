@@ -8,8 +8,8 @@ suite('Smartcar Auth SDK', function() {
   var clientId = 'ab3f8354-49ed-4670-8f53-e8300d65b387';
   var redirectUri = 'http://localhost:5000/callback';
   var scope = ['read_vehicle_info', 'read_odometer'];
-  var selector = 'smartcar-buttons';
   var grantType = 'token';
+  var selector = 'smartcar-buttons';
 
   setup(function() {
     sandbox = sinon.sandbox.create();
@@ -17,10 +17,9 @@ suite('Smartcar Auth SDK', function() {
       clientId: clientId,
       redirectUri: redirectUri,
       scope: scope,
-      selector: selector,
       grantType: grantType
     });
-    document.getElementById(Smartcar.selector).innerHTML = '';
+    document.getElementById(selector).innerHTML = '';
   });
 
   teardown(function() {
@@ -33,8 +32,6 @@ suite('Smartcar Auth SDK', function() {
       clientId: 'clientId',
       redirectUri: 'redirectUri',
       scope: 'scope',
-      selector: 'selector',
-      oems: ['oem1', 'oem2'],
       forcePrompt: true,
       disablePopup: true,
       callback: function() {}
@@ -43,11 +40,8 @@ suite('Smartcar Auth SDK', function() {
     expect(Smartcar.clientId).to.equal('clientId');
     expect(Smartcar.redirectUri).to.equal('redirectUri');
     expect(Smartcar.scope).to.equal('scope');
-    expect(Smartcar.selector).to.equal('selector');
     expect(Smartcar.grantType).to.equal('code');
     expect(Smartcar.popup).to.equal(false);
-    expect(Smartcar.oems[0]).to.equal('oem1');
-    expect(Smartcar.oems[1]).to.equal('oem2');
     expect(Smartcar.approvalPrompt).to.equal('force');
     expect(Smartcar.callback).to.be.a('function');
 
@@ -72,8 +66,8 @@ suite('Smartcar Auth SDK', function() {
   test('button generation', function() {
 
     sandbox.stub(Smartcar, '_registerPopups');
-    Smartcar.generateButtons();
-    Smartcar.oems.forEach(function(oem) {
+    Smartcar.generateButtons(selector);
+    Object.keys(Smartcar.oemConfig).forEach(function(oem) {
       var button = document.getElementById(oem + '-button');
       expect(button).to.be.ok();
     });
@@ -84,8 +78,8 @@ suite('Smartcar Auth SDK', function() {
   test('button generation without popup', function() {
 
     Smartcar.popup = false;
-    Smartcar.generateButtons();
-    Smartcar.oems.forEach(function(oem) {
+    Smartcar.generateButtons(selector);
+    Object.keys(Smartcar.oemConfig).forEach(function(oem) {
       var button = document.getElementById(oem + '-button');
       expect(button).to.be.ok();
     });
@@ -105,7 +99,7 @@ suite('Smartcar Auth SDK', function() {
     sandbox.stub(Smartcar, 'openDialog');
 
     // generateButtons calls _registerPopups
-    Smartcar.generateButtons();
+    Smartcar.generateButtons(selector);
 
     var elem = document.getElementById('tesla-button');
 

@@ -35,11 +35,8 @@ var Smartcar = (function(window, undefined) {
    * @param {String} options.clientId app client ID
    * @param {String} options.redirectUri app redirect URI
    * @param {String} options.scope app oauth scope
-   * @param {String} [options.selector] id of buttons container div, required
    * @param {String} [options.grantType=code] oauth grant type -> defaults to 'code'
    * @param {Boolean} [options.disablePopup=false] disables popups
-   * @param {String[]} [options.oems] oems to generate buttons for, defaults to
-   * all OEMs
    * @param {Boolean} [options.forcePrompt=false] forces permission screen if
    * set to true
    * @param {Function} [options.callback] called when oauth popup window
@@ -49,10 +46,8 @@ var Smartcar = (function(window, undefined) {
     this.clientId = options.clientId;
     this.redirectUri = options.redirectUri;
     this.scope = options.scope;
-    this.selector = options.selector;
     this.grantType = options.grantType || 'code';
     this.popup = options.disablePopup ? false : true;
-    this.oems = options.oems || Object.keys(Smartcar.oemConfig);
     this.approvalPrompt = options.forcePrompt ? 'force' : 'auto';
     this.callback = options.callback || function() {};
   };
@@ -91,14 +86,18 @@ var Smartcar = (function(window, undefined) {
 
   /**
    * Create buttons and insert into DOM
+   *
+   * @param {String} selector id of buttons container div
+   * @param {String[]} oems oems to generate buttons for, defaults to
+   * all OEMs
    */
-  Smartcar.generateButtons = function() {
+  Smartcar.generateButtons = function(selector, oems) {
+    var container = document.getElementById(selector);
+    oems = oems || Object.keys(Smartcar.oemConfig);
+
+    var links = this.generateLinks(oems);
+
     var html = '';
-    var append = document.getElementById(this.selector);
-
-    var links = this.generateLinks(this.oems);
-    var oems = Object.keys(links);
-
     oems.forEach(function(oemName) {
       html += '<a id="'
         + oemName + '-button" href="' + links[oemName]
@@ -108,7 +107,7 @@ var Smartcar = (function(window, undefined) {
         + '">Connect with ' + oemName + '</a>';
     });
 
-    append.innerHTML = html;
+    container.innerHTML = html;
 
     // Register popup events if enabled
     if(this.popup) {
