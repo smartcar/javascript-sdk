@@ -1,4 +1,4 @@
-# Smartcar JS Client SDK
+# Smartcar JS Client SDK [![Build Status](https://travis-ci.com/smartcar/javascript-sdk.svg?token=jMbuVtXPGeJMPdsn7RQ5&branch=master)](https://travis-ci.com/smartcar/javascript-sdk) [![Coverage Status](https://coveralls.io/repos/github/smartcar/javascript-sdk/badge.svg?branch=master&t=sqGPnl)](https://coveralls.io/github/smartcar/javascript-sdk?branch=master)
 
 The Smartcar Javascript SDK provides a script to generate OEM connect buttons for users to use to login in with their vehicles.
 
