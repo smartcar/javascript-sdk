@@ -13,5 +13,5 @@ module.exports = {
     } else {
       console.log('No coverage data generated');
     }
-  }
+  },
 };
