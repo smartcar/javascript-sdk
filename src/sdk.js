@@ -1,4 +1,5 @@
 /* jshint browser:true */
+/* exported Smartcar */
 
 // Smartcar JS SDK
 
@@ -12,7 +13,7 @@ var Smartcar = (function(window, undefined) {
     ford: {   color: '#003399' },
     bmw: {    color: '#2E9BDA' },
     lexus: {  color: '#5B7F95' },
-    volvo: {  color: '#000F60' }
+    volvo: {  color: '#000F60' },
   };
 
   // Sets default popup window size
@@ -59,7 +60,6 @@ var Smartcar = (function(window, undefined) {
    * @return {String} generated authorize link
    */
   Smartcar.generateLink = function(oemName) {
-    var oem = Smartcar.oemConfig[oemName];
     return 'https://' + oemName
       + '.smartcar.com/oauth/authorize?'
       + 'response_type=' + this.grantType
