@@ -42,7 +42,7 @@ gulp.task('compress', function() {
     .pipe(gulp.dest('dist'));
 });
 
-gulp.task('publish', ['compress'], function() {
+gulp.task('publish', function() {
 
   var S3_REGION = 'us-west-2';
   var S3_BUCKET = 'smartcar-javascript-sdk';

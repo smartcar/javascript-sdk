@@ -16,6 +16,7 @@ install:
   - git clone git@github.com:smartcar/build.git $HOME/smartcar-build
   - cp $HOME/smartcar-build/resources/Makefile .
 
+  - npm install -g gulp
   - npm install
 
 script:
@@ -23,6 +24,7 @@ script:
   - npm run cover
   - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
   - make create-tag
+  - gulp compress
 
 before_deploy:
   # This is to suppress some warnings thrown by Travis. This has no effect
