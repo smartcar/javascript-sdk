@@ -3,6 +3,8 @@
 var gulp = require('gulp');
 var browserSync = require('browser-sync');
 var reload = browserSync.reload;
+var $ = require('gulp-load-plugins')();
+var version = require('./package').version;
 
 // Serve demo page
 gulp.task('demo', function() {
@@ -31,4 +33,29 @@ gulp.task('demo', function() {
 
 });
 
-// TODO: Setup JS Minification task
+gulp.task('compress', function() {
+  return gulp.src('src/*.js')
+    .pipe($.uglify())
+    .pipe($.rename({
+      suffix: "-" + version
+    }))
+    .pipe(gulp.dest('dist'));
+});
+
+gulp.task('publish', function() {
+
+  var S3_REGION = 'us-west-2';
+  var S3_BUCKET = 'smartcar-javascript-sdk';
+
+  var publisher = $.awspublish.create({
+    region: S3_REGION,
+    params: {
+      Bucket: S3_BUCKET,
+    }
+  });
+
+  return gulp.src('dist/*.js')
+    .pipe(publisher.publish())
+    .pipe($.awspublish.reporter());
+
+});
