@@ -39,7 +39,7 @@ gulp.task('compress', function() {
     .pipe($.rename({
       suffix: "-" + version
     }))
-    .pipe(gulp.dest('dist'));
+    .pipe(gulp.dest('dist/javascript-sdk'));
 });
 
 gulp.task('publish', function() {
@@ -54,7 +54,7 @@ gulp.task('publish', function() {
     }
   });
 
-  return gulp.src('dist/*.js')
+  return gulp.src('dist/**/*.js')
     .pipe(publisher.publish())
     .pipe($.awspublish.reporter());
 
