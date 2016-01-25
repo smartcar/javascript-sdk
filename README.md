@@ -66,6 +66,12 @@ Set to `force` to force a user to re-grant permissions.
 
 #### `callback`
 
+Action to perform upon popup callback finish. Regularly used to call `window.location.reload();`.
+
+#### `jqueryLightbox`
+
+In the event a lightbox using jQuery is used to serve the buttons, setting jqueryLightbox to true will ensure the click listeners are properly registered.
+
 A function that is called in `callback.js` in the redirect page.
 
 ## Auxillary Functions
