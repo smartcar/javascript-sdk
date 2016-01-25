@@ -101,10 +101,18 @@ var Smartcar = (function(window, undefined) {
 
     var links = this.generateLinks(oems);
 
-    var html = '';
+    var html = '', self = this;
     oems.forEach(function(oemName) {
+      var link;
+
+      if(self.popup) {
+        link = '#';
+      } else {
+        link = links[oemName];
+      }
+
       html += '<a id="' +
-        oemName + '-button" href="' + links[oemName] +
+        oemName + '-button" href="' + link +
         '" class="button connect-button" style="color: #FBFBFB;' +
         'border:0;display:block;font-size:15px;background-color:' +
         Smartcar.oemConfig[oemName].color +
