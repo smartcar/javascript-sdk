@@ -47,16 +47,13 @@
         clientId: 'ab3f8354-49ed-4670-8f53-e8300d65b387',
         redirectUri: 'http://localhost:5000/callback',
         scope: ['read_vehicle_info', 'read_odometer'],
-        selector: 'smartcar-buttons',
         grantType: 'token',
         callback: function() {
           window.location.reload();
         }
       });
 
-      Smartcar.generateButtons(function() {
-        console.log('buttons generated');
-      });
+      Smartcar.generateButtons('smartcar-buttons');
     </script>
   </body>
 </html>
