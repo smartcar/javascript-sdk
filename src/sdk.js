@@ -46,8 +46,6 @@ var Smartcar = (function(window, undefined) {
    * set to true
    * @param {Function} [options.callback] called when oauth popup window
    * completes flow. the parameter is not used when popup is disabled.
-   * @param {Boolean} [options.jqueryLightbox=false] binds popup click listeners
-   * to document using jquery if a jquery lightbox is introduced
    */
   Smartcar.init = function(options) {
     this.clientId = options.clientId;
@@ -57,7 +55,6 @@ var Smartcar = (function(window, undefined) {
     this.popup = options.disablePopup ? false : true;
     this.approvalPrompt = options.forcePrompt ? 'force' : 'auto';
     this.callback = options.callback || function() {};
-    this.jqueryLightbox = options.jqueryLightbox || false;
   };
 
   /**
@@ -139,8 +136,8 @@ var Smartcar = (function(window, undefined) {
     var self = this;
     oems.forEach(function(oem) {
 
-      if(self.jqueryLightbox) {
-        $(document).on('click', '#' + oem + '-button', function(event) {
+      if(window.jQuery) {
+        jQuery(document).on('click', '#' + oem + '-button', function(event) {
           event.preventDefault();
           Smartcar.openDialog(oem);
         });
