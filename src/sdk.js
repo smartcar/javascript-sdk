@@ -45,7 +45,7 @@ var Smartcar = (function(window, undefined) {
    * @param {Boolean} [options.forcePrompt=false] forces permission screen if
    * set to true
    * @param {Function} [options.callback] called when oauth popup window
-   * completes flow. the parameter is not used when popul is disabled.
+   * completes flow. the parameter is not used when popup is disabled.
    */
   Smartcar.init = function(options) {
     this.clientId = options.clientId;
@@ -101,10 +101,18 @@ var Smartcar = (function(window, undefined) {
 
     var links = this.generateLinks(oems);
 
-    var html = '';
+    var html = '', self = this;
     oems.forEach(function(oemName) {
+      var link;
+
+      if(self.popup) {
+        link = '#';
+      } else {
+        link = links[oemName];
+      }
+
       html += '<a id="' +
-        oemName + '-button" href="' + links[oemName] +
+        oemName + '-button" href="' + link +
         '" class="button connect-button" style="color: #FBFBFB;' +
         'border:0;display:block;font-size:15px;background-color:' +
         Smartcar.oemConfig[oemName].color +
@@ -125,12 +133,22 @@ var Smartcar = (function(window, undefined) {
    * @param {String[]} oems array of oem names
    */
   Smartcar._registerPopups = function(oems) {
+    var self = this;
     oems.forEach(function(oem) {
-      var button = document.getElementById(oem + '-button');
-      button.addEventListener('click', function(event) {
-        event.preventDefault();
-        Smartcar.openDialog(oem);
-      });
+
+      if(window.jQuery) {
+        jQuery(document).on('click', '#' + oem + '-button', function(event) {
+          event.preventDefault();
+          Smartcar.openDialog(oem);
+        });
+      } else {
+        var button = document.getElementById(oem + '-button');
+        button.addEventListener('click', function(event) {
+          event.preventDefault();
+          Smartcar.openDialog(oem);
+        });
+      }
+
     });
   };
 

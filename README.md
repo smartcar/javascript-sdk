@@ -66,7 +66,8 @@ Set to `force` to force a user to re-grant permissions.
 
 #### `callback`
 
-A function that is called in `callback.js` in the redirect page.
+Action to perform upon popup callback finish. Regularly used to call `window.location.reload();`.
+
 
 ## Auxillary Functions
 
