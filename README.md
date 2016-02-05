@@ -8,16 +8,16 @@ The code below will initiate the Client SDK with the minimum configuration optio
 
 ```html
 <div id="smartcar-buttons"></div>
-<script src="scripts/sdk.js"></script>
+
+<script src="https://cdn.smartcar.com/javascript-sdk/sdk-0.0.7.js"></script>
 <script>
 	Smartcar.init({
 		clientId: 'your-client-id',
 		redirectUri: 'your-redirect-uri',
 		scope: ['read_vehicle_info', 'read_odometer'],
-		selector: 'smartcar-buttons',
 	});
 
-	Smartcar.generateButtons();
+	Smartcar.generateButtons('smartcar-buttons');
 </script>
 ```
 
