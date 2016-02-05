@@ -48,6 +48,7 @@
         redirectUri: 'http://localhost:5000/callback',
         scope: ['read_vehicle_info', 'read_odometer'],
         grantType: 'token',
+        forcePrompt: true,
         callback: function() {
           window.location.reload();
         }
