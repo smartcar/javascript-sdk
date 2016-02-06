@@ -1,5 +1,6 @@
 /* jshint browser:true */
 /* exported Smartcar */
+/* globals jQuery */
 
 // Smartcar JS SDK
 
@@ -76,11 +77,12 @@ var Smartcar = (function(window, undefined) {
   /**
    * Returns mapped out oem object with links
    *
-   * @param  {Object} oems
+   * @param  {Object} [oems] oems to generate links for, defaults to all OEMs
    * @return {Object} map of oemName to link:
    *   { tesla: 'https://tesla.smartcar.com/oauth/authorize?... }
    */
   Smartcar.generateLinks = function(oems) {
+    oems = oems || Object.keys(Smartcar.oemConfig);
     var links = {};
     oems.forEach(function(oemName) {
       links[oemName] = Smartcar.generateLink(oemName);
@@ -92,7 +94,7 @@ var Smartcar = (function(window, undefined) {
    * Create buttons and insert into DOM
    *
    * @param {String} selector id of buttons container div
-   * @param {String[]} oems oems to generate buttons for, defaults to
+   * @param {String[]} [oems] oems to generate buttons for, defaults to
    * all OEMs
    */
   Smartcar.generateButtons = function(selector, oems) {
@@ -101,11 +103,12 @@ var Smartcar = (function(window, undefined) {
 
     var links = this.generateLinks(oems);
 
-    var html = '', self = this;
+    var html = '';
+    var self = this;
     oems.forEach(function(oemName) {
       var link;
 
-      if(self.popup) {
+      if (self.popup) {
         link = '#';
       } else {
         link = links[oemName];
@@ -133,10 +136,9 @@ var Smartcar = (function(window, undefined) {
    * @param {String[]} oems array of oem names
    */
   Smartcar._registerPopups = function(oems) {
-    var self = this;
     oems.forEach(function(oem) {
 
-      if(window.jQuery) {
+      if (window.jQuery) {
         jQuery(document).on('click', '#' + oem + '-button', function(event) {
           event.preventDefault();
           Smartcar.openDialog(oem);

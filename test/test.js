@@ -64,6 +64,14 @@ suite('Smartcar Auth SDK', function() {
 
   });
 
+  test('test generate all links', function() {
+
+    var oemCount = Object.keys(Smartcar.oemConfig).length;
+    var linkedOems = Smartcar.generateLinks();
+    expect(Object.keys(linkedOems)).to.have.length(oemCount);
+
+  });
+
   test('button generation', function() {
 
     sandbox.stub(Smartcar, '_registerPopups');
