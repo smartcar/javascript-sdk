@@ -15,6 +15,7 @@ var Smartcar = (function(window, undefined) {
     bmw: {    color: '#2E9BDA' },
     lexus: {  color: '#5B7F95' },
     volvo: {  color: '#000F60' },
+    mock: {  color: '#848484' },
   };
 
   // Sets default popup window size
@@ -40,8 +41,8 @@ var Smartcar = (function(window, undefined) {
    * @param {String} options the sdk configuration object
    * @param {String} options.clientId app client ID
    * @param {String} options.redirectUri app redirect URI
-   * @param {String} options.scope app oauth scope
-   * @param {String} [options.grantType=code] oauth grant type defaults to code
+   * @param {String[]} options.scope app oauth scope
+   * @param {String} [options.grantType=`code`] oauth grant type defaults to code
    * @param {Boolean} [options.disablePopup=false] disables popups
    * @param {Boolean} [options.forcePrompt=false] forces permission screen if
    * set to true
