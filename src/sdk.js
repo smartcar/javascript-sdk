@@ -15,6 +15,7 @@ var Smartcar = (function(window, undefined) {
     bmw: {    color: '#2E9BDA' },
     lexus: {  color: '#5B7F95' },
     volvo: {  color: '#000F60' },
+    mock: {  color: '#495F5D' },
   };
 
   // Sets default popup window size
@@ -40,8 +41,9 @@ var Smartcar = (function(window, undefined) {
    * @param {String} options the sdk configuration object
    * @param {String} options.clientId app client ID
    * @param {String} options.redirectUri app redirect URI
-   * @param {String} options.scope app oauth scope
-   * @param {String} [options.grantType=code] oauth grant type defaults to code
+   * @param {String[]} options.scope app oauth scope
+   * @param {String} [options.state] oauth state
+   * @param {String} [options.grantType=`code`] oauth grant type defaults to code
    * @param {Boolean} [options.disablePopup=false] disables popups
    * @param {Boolean} [options.forcePrompt=false] forces permission screen if
    * set to true
@@ -52,6 +54,7 @@ var Smartcar = (function(window, undefined) {
     this.clientId = options.clientId;
     this.redirectUri = options.redirectUri;
     this.scope = options.scope;
+    this.state = options.state || null;
     this.grantType = options.grantType || 'code';
     this.popup = options.disablePopup ? false : true;
     this.approvalPrompt = options.forcePrompt ? 'force' : 'auto';
@@ -61,17 +64,24 @@ var Smartcar = (function(window, undefined) {
   /**
    * Generates an object with OAuth URL given a single OEM name
    *
-   * @param  {String} oemName tesla|ford|bmw|lexus|volvo
+   * @param  {String} oemName tesla|ford|bmw|lexus|volvo|mock
    * @return {String} generated authorize link
    */
   Smartcar.generateLink = function(oemName) {
+    var stateString = '';
+
+    if(this.state) {
+      stateString = '&state=' + this.state;
+    }
+
     return 'https://' + oemName +
       '.smartcar.com/oauth/authorize?' +
       'response_type=' + this.grantType +
       '&client_id=' + this.clientId +
       '&redirect_uri=' + encodeURIComponent(this.redirectUri) +
       '&scope=' + encodeURIComponent(this.scope.join(' ')) +
-      '&approval_prompt=' + this.approvalPrompt;
+      '&approval_prompt=' + this.approvalPrompt +
+      stateString;
   };
 
   /**
@@ -117,6 +127,9 @@ var Smartcar = (function(window, undefined) {
       html += '<a id="' +
         oemName + '-button" href="' + link +
         '" class="button connect-button" style="color: #FBFBFB;' +
+        'text-decoration:none;padding:7px 14px;margin:7px;text-align:center;' +
+        'font-weight:bold;font-family:Lato,Arial,Helvetica,sans-serif;' +
+        'border-radius:5px;text-transform:uppercase;max-width:500px;' +
         'border:0;display:block;font-size:15px;background-color:' +
         Smartcar.oemConfig[oemName].color +
         '">Connect with ' + oemName + '</a>';

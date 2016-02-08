@@ -11,6 +11,7 @@ suite('Smartcar Auth SDK', function() {
   var scope = ['read_vehicle_info', 'read_odometer'];
   var grantType = 'token';
   var selector = 'smartcar-buttons';
+  var state = '3jdk23iojsdfkjfsd';
 
   setup(function() {
     sandbox = sinon.sandbox.create();
@@ -19,6 +20,7 @@ suite('Smartcar Auth SDK', function() {
       redirectUri: redirectUri,
       scope: scope,
       grantType: grantType,
+      state: state
     });
     document.getElementById(selector).innerHTML = '';
   });
@@ -33,6 +35,7 @@ suite('Smartcar Auth SDK', function() {
       clientId: 'clientId',
       redirectUri: 'redirectUri',
       scope: 'scope',
+      state: state,
       forcePrompt: true,
       disablePopup: true,
       callback: function() {},
@@ -42,6 +45,7 @@ suite('Smartcar Auth SDK', function() {
     expect(Smartcar.redirectUri).to.equal('redirectUri');
     expect(Smartcar.scope).to.equal('scope');
     expect(Smartcar.grantType).to.equal('code');
+    expect(Smartcar.state).to.equal(state);
     expect(Smartcar.popup).to.equal(false);
     expect(Smartcar.approvalPrompt).to.equal('force');
     expect(Smartcar.callback).to.be.a('function');
@@ -58,7 +62,8 @@ suite('Smartcar Auth SDK', function() {
       '&client_id=' + clientId +
       '&redirect_uri=' + encodeURIComponent(redirectUri) +
       '&scope=' + encodeURIComponent(scope.join(' ')) +
-      '&approval_prompt=auto';
+      '&approval_prompt=auto' +
+      '&state=' + state;
 
     expect(linkedOem).to.equal(uri);
 

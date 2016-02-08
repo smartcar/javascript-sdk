@@ -9,7 +9,7 @@ The code below will initiate the Client SDK with the minimum configuration optio
 ```html
 <div id="smartcar-buttons"></div>
 
-<script src="https://cdn.smartcar.com/javascript-sdk/sdk-0.0.8.js"></script>
+<script src="https://cdn.smartcar.com/javascript-sdk/sdk-0.0.9.js"></script>
 <script>
 	Smartcar.init({
 		clientId: 'your-client-id',
@@ -28,7 +28,7 @@ Add the below script to your redirectUri callback page to handle closing the OAu
 
 
 ```html
-<script src="scripts/callback.js"></script>
+<script src="https://cdn.smartcar.com/javascript-sdk/callback-0.0.9.js"></script>
 ```
 
 ## Configuration
@@ -44,6 +44,9 @@ Given URL must match URL in application settings.
 #### `scope`
 Permissions requested from the user for specific grant.
 
+#### `state`
+OAuth state parameter. Typically used for passing a user's ID or token to prevent CORS attacks
+
 #### `selector`
 ID of html element that will contain the generated buttons.
 
@@ -56,13 +59,9 @@ Defaults to `code`.
 #### `disablePopup` (optional)
 Defaults to `false`. To disable a popup, and redirect to a different page instead, set to `true`.
 
-#### `oems` (optional)
-Specify Smartcar-compatible OEMs to generate buttons for. Defaults to entire set of compatible Smartcar OEMs.
-
 #### `forcePrompt` (optional)
 
 Set to `force` to force a user to re-grant permissions.
-
 
 #### `callback`
 
@@ -80,8 +79,8 @@ Call `Smartcar.generateLink('bmw')` to receive an object with the oemName and a 
 'https://bmw.smartcar.com/oauth/authorize?response_type=token...'
 ```
 
-### `generateButtons(callback)`
-`Smartcar.generateButtons()` will retrieve OEMs set on init and generate the appropriate buttons into specified DOM selector. To generate a different set of OEM buttons, set the OEM names on the `Smartcar.oems` array. An optional callback can be included on completion.
+### `generateButtons(oems)`
+`Smartcar.generateButtons()` will retrieve passed in OEMs and generate the appropriate buttons into specified DOM selector. If no OEMs are passed in as a parameter, the functions defaults to all OEMs.
 
 ### `openDialog(oemName)`
 Bind `Smartcar.openDialog('tesla')` to a click event to open a fully configured popup of that OEM. Calling the function without a user triggered click event will prevent the popup from showing up.
