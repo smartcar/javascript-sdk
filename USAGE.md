@@ -64,6 +64,17 @@ If popups are being used, place the callback script on the page your redirectURI
 <script src="https://cdn.smartcar.com/javascript-sdk/callback-0.0.10.js"></script>
 ```
 
+### Supported OEMs
+
+Currently the SDK supports the following OEMs:
+
++ `bmw`
++ `ford`
++ `lexus`
++ `tesla`
++ `volvo`
++ `mock` (fake OEM used for testing, ensure `development` is set to `true` prior to using)
+
 ### Using the SDK to generate connect buttons
 
 The SDK provides a `generateButtons(selector)` method to generate a list of buttons corresponding to the OEMs provided upon SDK initialization. The function takes in a div ID, in this case `smartcar-buttons`. The function will then populate the div with the buttons and links attached to them.
@@ -89,6 +100,7 @@ Example:
 ```html
 Smartcar.generateLinks(['tesla', 'bmw', 'ford']);
 ```
+
 Returns:
 
 ```
@@ -106,6 +118,7 @@ Example:
 ```html
 Smartcar.generateLink('bmw');
 ```
+
 Returns:
 
 ```
