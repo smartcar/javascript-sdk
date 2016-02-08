@@ -67,7 +67,11 @@ Smartcar.generateLinks(['tesla', 'bmw', 'ford']);
 Returns:
 
 ```
-['https://tesla.smartcar.com/oauth/authorize?response_type=token...', 'https://bmw.smartcar.com/oauth/authorize?response_type=token...', 'https://ford.smartcar.com/oauth/authorize?response_type=token...']
+{
+  tesla: 'https://tesla.smartcar.com/oauth/authorize?response_type=token...',
+  bmw: 'https://bmw.smartcar.com/oauth/authorize?response_type=token...',
+  ford: 'https://ford.smartcar.com/oauth/authorize?response_type=token...'
+}
 
 ```
 
