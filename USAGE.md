@@ -9,7 +9,7 @@ To integrate the web client of your application with Smartcar, use the following
 Load the SDK into your webpage with the following code:
 
 ```html
-<script src="https://cdn.smartcar.com/javascript-sdk/sdk-0.0.9.js"></script>
+<script src="https://cdn.smartcar.com/javascript-sdk/sdk-0.0.10.js"></script>
 <script>
   Smartcar.init({
     clientId: 'your-client-id',
@@ -33,6 +33,7 @@ The best placement for the above code is just before the closing `</body>` tag.
 | `grantType`     | String |**Optional** OAuth grant type. `code` or `token`. Defaults to `code` |
 | `disablePopup`  | Boolean |**Optional** Set to true to disable popups and use redirects instead |
 | `forcePrompt`   | Boolean |**Optional** Force a user to the permission screen even if they've already granted access |
+| `development`   | Boolean |**Optional** Set to `true` to add a Mock OEM for testing |
 
 ### Loading callback.js
 
@@ -51,7 +52,7 @@ If popups are being used, place the callback script on the page your redirectURI
 
 ```html
 <!-- https://example.com/callback -->
-<script src="https://cdn.smartcar.com/javascript-sdk/callback-0.0.9.js"></script>
+<script src="https://cdn.smartcar.com/javascript-sdk/callback-0.0.10.js"></script>
 ```
 
 ### Using the SDK to generate connect buttons
