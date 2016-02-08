@@ -25,9 +25,10 @@ The best placement for the above code is just before the closing `</body>` tag.
 
 | Parameter       | Type | Description   |
 |:--------------- |:---|:------------- |
-| `clientId`     | String |**Required** Your application's client ID |
-| `redirectUri`  | String |**Required** RedirectURI set in application settings |
+| `clientId`      | String |**Required** Your application's client ID |
+| `redirectUri`   | String |**Required** RedirectURI set in application settings |
 | `scope`         | String[] |**Required** List of permissions your application requests access to |
+| `state`         | String |**Optional** OAuth state parameter used for identifying the user who initated the request|
 | `callback`      | Function |**Optional** Function to be called upon user granting your application access |
 | `grantType`     | String |**Optional** OAuth grant type. `code` or `token`. Defaults to `code` |
 | `disablePopup`  | Boolean |**Optional** Set to true to disable popups and use redirects instead |

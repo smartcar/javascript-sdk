@@ -44,6 +44,9 @@ Given URL must match URL in application settings.
 #### `scope`
 Permissions requested from the user for specific grant.
 
+#### `state`
+OAuth state parameter. Typically used for passing a user's ID or token to prevent CORS attacks
+
 #### `selector`
 ID of html element that will contain the generated buttons.
 
