@@ -15,7 +15,6 @@ var Smartcar = (function(window, undefined) {
     bmw: {    color: '#2E9BDA' },
     lexus: {  color: '#5B7F95' },
     volvo: {  color: '#000F60' },
-    mock: {  color: '#495F5D' },
   };
 
   // Sets default popup window size
@@ -43,12 +42,14 @@ var Smartcar = (function(window, undefined) {
    * @param {String} options.redirectUri app redirect URI
    * @param {String[]} options.scope app oauth scope
    * @param {String} [options.state] oauth state
-   * @param {String} [options.grantType=`code`] oauth grant type defaults to code
+   * @param {String} [options.grantType=code] oauth grant type can be either
+   * `code` or `token`. Defaults to `code`.
    * @param {Boolean} [options.disablePopup=false] disables popups
    * @param {Boolean} [options.forcePrompt=false] forces permission screen if
    * set to true
    * @param {Function} [options.callback] called when oauth popup window
    * completes flow. the parameter is not used when popup is disabled.
+   * @param {Boolean} [options.development] appends mock oem if true
    */
   Smartcar.init = function(options) {
     this.clientId = options.clientId;
@@ -59,6 +60,10 @@ var Smartcar = (function(window, undefined) {
     this.popup = options.disablePopup ? false : true;
     this.approvalPrompt = options.forcePrompt ? 'force' : 'auto';
     this.callback = options.callback || function() {};
+
+    if (options.development === true) {
+      this.oemConfig.mock = { color: '#495F5D' };
+    }
   };
 
   /**
@@ -70,7 +75,7 @@ var Smartcar = (function(window, undefined) {
   Smartcar.generateLink = function(oemName) {
     var stateString = '';
 
-    if(this.state) {
+    if (this.state) {
       stateString = '&state=' + this.state;
     }
 

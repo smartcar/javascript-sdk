@@ -9,7 +9,7 @@ The code below will initiate the Client SDK with the minimum configuration optio
 ```html
 <div id="smartcar-buttons"></div>
 
-<script src="https://cdn.smartcar.com/javascript-sdk/sdk-0.0.9.js"></script>
+<script src="https://cdn.smartcar.com/javascript-sdk/sdk-0.0.10.js"></script>
 <script>
 	Smartcar.init({
 		clientId: 'your-client-id',
@@ -28,7 +28,7 @@ Add the below script to your redirectUri callback page to handle closing the OAu
 
 
 ```html
-<script src="https://cdn.smartcar.com/javascript-sdk/callback-0.0.9.js"></script>
+<script src="https://cdn.smartcar.com/javascript-sdk/callback-0.0.10.js"></script>
 ```
 
 ## Configuration
@@ -62,6 +62,10 @@ Defaults to `false`. To disable a popup, and redirect to a different page instea
 #### `forcePrompt` (optional)
 
 Set to `force` to force a user to re-grant permissions.
+
+#### `Development` (optional)
+
+Set to `true` to enable the Mock OEM.
 
 #### `callback`
 

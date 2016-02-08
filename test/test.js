@@ -20,7 +20,7 @@ suite('Smartcar Auth SDK', function() {
       redirectUri: redirectUri,
       scope: scope,
       grantType: grantType,
-      state: state
+      state: state,
     });
     document.getElementById(selector).innerHTML = '';
   });
@@ -37,6 +37,7 @@ suite('Smartcar Auth SDK', function() {
       scope: 'scope',
       state: state,
       forcePrompt: true,
+      development: true,
       disablePopup: true,
       callback: function() {},
     });
@@ -47,6 +48,7 @@ suite('Smartcar Auth SDK', function() {
     expect(Smartcar.grantType).to.equal('code');
     expect(Smartcar.state).to.equal(state);
     expect(Smartcar.popup).to.equal(false);
+    expect(Smartcar.oemConfig.mock).to.be.an('object');
     expect(Smartcar.approvalPrompt).to.equal('force');
     expect(Smartcar.callback).to.be.a('function');
 
