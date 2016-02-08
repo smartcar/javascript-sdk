@@ -127,6 +127,9 @@ var Smartcar = (function(window, undefined) {
       html += '<a id="' +
         oemName + '-button" href="' + link +
         '" class="button connect-button" style="color: #FBFBFB;' +
+        'text-decoration:none;padding:7px 14px;margin:7px;text-align:center;' +
+        'font-weight:bold;font-family:Lato,Arial,Helvetica,sans-serif;' +
+        'border-radius:5px;text-transform:uppercase;max-width:500px;' +
         'border:0;display:block;font-size:15px;background-color:' +
         Smartcar.oemConfig[oemName].color +
         '">Connect with ' + oemName + '</a>';
