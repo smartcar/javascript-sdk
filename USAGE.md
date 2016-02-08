@@ -16,7 +16,7 @@ Load the SDK into your webpage with the following code:
     redirectUri: 'your-redirect-uri',
     scope: ['read_vehicle_info', 'read_odometer'],
     callback: function() {
-      window.location.reload;
+      window.location.reload();
     }
   });
 </script>
@@ -36,8 +36,23 @@ The best placement for the above code is just before the closing `</body>` tag.
 
 ### Loading callback.js
 
-If popups are being used, place `https://cdn.smartcar.com/javascript-sdk/callback-0.0.9.js` on the page your redirectURI is set to. This script will close the popup upon success and execute the code defined in `callback` upon initializing the SDK.
+If popups are being used, place the callback script on the page your redirectURI is set to. This script will close the popup upon success and execute the code defined in `callback` upon initializing the SDK.
 
+```html
+<!-- https://example.com -->
+<script>
+  Smartcar.init({
+    callback: function() {
+      window.location.reload();
+    }
+  })
+</script>
+```
+
+```html
+<!-- https://example.com/callback -->
+<script src="https://cdn.smartcar.com/javascript-sdk/callback-0.0.9.js"></script>
+```
 
 ### Using the SDK to generate connect buttons
 
