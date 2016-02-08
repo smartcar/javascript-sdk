@@ -15,7 +15,7 @@ var Smartcar = (function(window, undefined) {
     bmw: {    color: '#2E9BDA' },
     lexus: {  color: '#5B7F95' },
     volvo: {  color: '#000F60' },
-    mock: {  color: '#848484' },
+    mock: {  color: '#495F5D' },
   };
 
   // Sets default popup window size
