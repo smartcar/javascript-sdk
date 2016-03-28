@@ -21,7 +21,7 @@ The code below will initiate the Client SDK with the minimum configuration optio
 </script>
 ```
 
-The result will be as follows:
+Here are a subset of the buttons that will be generated:
 ![](lib/buttons.png)
 
 Add the below script to your redirectUri callback page to handle closing the OAuth popup and reloading the current page to update it with information retrieved with the newly obtained token.

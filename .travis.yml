@@ -17,7 +17,7 @@ install:
   - cp $HOME/smartcar-build/resources/Makefile .
 
   - npm install -g gulp
-  - npm install
+  - npm install --no-progress
 
 script:
   - npm test
