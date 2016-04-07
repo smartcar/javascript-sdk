@@ -34,17 +34,6 @@ var Smartcar = (function(window, undefined) {
     height: 500,
   };
 
-  wnd_settings.left = window.screenX +
-    (window.outerWidth - wnd_settings.width) / 2;
-  wnd_settings.top = window.screenY +
-    (window.outerHeight - wnd_settings.height) / 8;
-
-  var wnd_options = 'width=' + wnd_settings.width +
-    ',height=' + wnd_settings.height;
-  wnd_options += ',toolbar=0,scrollbars=1,status=1' +
-    ',resizable=1,location=1,menuBar=0';
-  wnd_options += ',left=' + wnd_settings.left + ',top=' + wnd_settings.top;
-
   /**
    * Initializes Smartcar Object
    *
@@ -184,12 +173,34 @@ var Smartcar = (function(window, undefined) {
   };
 
   /**
+   * Calculate the popup window size and position based on the current window
+   * settings.
+   *
+   * @return {String} a string of window settings
+   */
+  Smartcar._getWindowOptions = function() {
+    wnd_settings.left = window.screenX +
+      (window.outerWidth - wnd_settings.width) / 2;
+    wnd_settings.top = window.screenY +
+      (window.outerHeight - wnd_settings.height) / 8;
+
+    var wnd_options = 'width=' + wnd_settings.width +
+      ',height=' + wnd_settings.height;
+    wnd_options += ',toolbar=0,scrollbars=1,status=1' +
+      ',resizable=1,location=1,menuBar=0';
+    wnd_options += ',left=' + wnd_settings.left + ',top=' + wnd_settings.top;
+
+    return wnd_options;
+  };
+
+  /**
    * Opens a dialog for a specific OEM
    *
    * @param {String} oemName oem name
    */
   Smartcar.openDialog = function(oemName) {
     var href = this.generateLink(oemName);
+    var wnd_options = Smartcar._getWindowOptions();
     window.open(href, 'Login with ' + oemName, wnd_options);
   };
 
