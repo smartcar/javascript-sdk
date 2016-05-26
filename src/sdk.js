@@ -20,6 +20,7 @@ var Smartcar = (function(window, undefined) {
     ford:       { color: '#003399' },
     fiat:       { color: '#B50536' },
     gmc:        { color: '#CC0033' },
+    hyundai:    { color: '#00287A' },
     infiniti:   { color: '#1F1F1F' },
     jeep:       { color: '#374B00' },
     lexus:      { color: '#5B7F95' },
