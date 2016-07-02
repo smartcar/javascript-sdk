@@ -30,6 +30,7 @@ var Smartcar = (function(window, undefined) {
     tesla:      { color: '#CC0000' },
     volkswagen: { color: '#000000' },
     volvo:      { color: '#000F60' },
+    mercedes:   { color: '#222222' },
   };
 
   // Sets default popup window size
