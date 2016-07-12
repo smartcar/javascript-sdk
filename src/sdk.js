@@ -11,6 +11,7 @@ var Smartcar = (function(window, undefined) {
   // OEM static configuration
   Smartcar.oemConfig = {
     acura:      { color: '#020202' },
+    audi:       { color: '#000000' },
     bmw:        { color: '#2E9BDA' },
     buick:      { color: '#333333' },
     cadillac:   { color: '#941711' },
