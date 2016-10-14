@@ -1,6 +1,6 @@
 {
   "name": "smartcar-javascript-sdk",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "scripts": {
     "test": "mocha-phantomjs test/test.html",
     "cover": "istanbul instrument src/ -o src_tmp && mocha-phantomjs test/cover.html --hooks test/phantom_hooks.js && istanbul report text-summary lcov && rm -r src_tmp"

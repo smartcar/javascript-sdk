@@ -27,6 +27,7 @@ var Smartcar = (function(window, undefined) {
     landrover:  { color: '#005A2B' },
     lexus:      { color: '#5B7F95' },
     nissan:     { color: '#C71444' },
+    nissanev:   { color: '#C71444' },
     ram:        { color: '#000000' },
     tesla:      { color: '#CC0000' },
     volkswagen: { color: '#000000' },
