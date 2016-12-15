@@ -1,8 +1,9 @@
-/* jshint browser:true */
-/* globals Smartcar, expect, sinon */
+/* global Smartcar, sinon, expect */
+/* eslint-disable object-shorthand */
+
+'use strict';
 
 suite('Smartcar Auth SDK', function() {
-  'use strict';
 
   var sandbox;
 
@@ -29,7 +30,7 @@ suite('Smartcar Auth SDK', function() {
     sandbox.restore();
   });
 
-  test('initialization' , function() {
+  test('initialization', function() {
 
     Smartcar.init({
       clientId: 'clientId',
@@ -39,7 +40,7 @@ suite('Smartcar Auth SDK', function() {
       forcePrompt: true,
       development: true,
       disablePopup: true,
-      callback: function() {},
+      callback: function() { /* empty */ },
     });
 
     expect(Smartcar.clientId).to.equal('clientId');

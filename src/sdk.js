@@ -1,44 +1,40 @@
-/* jshint browser:true */
-/* exported Smartcar */
-/* globals jQuery */
+'use strict';
 
-// Smartcar JS SDK
-
-var Smartcar = (function(window, undefined) {
-  'use strict';
+window.Smartcar = (function(window) {
   var Smartcar = {};
 
-  // OEM static configuration
+  /* eslint-disable key-spacing */
   Smartcar.oemConfig = {
-    acura:         { color: '#020202' },
-    audi:          { color: '#000000' },
-    bmw:           { color: '#2E9BDA' },
-    'bmw-connected': { color: '#2E9BDA' },
-    buick:         { color: '#333333' },
-    cadillac:      { color: '#941711' },
-    chevrolet:     { color: '#042F6B' },
-    chrysler:      { color: '#231F20' },
-    dodge:         { color: '#000000' },
-    ford:          { color: '#003399' },
-    fiat:          { color: '#B50536' },
-    gmc:           { color: '#CC0033' },
-    hyundai:       { color: '#00287A' },
-    infiniti:      { color: '#1F1F1F' },
-    jeep:          { color: '#374B00' },
-    kia:           { color: '#C4172C' },
-    landrover:     { color: '#005A2B' },
-    lexus:         { color: '#5B7F95' },
-    nissan:        { color: '#C71444' },
-    nissanev:      { color: '#C71444' },
-    ram:           { color: '#000000' },
-    tesla:         { color: '#CC0000' },
-    volkswagen:    { color: '#000000' },
-    volvo:         { color: '#000F60' },
-    mercedes:      { color: '#222222' },
+    acura:           {color: '#020202'},
+    audi:            {color: '#000000'},
+    bmw:             {color: '#2E9BDA'},
+    'bmw-connected': {color: '#2E9BDA'},
+    buick:           {color: '#333333'},
+    cadillac:        {color: '#941711'},
+    chevrolet:       {color: '#042F6B'},
+    chrysler:        {color: '#231F20'},
+    dodge:           {color: '#000000'},
+    ford:            {color: '#003399'},
+    fiat:            {color: '#B50536'},
+    gmc:             {color: '#CC0033'},
+    hyundai:         {color: '#00287A'},
+    infiniti:        {color: '#1F1F1F'},
+    jeep:            {color: '#374B00'},
+    kia:             {color: '#C4172C'},
+    landrover:       {color: '#005A2B'},
+    lexus:           {color: '#5B7F95'},
+    nissan:          {color: '#C71444'},
+    nissanev:        {color: '#C71444'},
+    ram:             {color: '#000000'},
+    tesla:           {color: '#CC0000'},
+    volkswagen:      {color: '#000000'},
+    volvo:           {color: '#000F60'},
+    mercedes:        {color: '#222222'},
   };
+  /* eslint-enable key-spacing */
 
   // Sets default popup window size
-  var wnd_settings = {
+  var windowSettings = {
     width: 430,
     height: 500,
   };
@@ -66,12 +62,12 @@ var Smartcar = (function(window, undefined) {
     this.scope = options.scope;
     this.state = options.state || null;
     this.grantType = options.grantType || 'code';
-    this.popup = options.disablePopup ? false : true;
+    this.popup = !options.disablePopup;
     this.approvalPrompt = options.forcePrompt ? 'force' : 'auto';
-    this.callback = options.callback || function() {};
+    this.callback = options.callback || function() { /* empty */ };
 
     if (options.development === true) {
-      this.oemConfig.mock = { color: '#495F5D' };
+      this.oemConfig.mock = {color: '#495F5D'};
     }
   };
 
@@ -165,7 +161,7 @@ var Smartcar = (function(window, undefined) {
   Smartcar._registerPopups = function(oems) {
     oems.forEach(function(oem) {
 
-      if (window.jQuery) {
+      if (window.jQuery) { // eslint-disable-next-line no-undef
         jQuery(document).on('click', '#' + oem + '-button', function(event) {
           event.preventDefault();
           Smartcar.openDialog(oem);
@@ -188,18 +184,28 @@ var Smartcar = (function(window, undefined) {
    * @return {String} a string of window settings
    */
   Smartcar._getWindowOptions = function() {
-    wnd_settings.left = window.screenX +
-      (window.outerWidth - wnd_settings.width) / 2;
-    wnd_settings.top = window.screenY +
-      (window.outerHeight - wnd_settings.height) / 8;
+    var width = (window.outerWidth - windowSettings.width) / 2;
+    var height = (window.outerHeight - windowSettings.height) / 8;
 
-    var wnd_options = 'width=' + wnd_settings.width +
-      ',height=' + wnd_settings.height;
-    wnd_options += ',toolbar=0,scrollbars=1,status=1' +
-      ',resizable=1,location=1,menuBar=0';
-    wnd_options += ',left=' + wnd_settings.left + ',top=' + wnd_settings.top;
+    windowSettings.left = window.screenX + width;
+    windowSettings.top = window.screenY + height;
 
-    return wnd_options;
+    var options = {
+      status: 1,
+      toolbar: 0,
+      menuBar: 0,
+      location: 1,
+      resizeable: 1,
+      scrollbars: 1,
+    };
+
+    var windowOptions = [];
+    for (var option in options) { // eslint-disable-line guard-for-in
+      windowOptions.push(option + '=' + options[option]);
+    }
+
+    return windowOptions.join(',');
+
   };
 
   /**
@@ -209,8 +215,8 @@ var Smartcar = (function(window, undefined) {
    */
   Smartcar.openDialog = function(oemName) {
     var href = this.generateLink(oemName);
-    var wnd_options = Smartcar._getWindowOptions();
-    window.open(href, 'Login with ' + oemName, wnd_options);
+    var windowOptions = Smartcar._getWindowOptions();
+    window.open(href, 'Login with ' + oemName, windowOptions);
   };
 
   return Smartcar;
