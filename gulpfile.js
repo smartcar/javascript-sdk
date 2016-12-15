@@ -1,12 +1,14 @@
+/* eslint-env node */
+
 'use strict';
 
-var gulp = require('gulp');
-var browserSync = require('browser-sync');
-var reload = browserSync.reload;
-var $ = require('gulp-load-plugins')();
-var version = require('./package').version;
+const gulp = require('gulp');
+const {version} = require('./package');
+const $ = require('gulp-load-plugins')();
+const browserSync = require('browser-sync');
 
-// Serve demo page
+const reload = browserSync.reload;
+
 gulp.task('demo', function() {
   browserSync({
     port: 5000,
@@ -37,21 +39,21 @@ gulp.task('compress', function() {
   return gulp.src('src/*.js')
     .pipe($.uglify())
     .pipe($.rename({
-      suffix: "-" + version
+      suffix: `-${version}`,
     }))
     .pipe(gulp.dest('dist/javascript-sdk'));
 });
 
 gulp.task('publish', function() {
 
-  var S3_REGION = 'us-west-2';
-  var S3_BUCKET = 'smartcar-javascript-sdk';
+  const S3_REGION = 'us-west-2';
+  const S3_BUCKET = 'smartcar-javascript-sdk';
 
-  var publisher = $.awspublish.create({
+  const publisher = $.awspublish.create({
     region: S3_REGION,
     params: {
       Bucket: S3_BUCKET,
-    }
+    },
   });
 
   return gulp.src('dist/**/*.js')

@@ -1,4 +1,4 @@
-# Smartcar JS Client SDK [![Build Status](https://travis-ci.com/smartcar/javascript-sdk.svg?token=jMbuVtXPGeJMPdsn7RQ5&branch=master)](https://travis-ci.com/smartcar/javascript-sdk) [![Coverage Status](https://coveralls.io/repos/github/smartcar/javascript-sdk/badge.svg?branch=master&t=sqGPnl)](https://coveralls.io/github/smartcar/javascript-sdk?branch=master)
+# Smartcar JS Client SDK [![Build Status][ci-image]][ci-url]
 
 The Smartcar Javascript SDK provides a script to generate OEM connect buttons for users to use to login in with their vehicles.
 
@@ -9,7 +9,7 @@ The code below will initiate the Client SDK with the minimum configuration optio
 ```html
 <div id="smartcar-buttons"></div>
 
-<script src="https://cdn.smartcar.com/javascript-sdk/sdk-0.0.10.js"></script>
+<script src="https://cdn.smartcar.com/javascript-sdk/sdk-0.0.21.js"></script>
 <script>
 	Smartcar.init({
 	  clientId: 'your-client-id',
@@ -28,7 +28,7 @@ Add the below script to your redirectUri callback page to handle closing the OAu
 
 
 ```html
-<script src="https://cdn.smartcar.com/javascript-sdk/callback-0.0.10.js"></script>
+<script src="https://cdn.smartcar.com/javascript-sdk/callback-0.0.21.js"></script>
 ```
 
 ## Configuration
@@ -89,3 +89,5 @@ Call `Smartcar.generateLink('bmw')` to receive an object with the oemName and a 
 ### `openDialog(oemName)`
 Bind `Smartcar.openDialog('tesla')` to a click event to open a fully configured popup of that OEM. Calling the function without a user triggered click event will prevent the popup from showing up.
 
+[ci-url]: https://travis-ci.com/smartcar/javascript-sdk
+[ci-image]: https://travis-ci.com/smartcar/javascript-sdk.svg?token=jMbuVtXPGeJMPdsn7RQ5&branch=master

@@ -1,8 +1,9 @@
-/* jshint browser:true */
-/* globals Smartcar, expect, sinon */
+/* global Smartcar, sinon, expect */
+/* eslint-disable object-shorthand */
+
+'use strict';
 
 suite('Smartcar Auth SDK', function() {
-  'use strict';
 
   var sandbox;
 
@@ -29,7 +30,7 @@ suite('Smartcar Auth SDK', function() {
     sandbox.restore();
   });
 
-  test('initialization' , function() {
+  test('initialization', function() {
 
     Smartcar.init({
       clientId: 'clientId',
@@ -39,7 +40,7 @@ suite('Smartcar Auth SDK', function() {
       forcePrompt: true,
       development: true,
       disablePopup: true,
-      callback: function() {},
+      callback: function() { /* empty */ },
     });
 
     expect(Smartcar.clientId).to.equal('clientId');
@@ -53,6 +54,14 @@ suite('Smartcar Auth SDK', function() {
     expect(Smartcar.callback).to.be.a('function');
 
   });
+
+  test('initialization - no state', function() {
+
+    Smartcar.init({});
+    expect(Smartcar.state).to.equal(null);
+
+  });
+
 
   test('test link generation', function() {
     var oem = 'tesla';
@@ -70,6 +79,25 @@ suite('Smartcar Auth SDK', function() {
     expect(linkedOem).to.equal(uri);
 
   });
+
+  test('test link generation - no state', function() {
+    Smartcar.state = false;
+
+    var oem = 'tesla';
+    var linkedOem = Smartcar.generateLink(oem);
+
+    var uri = 'https://' + oem +
+    '.smartcar.com/oauth/authorize?' +
+      'response_type=' + grantType +
+      '&client_id=' + clientId +
+      '&redirect_uri=' + encodeURIComponent(redirectUri) +
+      '&scope=' + encodeURIComponent(scope.join(' ')) +
+      '&approval_prompt=auto';
+
+    expect(linkedOem).to.equal(uri);
+
+  });
+
 
   test('test generate all links', function() {
 

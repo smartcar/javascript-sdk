@@ -1,23 +1,27 @@
 {
   "name": "smartcar-javascript-sdk",
-  "version": "0.0.20",
+  "version": "0.0.21",
+  "private": true,
   "scripts": {
     "test": "mocha-phantomjs test/test.html",
-    "cover": "istanbul instrument src/ -o src_tmp && mocha-phantomjs test/cover.html --hooks test/phantom_hooks.js && istanbul report text-summary lcov && rm -r src_tmp"
+    "posttest": "npm run lint -s",
+    "lint": "eslint . --cache",
+    "cover": "nyc instrument src instrumented && mocha-phantomjs test/cover.html --hooks test/phantom_hooks.js && nyc report && rm -r instrumented && nyc check-coverage"
   },
-  "dependencies": {
-    "browser-sync": "^2.7.7",
+  "devDependencies": {
+    "browser-sync": "^2.18.5",
     "chai": "^3.4.1",
-    "coveralls": "^2.11.6",
     "dirty-chai": "^1.2.2",
+    "eslint": "^3.12.2",
+    "eslint-config-smartcar": "^2.0.0",
     "gulp": "^3.8.5",
     "gulp-awspublish": "^3.0.1",
     "gulp-load-plugins": "^1.2.0",
     "gulp-rename": "^1.2.2",
-    "gulp-uglify": "^1.5.1",
-    "istanbul": "^0.4.2",
-    "mocha": "^2.3.4",
+    "gulp-uglify": "^2.0.0",
+    "mocha": "^3.2.0",
     "mocha-phantomjs": "^4.0.2",
+    "nyc": "^10.0.0",
     "sinon": "^1.17.2",
     "sinon-chai": "^2.8.0"
   }

@@ -1,7 +1,6 @@
-/* jshint browser:true */
+'use strict';
 
 (function() {
-  'use strict';
   window.opener.Smartcar.callback();
   window.close();
-}());
+})();
