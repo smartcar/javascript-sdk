@@ -12,12 +12,13 @@ var after = function(runner) {
     return window.__coverage__;
   });
 
-  if (coverage) {
-    console.log('Writing coverage to ', COVERAGE_FILE);
-    fs.write(COVERAGE_FILE, JSON.stringify(coverage), 'w');
-  } else {
-    console.log('No coverage data generated');
+  if (!coverage) {
+    return console.error('No coverage data generated');
   }
+
+  coverage = JSON.stringify(coverage);
+  coverage = coverage.replace(/"(\w+?)\.js"/g, '"src/$1.js"');
+  fs.write(COVERAGE_FILE, coverage, 'w');
 
 };
 

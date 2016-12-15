@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "test": "mocha-phantomjs test/test.html",
+    "posttest": "npm run lint -s",
     "lint": "eslint . --cache",
-    "cover": "nyc instrument src instrumented && mocha-phantomjs test/cover.html --hooks test/phantom_hooks.js && nyc report && rm -r instrumented"
+    "cover": "nyc instrument src instrumented && mocha-phantomjs test/cover.html --hooks test/phantom_hooks.js && nyc report && rm -r instrumented && nyc check-coverage"
   },
   "devDependencies": {
     "browser-sync": "^2.18.5",
