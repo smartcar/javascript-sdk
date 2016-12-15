@@ -64,6 +64,8 @@ window.Smartcar = (function(window) {
     this.grantType = options.grantType || 'code';
     this.popup = !options.disablePopup;
     this.approvalPrompt = options.forcePrompt ? 'force' : 'auto';
+
+    // TODO this is not used anywhere, implement it
     this.callback = options.callback || function() { /* empty */ };
 
     if (options.development === true) {
@@ -160,20 +162,11 @@ window.Smartcar = (function(window) {
    */
   Smartcar._registerPopups = function(oems) {
     oems.forEach(function(oem) {
-
-      if (window.jQuery) { // eslint-disable-next-line no-undef
-        jQuery(document).on('click', '#' + oem + '-button', function(event) {
-          event.preventDefault();
-          Smartcar.openDialog(oem);
-        });
-      } else {
-        var button = document.getElementById(oem + '-button');
-        button.addEventListener('click', function(event) {
-          event.preventDefault();
-          Smartcar.openDialog(oem);
-        });
-      }
-
+      var button = document.getElementById(oem + '-button');
+      button.addEventListener('click', function(event) {
+        event.preventDefault();
+        Smartcar.openDialog(oem);
+      });
     });
   };
 
