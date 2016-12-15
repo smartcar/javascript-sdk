@@ -55,6 +55,14 @@ suite('Smartcar Auth SDK', function() {
 
   });
 
+  test('initialization - no state', function() {
+
+    Smartcar.init({});
+    expect(Smartcar.state).to.equal(null);
+
+  });
+
+
   test('test link generation', function() {
     var oem = 'tesla';
     var linkedOem = Smartcar.generateLink(oem);
@@ -71,6 +79,25 @@ suite('Smartcar Auth SDK', function() {
     expect(linkedOem).to.equal(uri);
 
   });
+
+  test('test link generation - no state', function() {
+    Smartcar.state = false;
+
+    var oem = 'tesla';
+    var linkedOem = Smartcar.generateLink(oem);
+
+    var uri = 'https://' + oem +
+    '.smartcar.com/oauth/authorize?' +
+      'response_type=' + grantType +
+      '&client_id=' + clientId +
+      '&redirect_uri=' + encodeURIComponent(redirectUri) +
+      '&scope=' + encodeURIComponent(scope.join(' ')) +
+      '&approval_prompt=auto';
+
+    expect(linkedOem).to.equal(uri);
+
+  });
+
 
   test('test generate all links', function() {
 
