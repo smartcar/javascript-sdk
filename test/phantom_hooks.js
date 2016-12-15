@@ -9,7 +9,7 @@ module.exports = {
 
     if (coverage) {
       console.log('Writing coverage to coverage/coverage.json');
-      fs.write('coverage/coverage.json', JSON.stringify(coverage), 'w');
+      fs.write('.nyc_output/coverage.json', JSON.stringify(coverage), 'w');
     } else {
       console.log('No coverage data generated');
     }
