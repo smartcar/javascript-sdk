@@ -1,17 +1,25 @@
-'use strict';
-module.exports = {
-  afterEnd: function(runner) {
-    var fs = require('fs');
-    var coverage = runner.page.evaluate(function() {
-      // jshint browser:true
-      return window.__coverage__;
-    });
+/* eslint-env node */
+/* eslint-disable no-console */
 
-    if (coverage) {
-      console.log('Writing coverage to coverage/coverage.json');
-      fs.write('.nyc_output/coverage.json', JSON.stringify(coverage), 'w');
-    } else {
-      console.log('No coverage data generated');
-    }
-  },
+'use strict';
+
+var fs = require('fs');
+var COVERAGE_FILE = '.nyc_output/coverage.json';
+
+var after = function(runner) {
+
+  var coverage = runner.page.evaluate(function() {
+    return window.__coverage__;
+  });
+
+  if (coverage) {
+    console.log('Writing coverage to ', COVERAGE_FILE);
+    fs.write(COVERAGE_FILE, JSON.stringify(coverage), 'w');
+  } else {
+    console.log('No coverage data generated');
+  }
+
 };
+
+
+module.exports = {afterEnd: after};
