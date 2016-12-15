@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "test": "mocha-phantomjs test/test.html",
+    "lint": "eslint . --cache",
     "cover": "nyc instrument src instrumented && mocha-phantomjs test/cover.html --hooks test/phantom_hooks.js && nyc report && rm -r instrumented"
   },
   "devDependencies": {
@@ -11,6 +12,8 @@
     "chai": "^3.4.1",
     "coveralls": "^2.11.6",
     "dirty-chai": "^1.2.2",
+    "eslint": "^3.12.2",
+    "eslint-config-smartcar": "^2.0.0",
     "gulp": "^3.8.5",
     "gulp-awspublish": "^3.0.1",
     "gulp-load-plugins": "^1.2.0",
