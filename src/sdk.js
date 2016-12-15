@@ -3,35 +3,33 @@
 window.Smartcar = (function(window) {
   var Smartcar = {};
 
-  /* eslint-disable key-spacing */
   Smartcar.oemConfig = {
-    acura:           {color: '#020202'},
-    audi:            {color: '#000000'},
-    bmw:             {color: '#2E9BDA'},
+    acura: {color: '#020202'},
+    audi: {color: '#000000'},
+    bmw: {color: '#2E9BDA'},
     'bmw-connected': {color: '#2E9BDA'},
-    buick:           {color: '#333333'},
-    cadillac:        {color: '#941711'},
-    chevrolet:       {color: '#042F6B'},
-    chrysler:        {color: '#231F20'},
-    dodge:           {color: '#000000'},
-    ford:            {color: '#003399'},
-    fiat:            {color: '#B50536'},
-    gmc:             {color: '#CC0033'},
-    hyundai:         {color: '#00287A'},
-    infiniti:        {color: '#1F1F1F'},
-    jeep:            {color: '#374B00'},
-    kia:             {color: '#C4172C'},
-    landrover:       {color: '#005A2B'},
-    lexus:           {color: '#5B7F95'},
-    nissan:          {color: '#C71444'},
-    nissanev:        {color: '#C71444'},
-    ram:             {color: '#000000'},
-    tesla:           {color: '#CC0000'},
-    volkswagen:      {color: '#000000'},
-    volvo:           {color: '#000F60'},
-    mercedes:        {color: '#222222'},
+    buick: {color: '#333333'},
+    cadillac: {color: '#941711'},
+    chevrolet: {color: '#042F6B'},
+    chrysler: {color: '#231F20'},
+    dodge: {color: '#000000'},
+    ford: {color: '#003399'},
+    fiat: {color: '#B50536'},
+    gmc: {color: '#CC0033'},
+    hyundai: {color: '#00287A'},
+    infiniti: {color: '#1F1F1F'},
+    jeep: {color: '#374B00'},
+    kia: {color: '#C4172C'},
+    landrover: {color: '#005A2B'},
+    lexus: {color: '#5B7F95'},
+    nissan: {color: '#C71444'},
+    nissanev: {color: '#C71444'},
+    ram: {color: '#000000'},
+    tesla: {color: '#CC0000'},
+    volkswagen: {color: '#000000'},
+    volvo: {color: '#000F60'},
+    mercedes: {color: '#222222'},
   };
-  /* eslint-enable key-spacing */
 
   // Sets default popup window size
   var windowSettings = {
@@ -64,8 +62,6 @@ window.Smartcar = (function(window) {
     this.grantType = options.grantType || 'code';
     this.popup = !options.disablePopup;
     this.approvalPrompt = options.forcePrompt ? 'force' : 'auto';
-
-    // TODO this is not used anywhere, implement it
     this.callback = options.callback || function() { /* empty */ };
 
     if (options.development === true) {
