@@ -5,38 +5,55 @@
     <title>Demo App</title>
 
     <style>
-      .header {
-        text-align: center;
-        font-weight: 700;
+
+      html, body {
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
       }
 
       body {
         font-family: "Lato", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
-        background: #FBFBFB;
+        background: #ECE9E6;
+        background: linear-gradient(to top left, #FFFFFF, #ECE9E6);
       }
 
-      .container {
-        margin-top: 100px;
+      h1 {
+        margin-bottom: 50px;
       }
+
+      #container {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      #smartcar-buttons {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+      }
+
+      #smartcar-buttons a {
+        height: 75px;
+        width: 300px;
+        line-height: 75px;
+      }
+
     </style>
   </head>
 
   <body>
 
     <span id="browser-sync-binding"></span>
-    <div class="container">
 
-      <div class="row">
-        <div class="four columns offset-by-four">
-          <h1 class="header">Demo</h1>
-        </div>
-      </div>
+    <div id="container">
 
-      <div class="row">
-        <div class="four columns offset-by-four">
-          <div id="smartcar-buttons"></div>
-        </div>
-      </div>
+      <h1>Javascript SDK Demo</h1>
+      <div id="smartcar-buttons"></div>
+
     </div>
 
     <script src="scripts/sdk.js"></script>
