@@ -1,6 +1,7 @@
-'use strict';
 
 window.Smartcar = (function(window) {
+  'use strict';
+
   var Smartcar = {};
 
   Smartcar.oemConfig = {

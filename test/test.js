@@ -1,9 +1,9 @@
 /* global Smartcar, sinon, expect */
 /* eslint-disable object-shorthand */
 
-'use strict';
-
 suite('Smartcar Auth SDK', function() {
+
+  'use strict';
 
   var sandbox;
 
