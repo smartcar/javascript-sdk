@@ -1,6 +1,6 @@
 {
   "name": "smartcar-javascript-sdk",
-  "version": "0.0.21",
+  "version": "0.0.22",
   "private": true,
   "scripts": {
     "test": "mocha-phantomjs test/test.html",
