@@ -176,25 +176,12 @@ window.Smartcar = (function(window) {
     var width = (window.outerWidth - windowSettings.width) / 2;
     var height = (window.outerHeight - windowSettings.height) / 8;
 
-    windowSettings.left = window.screenX + width;
-    windowSettings.top = window.screenY + height;
-
-    var options = {
-      status: 1,
-      toolbar: 0,
-      menuBar: 0,
-      location: 1,
-      resizeable: 1,
-      scrollbars: 1,
-    };
-
-    var windowOptions = [];
-    for (var option in options) { // eslint-disable-line guard-for-in
-      windowOptions.push(option + '=' + options[option]);
-    }
-
-    return windowOptions.join(',');
-
+    var options = '';
+    options += 'top=' + window.screenY + height + ',';
+    options += 'left=' + window.screenX + width + ',';
+    options += 'width=' + windowSettings.width + ',';
+    options += 'height=' + windowSettings.height + ',';
+    return options;
   };
 
   /**
