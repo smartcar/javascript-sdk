@@ -1,5 +1,3 @@
-/* global jQuery */
-
 window.Smartcar = (function(window) {
   'use strict';
 
@@ -126,52 +124,37 @@ window.Smartcar = (function(window) {
 
     let html = '';
     oems.forEach((oemName) => {
-      let link;
 
+      const id = `id="${oemName}-button"`;
+      const cls = 'class="button connect-button"';
+      const style = `style="
+        color: #FBFBFB;
+        text-decoration: none;
+        padding: 7px 14px;
+        margin: 7px;
+        text-align: center;
+        font-weight: bold;
+        font-family: Lato,Arial,Helvetica,sans-serif;
+        border-radius: 5px;
+        text-transform: uppercase;
+        max-width: 500px;
+        border: 0;
+        display: block;
+        font-size: 15px;
+        background-color: ${Smartcar.oemConfig[oemName].color}"`;
+
+      let link;
       if (this.popup) {
-        link = '#';
+        link = `href="#" onclick="Smartcar.openDialog('${oemName}');"`;
       } else {
-        link = links[oemName];
+        link = `href="${links[oemName]}"`;
       }
 
-      html += `<a id="${oemName}-button" href="${link}"
-        class="button connect-button" style="color: #FBFBFB;
-        text-decoration:none;padding:7px 14px;margin:7px;text-align:center;
-        font-weight:bold;font-family:Lato,Arial,Helvetica,sans-serif;
-        border-radius:5px;text-transform:uppercase;max-width:500px;
-        border:0;display:block;font-size:15px;background-color:
-        Smartcar.oemConfig[oemName].color
-        ">Connect with ${oemName}</a>`;
+      html += `<a ${id} ${cls} ${style} ${link}>Connect with ${oemName}</a>`;
+
     });
 
     container.innerHTML = html;
-
-    // Register popup events if enabled
-    if (this.popup) {
-      Smartcar._registerPopups(oems);
-    }
-  };
-
-  /**
-   * Registers popup click handlers for given OEM objects
-   *
-   * @param {String[]} oems array of oem names
-   */
-  Smartcar._registerPopups = function(oems) {
-    oems.forEach(function(oem) {
-      if (window.jQuery) {
-        jQuery(document).on('click', `#${oem}-button`, function(event) {
-          event.preventDefault();
-          Smartcar.openDialog(oem);
-        });
-      } else {
-        const button = document.getElementById(`${oem}-button`);
-        button.addEventListener('click', function(event) {
-          event.preventDefault();
-          Smartcar.openDialog(oem);
-        });
-      }
-    });
   };
 
   /**
@@ -201,6 +184,7 @@ window.Smartcar = (function(window) {
     const href = this.generateLink(oemName);
     const windowOptions = Smartcar._getWindowOptions();
     window.open(href, `Login with ${oemName}`, windowOptions);
+    return false; // this is equivalent to calling event.preventDefault();
   };
 
   return Smartcar;

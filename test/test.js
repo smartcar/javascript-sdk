@@ -56,7 +56,6 @@ suite('Smartcar Auth SDK', function() {
   });
 
   test('initialization - no state', function() {
-
     Smartcar.init({});
     expect(Smartcar.state).to.equal(null);
 
@@ -109,13 +108,13 @@ suite('Smartcar Auth SDK', function() {
 
   test('button generation', function() {
 
-    sandbox.stub(Smartcar, '_registerPopups');
     Smartcar.generateButtons(selector);
     Object.keys(Smartcar.oemConfig).forEach(function(oem) {
       var button = document.getElementById(oem + '-button');
       expect(button).to.be.ok();
+      expect(button.href).to.include('test.html#');
+      expect(typeof button.onclick).to.equal('function');
     });
-    expect(Smartcar._registerPopups).to.be.calledOnce();
 
   });
 
@@ -126,6 +125,8 @@ suite('Smartcar Auth SDK', function() {
     Object.keys(Smartcar.oemConfig).forEach(function(oem) {
       var button = document.getElementById(oem + '-button');
       expect(button).to.be.ok();
+      expect(button.href).to.include('smartcar.com/oauth/authorize');
+      expect(button.onclick).to.equal(null);
     });
 
   });
