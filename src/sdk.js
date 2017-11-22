@@ -17,6 +17,7 @@ window.Smartcar = (function(window) {
     ford: {color: '#003399'},
     fiat: {color: '#B50536'},
     gmc: {color: '#CC0033'},
+    honda: {color: '#DA251D'},
     hyundai: {color: '#00287A'},
     genesis: {color: '#000000'},
     infiniti: {color: '#1F1F1F'},
