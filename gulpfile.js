@@ -35,8 +35,15 @@ gulp.task('demo', function() {
 
 });
 
+gulp.task('test', function() {
+  return gulp.src('src/*.js')
+    .pipe($.babel())
+    .pipe(gulp.dest('dist'));
+});
+
 gulp.task('compress', function() {
   return gulp.src('src/*.js')
+    .pipe($.babel())
     .pipe($.uglify())
     .pipe($.rename({
       suffix: `-${version}`,

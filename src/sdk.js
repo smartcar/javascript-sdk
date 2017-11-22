@@ -3,7 +3,7 @@
 window.Smartcar = (function(window) {
   'use strict';
 
-  var Smartcar = {};
+  const Smartcar = {};
 
   Smartcar.oemConfig = {
     acura: {color: '#020202'},
@@ -36,7 +36,7 @@ window.Smartcar = (function(window) {
   };
 
   // Sets default popup window size
-  var windowSettings = {
+  const windowSettings = {
     width: 430,
     height: 500,
   };
@@ -80,20 +80,19 @@ window.Smartcar = (function(window) {
    * @return {String} generated authorize link
    */
   Smartcar.generateLink = function(oemName) {
-    var stateString = '';
+    let link = '';
+    link += `https://${oemName}.smartcar.com/oauth/authorize`;
+    link += `?response_type=${this.grantType}`;
+    link += `&client_id=${this.clientId}`;
+    link += `&redirect_uri=${encodeURIComponent(this.redirectUri)}`;
+    link += `&scope=${encodeURIComponent(this.scope.join(' '))}`;
+    link += `&approval_prompt=${this.approvalPrompt}`;
 
     if (this.state) {
-      stateString = '&state=' + this.state;
+      link += `&state=${this.state}`;
     }
 
-    return 'https://' + oemName +
-      '.smartcar.com/oauth/authorize?' +
-      'response_type=' + this.grantType +
-      '&client_id=' + this.clientId +
-      '&redirect_uri=' + encodeURIComponent(this.redirectUri) +
-      '&scope=' + encodeURIComponent(this.scope.join(' ')) +
-      '&approval_prompt=' + this.approvalPrompt +
-      stateString;
+    return link;
   };
 
   /**
@@ -105,7 +104,7 @@ window.Smartcar = (function(window) {
    */
   Smartcar.generateLinks = function(oems) {
     oems = oems || Object.keys(Smartcar.oemConfig);
-    var links = {};
+    const links = {};
     oems.forEach(function(oemName) {
       links[oemName] = Smartcar.generateLink(oemName);
     });
@@ -120,31 +119,29 @@ window.Smartcar = (function(window) {
    * all OEMs
    */
   Smartcar.generateButtons = function(selector, oems) {
-    var container = document.getElementById(selector);
+    const container = document.getElementById(selector);
     oems = oems || Object.keys(Smartcar.oemConfig);
 
-    var links = this.generateLinks(oems);
+    const links = this.generateLinks(oems);
 
-    var html = '';
-    var self = this;
-    oems.forEach(function(oemName) {
-      var link;
+    let html = '';
+    oems.forEach((oemName) => {
+      let link;
 
-      if (self.popup) {
+      if (this.popup) {
         link = '#';
       } else {
         link = links[oemName];
       }
 
-      html += '<a id="' +
-        oemName + '-button" href="' + link +
-        '" class="button connect-button" style="color: #FBFBFB;' +
-        'text-decoration:none;padding:7px 14px;margin:7px;text-align:center;' +
-        'font-weight:bold;font-family:Lato,Arial,Helvetica,sans-serif;' +
-        'border-radius:5px;text-transform:uppercase;max-width:500px;' +
-        'border:0;display:block;font-size:15px;background-color:' +
-        Smartcar.oemConfig[oemName].color +
-        '">Connect with ' + oemName + '</a>';
+      html += `<a id="${oemName}-button" href="${link}"
+        class="button connect-button" style="color: #FBFBFB;
+        text-decoration:none;padding:7px 14px;margin:7px;text-align:center;
+        font-weight:bold;font-family:Lato,Arial,Helvetica,sans-serif;
+        border-radius:5px;text-transform:uppercase;max-width:500px;
+        border:0;display:block;font-size:15px;background-color:
+        Smartcar.oemConfig[oemName].color
+        ">Connect with ${oemName}</a>`;
     });
 
     container.innerHTML = html;
@@ -163,12 +160,12 @@ window.Smartcar = (function(window) {
   Smartcar._registerPopups = function(oems) {
     oems.forEach(function(oem) {
       if (window.jQuery) {
-        jQuery(document).on('click', '#' + oem + '-button', function(event) {
+        jQuery(document).on('click', `#${oem}-button`, function(event) {
           event.preventDefault();
           Smartcar.openDialog(oem);
         });
       } else {
-        var button = document.getElementById(oem + '-button');
+        const button = document.getElementById(`${oem}-button`);
         button.addEventListener('click', function(event) {
           event.preventDefault();
           Smartcar.openDialog(oem);
@@ -184,14 +181,14 @@ window.Smartcar = (function(window) {
    * @return {String} a string of window settings
    */
   Smartcar._getWindowOptions = function() {
-    var width = (window.outerWidth - windowSettings.width) / 2;
-    var height = (window.outerHeight - windowSettings.height) / 8;
+    const width = (window.outerWidth - windowSettings.width) / 2;
+    const height = (window.outerHeight - windowSettings.height) / 8;
 
-    var options = '';
-    options += 'top=' + window.screenY + height + ',';
-    options += 'left=' + window.screenX + width + ',';
-    options += 'width=' + windowSettings.width + ',';
-    options += 'height=' + windowSettings.height + ',';
+    let options = '';
+    options += `top=${window.screenY + height},`;
+    options += `left=${window.screenX + width},`;
+    options += `width=${windowSettings.width},`;
+    options += `height=${windowSettings.height},`;
     return options;
   };
 
@@ -201,9 +198,9 @@ window.Smartcar = (function(window) {
    * @param {String} oemName oem name
    */
   Smartcar.openDialog = function(oemName) {
-    var href = this.generateLink(oemName);
-    var windowOptions = Smartcar._getWindowOptions();
-    window.open(href, 'Login with ' + oemName, windowOptions);
+    const href = this.generateLink(oemName);
+    const windowOptions = Smartcar._getWindowOptions();
+    window.open(href, `Login with ${oemName}`, windowOptions);
   };
 
   return Smartcar;
