@@ -1,3 +1,4 @@
+/* global jQuery */
 
 window.Smartcar = (function(window) {
   'use strict';
@@ -161,11 +162,18 @@ window.Smartcar = (function(window) {
    */
   Smartcar._registerPopups = function(oems) {
     oems.forEach(function(oem) {
-      var button = document.getElementById(oem + '-button');
-      button.addEventListener('click', function(event) {
-        event.preventDefault();
-        Smartcar.openDialog(oem);
-      });
+      if (window.jQuery) {
+        jQuery(document).on('click', '#' + oem + '-button', function(event) {
+          event.preventDefault();
+          Smartcar.openDialog(oem);
+        });
+      } else {
+        var button = document.getElementById(oem + '-button');
+        button.addEventListener('click', function(event) {
+          event.preventDefault();
+          Smartcar.openDialog(oem);
+        });
+      }
     });
   };
 
