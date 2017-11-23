@@ -6,7 +6,7 @@
     "test": "gulp test && mocha-phantomjs test/test.html",
     "posttest": "npm run lint -s",
     "lint": "eslint . --cache",
-    "cover": "nyc instrument src instrumented && mocha-phantomjs test/cover.html --hooks test/phantom_hooks.js && nyc report && rm -r instrumented && nyc check-coverage"
+    "cover": "nyc instrument src instrumented && gulp cover && mocha-phantomjs test/cover.html --hooks test/phantom_hooks.js && nyc report && rm -r instrumented && nyc check-coverage"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

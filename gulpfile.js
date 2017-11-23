@@ -41,6 +41,12 @@ gulp.task('test', function() {
     .pipe(gulp.dest('dist'));
 });
 
+gulp.task('cover', function() {
+  return gulp.src('instrumented/*.js')
+    .pipe($.babel())
+    .pipe(gulp.dest('instrumented'));
+});
+
 gulp.task('compress', function() {
   return gulp.src('src/*.js')
     .pipe($.babel())

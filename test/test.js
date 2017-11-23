@@ -112,7 +112,7 @@ suite('Smartcar Auth SDK', function() {
     Object.keys(Smartcar.oemConfig).forEach(function(oem) {
       var button = document.getElementById(oem + '-button');
       expect(button).to.be.ok();
-      expect(button.href).to.include('test.html#');
+      expect(button.href).to.include('.html#');
       expect(typeof button.onclick).to.equal('function');
     });
 
