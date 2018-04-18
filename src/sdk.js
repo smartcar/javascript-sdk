@@ -16,6 +16,12 @@ window.Smartcar = (function(window) {
     this.scope = options.scope;
     this.onComplete = options.onComplete || function() { /* empty */ };
     this.grantType = 'code';
+
+    // this is used to preserve reference to smartcar when we call
+    // onComplete in the callback (see callback.js)
+    //
+    // TODO throw error if more than one instance
+    window._smartcar = this;
   }
 
   /**
@@ -27,7 +33,9 @@ window.Smartcar = (function(window) {
    * exact scope of permission
    * @return {String} - generated OAuth link
    */
-  Smartcar.prototype._generateLink = function(options) {
+  Smartcar.prototype.generateLink = function(options) {
+    options = options || {};
+
     let link = '';
     link += 'https://connect.smartcar.com/oauth/authorize';
     link += `?response_type=${this.grantType}`;
@@ -40,12 +48,12 @@ window.Smartcar = (function(window) {
 
     // If scope is not specified, Smartcar will default to requesting all scopes
     // from the user
-    if (options.scope) {
+    if (this.scope) {
       link += `&scope=${encodeURIComponent(this.scope.join(' '))}`;
     }
 
     if (options.state) {
-      link += `&state=${this.state}`;
+      link += `&state=${options.state}`;
     }
 
     return link;
