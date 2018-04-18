@@ -1,6 +1,6 @@
 {
   "name": "smartcar-javascript-sdk",
-  "version": "0.0.26",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "test": "gulp test && mocha-phantomjs test/test.html",

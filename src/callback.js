@@ -1,6 +1,6 @@
 (function() {
   'use strict';
 
-  window.opener.Smartcar.callback();
+  window.opener.Smartcar.onComplete();
   window.close();
 })();
