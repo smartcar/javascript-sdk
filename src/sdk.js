@@ -17,11 +17,14 @@ window.Smartcar = (function(window) {
     this.onComplete = options.onComplete || function() { /* empty */ };
     this.grantType = 'code';
 
-    // this is used to preserve reference to smartcar when we call
+    // window._smartcar is used to preserve reference to smartcar when we call
     // onComplete in the callback (see callback.js)
-    //
-    // TODO throw error if more than one instance
-    window._smartcar = this;
+    if (window._smartcar) {
+      // throw error if more than one instance
+      throw new Error('window._smartcar is already defined');
+    } else {
+      window._smartcar = this;
+    }
   }
 
   /**
