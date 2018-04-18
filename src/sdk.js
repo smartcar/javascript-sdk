@@ -14,7 +14,7 @@ window.Smartcar = (function(window) {
     this.clientId = options.clientId;
     this.redirectUri = options.redirectUri;
     this.scope = options.scope;
-    this.onComplete = options.onComplete || function() { /* empty */ };
+    this.onComplete = options.onComplete;
     this.grantType = 'code';
 
     // window._smartcar is used to preserve reference to smartcar when we call

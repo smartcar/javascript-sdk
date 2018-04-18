@@ -57,7 +57,7 @@ describe('sdk', () => {
       expect(window._smartcar).toEqual(smartcar);
     });
 
-    test('defaults onComplete to empty function', () => {
+    test('onComplete undefined if not specified', () => {
       const options = {
         clientId: 'clientId',
         redirectUri: 'https://smartcar.com',
@@ -66,7 +66,7 @@ describe('sdk', () => {
 
       const smartcar = new window.Smartcar(options);
 
-      expect(typeof smartcar.onComplete).toBe('function');
+      expect(smartcar.onComplete).toBe(undefined);
     });
 
   });
