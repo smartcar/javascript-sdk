@@ -26,7 +26,21 @@ describe('callback', () => {
     expect(() => require('../src/callback')).toThrow('window.opener._smartcar is undefined');
   });
 
+  test('calls close if onComplete undefined', () => {
+    const mockClose = jest.fn();
+    window.close = mockClose;
+
+    window.opener = {_smartcar: {}};
+
+    require('../src/callback'); // eslint-disable-line global-require
+
+    expect(mockClose).toHaveBeenCalled();
+  });
+
   test('calls onComplete and window.close()', () => {
+    const mockClose = jest.fn();
+    window.close = mockClose;
+
     const mockOnComplete = jest.fn();
     window.opener = {
       _smartcar: {
@@ -34,8 +48,6 @@ describe('callback', () => {
       },
     };
 
-    const mockClose = jest.fn();
-    window.close = mockClose;
 
     require('../src/callback'); // eslint-disable-line global-require
 
