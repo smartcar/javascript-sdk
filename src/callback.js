@@ -1,5 +1,7 @@
 /**
- * callback.js should be imported in the file served by your redirect uri
+ * callback.js can be served in the last page of your OAuth Flow to close the
+ * popup window and call your callback. The last page of your OAuth Flow can be
+ * specified as your redirect_uri.
  */
 
 (function() {
