@@ -29,7 +29,8 @@ describe('sdk', () => {
         onComplete: jest.fn(),
       };
 
-      expect(() => new window.Smartcar(options)).toThrow('window._smartcar is already defined');
+      // eslint-disable-line max-len
+      expect(() => new window.Smartcar(options)).toThrow('Smartcar has already been instantiated in the window. Only one instance of Smartcar can be defined. See https://github.com/smartcar/javascript-sdk for more information');
     });
 
     test('initializes correctly', () => {

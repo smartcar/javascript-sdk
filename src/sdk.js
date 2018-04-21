@@ -21,7 +21,8 @@ window.Smartcar = (function(window) {
     // onComplete in the callback (see callback.js)
     if (window._smartcar) {
       // throw error if more than one instance
-      throw new Error('window._smartcar is already defined');
+      // eslint-disable-line max-len
+      throw new Error('Smartcar has already been instantiated in the window. Only one instance of Smartcar can be defined. See https://github.com/smartcar/javascript-sdk for more information');
     } else {
       window._smartcar = this;
     }
@@ -66,7 +67,7 @@ window.Smartcar = (function(window) {
    * Calculate the popup window size and position based on the current window
    * settings.
    *
-   * @return {String} - a string of window settings
+   * @return {String} a string of window settings
    */
   Smartcar._getWindowOptions = function() {
     // Sets default popup window size
