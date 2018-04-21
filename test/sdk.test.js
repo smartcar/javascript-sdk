@@ -7,7 +7,6 @@
 'use strict';
 
 const _ = require('lodash');
-const $ = require('jquery');
 
 require('../src/sdk.js');
 
@@ -189,7 +188,7 @@ describe('sdk', () => {
 
       expect(mockOpen).toHaveBeenCalledTimes(0);
 
-      $(`#${id}`).click();
+      document.getElementById(id).click();
 
       expect(mockOpen).toHaveBeenCalledWith(expectedLink, 'Connect your car', expectedOptions);
     });
