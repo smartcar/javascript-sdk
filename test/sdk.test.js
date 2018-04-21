@@ -97,9 +97,9 @@ describe('sdk', () => {
 
       const smartcar = new window.Smartcar(options);
 
-      const expectedLink = 'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&state=platform=web';
+      const expectedLink = 'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&state=foobarbaz';
       const link = smartcar.generateLink({
-        state: 'platform=web',
+        state: 'foobarbaz',
         forcePrompt: true,
       });
       expect(link).toEqual(expectedLink);
@@ -138,12 +138,12 @@ describe('sdk', () => {
     };
 
     const dialogOptions = {
-      state: 'platform=web',
+      state: 'foobarbaz',
       forcePrompt: true,
     };
 
     // expected OAuth link
-    const expectedLink = 'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&state=platform=web';
+    const expectedLink = 'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&state=foobarbaz';
 
     beforeEach(() => {
       // set window options
