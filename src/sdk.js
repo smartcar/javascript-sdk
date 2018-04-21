@@ -90,9 +90,9 @@ window.Smartcar = (function(window) {
 
   /**
    * Launch the OAuth dialog flow
-   * @param  {Object} options - the link configuration object
+   * @param {Object} options - the link configuration object
    * @param {String} [options.state] - arbitrary parameter passed to the redirect uri
-   * @param {Boolean} [options.forcePrompt] - force permission approval screen to
+   * @param {Boolean} [options.forcePrompt=false] - force permission approval screen to
    * show on every authentication, even if the user has previously consented
    * to the exact scope of permission
    * @return {String} - generated OAuth link
@@ -109,7 +109,8 @@ window.Smartcar = (function(window) {
   /**
   * Add an on-click event listener to the element with the provided id.
   * On-click event calls openDialog when the specified element is clicked.
-  * @param  {Object} options - the link configuration object
+  * @param {Object} options - clickHandler configuration object
+  * @param {String} [options.id] - id of the element for which to add the click handler
   * @param {String} [options.state] - arbitrary parameter passed to the redirect uri
   * @param {Boolean} [options.forcePrompt] - force permission approval screen to
   * show on every authentication, even if the user has previously consented
