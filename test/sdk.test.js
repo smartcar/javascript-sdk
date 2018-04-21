@@ -165,6 +165,31 @@ describe('sdk', () => {
       expect(mockOpen).toHaveBeenCalledWith(expectedLink, 'Connect your car', expectedOptions);
     });
 
+    test('addClickHandler throws error if id does not exist', () => {
+      const id = 'connect-car-button';
+
+      // setup document body
+      document.body.innerHTML =
+      `<div>
+      <button id="${id}">Connect your car</button>
+      </div>`;
+
+      // mock window.open
+      const mockOpen = jest.fn();
+      window.open = mockOpen;
+
+      const smartcar = new window.Smartcar(options);
+      const clickHandlerOptions = {
+        id: 'incorrect-id',
+        state: dialogOptions.state,
+        forcePrompt: dialogOptions.forcePrompt,
+      };
+
+      expect(() => smartcar.addClickHandler(clickHandlerOptions)).toThrow(
+        'Could not add click handler: element with id \'incorrect-id\' was not found.'
+      );
+    });
+
     test('addClickHandler adds event listener that calls openDialog on click event', () => {
       const id = 'connect-car-button';
 
