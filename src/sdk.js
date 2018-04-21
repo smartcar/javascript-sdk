@@ -123,11 +123,12 @@ window.Smartcar = (function(window) {
       forcePrompt: options.forcePrompt,
     };
 
-    if (!document.getElementById(id)) {
+    const element = document.getElementById(id);
+    if (!element) {
       throw new Error(`Could not add click handler: element with id '${id}' was not found.`);
     }
 
-    document.getElementById(id).addEventListener('click', () => this.openDialog(dialogOptions));
+    element.addEventListener('click', () => this.openDialog(dialogOptions));
   };
 
   return Smartcar;
