@@ -37,7 +37,7 @@ window.Smartcar = (function(window) {
    *
    * @param  {Object} options - the link configuration object
    * @param {String} [options.state] - arbitrary parameter passed to the redirect uri
-   * @param {Boolean} [options.forcePrompt] - force permission approval screen to show
+   * @param {Boolean} [options.forcePrompt=false] - force permission approval screen to show
    * on every authentication, even if the user has previously consented to the
    * exact scope of permission
    * @return {String} - generated OAuth link
