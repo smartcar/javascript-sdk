@@ -105,6 +105,44 @@ describe('sdk', () => {
       expect(link).toEqual(expectedLink);
     });
 
+    test('generates development mode link', () => {
+      const options = {
+        clientId: 'clientId',
+        redirectUri: 'https://smartcar.com',
+        scope: ['read_vehicle_info', 'read_odometer'],
+        onComplete: jest.fn(),
+      };
+
+      const smartcar = new window.Smartcar(options);
+
+      const expectedLink = 'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&state=foobarbaz&mock=true';
+      const link = smartcar.generateLink({
+        state: 'foobarbaz',
+        forcePrompt: true,
+        development: true,
+      });
+      expect(link).toEqual(expectedLink);
+    });
+
+    test('does not add mock to url if development false', () => {
+      const options = {
+        clientId: 'clientId',
+        redirectUri: 'https://smartcar.com',
+        scope: ['read_vehicle_info', 'read_odometer'],
+        onComplete: jest.fn(),
+      };
+
+      const smartcar = new window.Smartcar(options);
+
+      const expectedLink = 'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&state=foobarbaz';
+      const link = smartcar.generateLink({
+        state: 'foobarbaz',
+        forcePrompt: true,
+        development: false,
+      });
+      expect(link).toEqual(expectedLink);
+    });
+
   });
 
   describe('getWindowOptions', () => {
