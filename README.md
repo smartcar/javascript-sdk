@@ -25,35 +25,6 @@ The SDK helps ease the [OAuth authorization process](https://tools.ietf.org/html
 
 The SDK will help facilitate the OAuth link generation, popup dialog creation, and Smartcar will handle the user authentication and authorization. This SDK will not assist with the backend server code to accept authorization codes or exchanging for access tokens (step 6).
 
-### Parameters
-These parameters are used throughout the Smartcar Javascript SDK:
-
-| Parameter       | Type | Description   |
-|:--------------- |:---|:------------- |
-| `clientId`      | String |**Required** Your application's client ID |
-| `redirectUri`   | String |**Required** RedirectURI set in [application settings](https://developer.smartcar.com/apps) |
-| `scope`         | String[] |**Optional** List of permissions your application requests access to |
-| `state`         | String |**Optional** OAuth state parameter used for identifying the user who initiated the request |
-| `onComplete`      | Function |**Optional** Function to be called upon user granting your application access when using popups |
-| `forcePrompt`   | Boolean |**Optional** Force a user to the permission screen even if they've already granted access |
-
-### Code Sample
-```html
-<script src="https://cdn.smartcar.com/javascript-sdk/sdk-0.0.10.js"></script>
-<script>
-  const smartcar = new Smartcar({
-    clientId: 'your-client-id',
-    redirectUri: 'your-redirect-uri',
-    scope: ['read_vehicle_info', 'read_odometer'],
-    callback: function() {
-      window.location.reload();
-    }
-  });
-</script>
-```
-The best placement for the above code is just before the closing `</body>` tag.
-
-
 ### Import `sdk.js`:
 ```html
 <script src="https://cdn.smartcar.com/javascript-sdk/sdk-0.1.0.js"></script>
@@ -109,18 +80,19 @@ You can import this SDK into your application from Smartcar's CDN:
 
 ## Configuration
 ### `new Smartcar({options})`
+#### Options:
+| Parameter       | Type | Description   |
+|:--------------- |:---|:------------- |
+| `clientId`      | String |Application client ID obtained from [Smartcar Developer Portal](https://developer.smartcar.com). If you do not have access to the dashboard, please [request access](https://smartcar.com/subscribe). |
+| `redirectUri`   | String |**Required** RedirectURI set in [application settings](https://developer.smartcar.com/apps). Given URL must match URL in application settings. |
+| `scope`         | String[] |**Optional** List of permissions your application requests access to. This will default to requiring all scopes. The valid permission names are found in the [API Reference](https://smartcar.com/docs#get-all-vehicles). |
+| `onComplete`      | Function |**Optional** Action to perform upon completion of the Smartcar authorization flow. This function will only be invoked if `callback.js` is loaded in the page served by your redirect URI. |
+| `development`   | Boolean |**Optional** Launch Smartcar auth in development mode to enable the mock vehicle brand. |
 
-#### `clientId`
-Application client ID obtained from [Smartcar Developer Portal](https://developer.smartcar.com). If you do not have access to the dashboard, please [request access](https://smartcar.com/subscribe).
 
-#### `redirectUri`
-Given URL must match URL in application settings.
+| `state`         | String |**Optional** OAuth state parameter used for identifying the user who initiated the request |
 
-#### `scope` (optional)
-Permissions requested from the user for specific grant. This is an optional parameter, and will default to requiring all scopes. A space separated list of permissions your application is requesting access to. The valid permission names are found in the [API Reference](https://smartcar.com/docs#get-all-vehicles).
-
-#### `onComplete`
-Action to perform upon completion of the Smartcar authorization flow. This function will only be invoked if `callback.js` is loaded in the page served by your redirect URI.
+| `forcePrompt`   | Boolean |**Optional** Force a user to the permission screen even if they've already granted access |
 
 ### `generateLink({options})`
 ##### Example
@@ -128,13 +100,18 @@ Action to perform upon completion of the Smartcar authorization flow. This funct
 'https://connect.smartcar.com/oauth/authorize?response_type=token...'
 ```
 
-#### `state`
-Arbitrary parameter passed to the redirect uri.
-
-#### `forcePrompt`
-Setting `forcePrompt` to `true` will show the permissions approval screen on every authentication attempt, even if the user has previously consented to the exact scope of permission.
+#### Options
+| Parameter       | Type | Description   |
+|:--------------- |:---|:------------- |
+| `state`         | String |**Optional** OAuth state parameter passed to the redirect uri. This parameter may be used for identifying the user who initiated the request. |
+| `forcePrompt`   | Boolean |**Optional** Setting `forcePrompt` to `true` will show the permissions approval screen on every authentication attempt, even if the user has previously consented to the exact scope of permission. |
 
 ### `openDialog({options})`
+#### Options
+| Parameter       | Type | Description   |
+|:--------------- |:---|:------------- |
+| `state`         | String |**Optional** OAuth state parameter passed to the redirect uri. This parameter may be used for identifying the user who initiated the request. |
+| `forcePrompt`   | Boolean |**Optional** Setting `forcePrompt` to `true` will show the permissions approval screen on every authentication attempt, even if the user has previously consented to the exact scope of permission. |
 
 #### `state`
 Arbitrary parameter passed to the redirect uri.
@@ -143,15 +120,12 @@ Arbitrary parameter passed to the redirect uri.
 Setting `forcePrompt` to `true` will show the permissions approval screen on every authentication attempt, even if the user has previously consented to the exact scope of permission.
 
 ### `addClickHandler({options})`
-
-#### `id`
-The id of the element for which to add the click handler (e.g. a "Connect your car" button).
-
-#### `state`
-Arbitrary parameter passed to the redirect uri.
-
-#### `forcePrompt`
-Setting `forcePrompt` to `true` will show the permissions approval screen on every authentication attempt, even if the user has previously consented to the exact scope of permission.
+#### Options
+| Parameter       | Type | Description   |
+|:--------------- |:---|:------------- |
+| `id`         | String |**Optional** The id of the element for which to add the click handler (e.g. a "Connect your car" button). |
+| `state`         | String |**Optional** OAuth state parameter passed to the redirect uri. This parameter may be used for identifying the user who initiated the request. |
+| `forcePrompt`   | Boolean |**Optional** Setting `forcePrompt` to `true` will show the permissions approval screen on every authentication attempt, even if the user has previously consented to the exact scope of permission. |
 
 ## Documentation
 Visit https://smartcar.com/docs for detailed documentation of the Smartcar API (with sample code!).
