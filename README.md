@@ -88,7 +88,7 @@ You can import this SDK into your application from Smartcar's CDN:
 |:--------------- |:---|:------------- |
 | `clientId`      | String |Application clientId obtained from [Smartcar Developer Portal](https://developer.smartcar.com). If you do not have access to the dashboard, please [request access](https://smartcar.com/subscribe). |
 | `redirectUri`   | String |**Required** RedirectURI set in [application settings](https://developer.smartcar.com/apps). Given URL must match URL in application settings. |
-| `scope`         | String[] |**Optional** List of permissions your application requests access to. This will default to requiring all scopes. The valid permission names are found in the [API Reference](https://smartcar.com/docs#get-all-vehicles). |
+| `scope`         | String[] |**Optional** List of permissions your application requires. This will default to requiring all scopes. The valid permission names are found in the [API Reference](https://smartcar.com/docs#get-all-vehicles). |
 | `onComplete`      | Function |**Optional** Function to be invoked on completion of the Smartcar authorization flow. This function will only be invoked if `callback.js` is loaded in the page served by your redirectUri. |
 | `development`   | Boolean |**Optional** Launch Smartcar auth in development mode to enable the mock vehicle brand. |
 
