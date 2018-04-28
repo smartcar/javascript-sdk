@@ -12,7 +12,7 @@ To make requests to a vehicle from a web or mobile application, the end user mus
 For more information about Smartcar's authorization flow, please visit our [API documentation](https://smartcar.com/docs#authentication).
 
 ## Quick Start
-Before integrating with Smartcar's SDK, you'll need to register a new application in the [Smartcar Developer portal](https://developer.smartcar.com). If you do not have access to the dashboard, please [request access](https://smartcar.com/subscribe).
+Before integrating with Smartcar's SDK, you'll need to register an application in the [Smartcar Developer portal](https://developer.smartcar.com). If you do not have access to the dashboard, please [request access](https://smartcar.com/subscribe).
 
 The SDK helps ease the [OAuth authorization process](https://tools.ietf.org/html/rfc6749#section-4.1). A sample flow looks like this:
 
