@@ -92,11 +92,6 @@ You can import this SDK into your application from Smartcar's CDN:
 | `onComplete`      | Function |**Optional** Function to be invoked on completion of the Smartcar authorization flow. This function will only be invoked if `callback.js` is loaded in the page served by your redirectUri. |
 | `development`   | Boolean |**Optional** Launch Smartcar auth in development mode to enable the mock vehicle brand. |
 
-
-| `state`         | String |**Optional** OAuth state parameter used for identifying the user who initiated the request |
-
-| `forcePrompt`   | Boolean |**Optional** Force a user to the permission screen even if they've already granted access |
-
 ### `generateLink({options})`
 ##### Example
 ```
