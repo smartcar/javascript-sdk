@@ -107,20 +107,20 @@ You can import this SDK into your application from Smartcar's CDN:
 | Parameter       | Type | Description   |
 |:--------------- |:---|:------------- |
 | `state`         | String |**Optional** OAuth state parameter passed to the redirect uri. This parameter may be used for identifying the user who initiated the request. |
-| `forcePrompt`   | Boolean |**Optional** Setting `forcePrompt` to `true` will show the permissions approval screen on every authentication attempt, even if the user has previously consented to the exact scope of permission. |
+| `forcePrompt`   | Boolean |**Optional** Setting `forcePrompt` to `true` will show the permissions approval screen on every authentication attempt, even if the user has previously consented to the exact scope of permissions. |
 
 ### `openDialog({options})`
 #### Options
 | Parameter       | Type | Description   |
 |:--------------- |:---|:------------- |
 | `state`         | String |**Optional** OAuth state parameter passed to the redirect uri. This parameter may be used for identifying the user who initiated the request. |
-| `forcePrompt`   | Boolean |**Optional** Setting `forcePrompt` to `true` will show the permissions approval screen on every authentication attempt, even if the user has previously consented to the exact scope of permission. |
+| `forcePrompt`   | Boolean |**Optional** Setting `forcePrompt` to `true` will show the permissions approval screen on every authentication attempt, even if the user has previously consented to the exact scope of permissions. |
 
 #### `state`
 Arbitrary parameter passed to the redirect uri.
 
 #### `forcePrompt`
-Setting `forcePrompt` to `true` will show the permissions approval screen on every authentication attempt, even if the user has previously consented to the exact scope of permission.
+Setting `forcePrompt` to `true` will show the permissions approval screen on every authentication attempt, even if the user has previously consented to the exact scope of permissions.
 
 ### `addClickHandler({options})`
 #### Options
@@ -128,7 +128,7 @@ Setting `forcePrompt` to `true` will show the permissions approval screen on eve
 |:--------------- |:---|:------------- |
 | `id`         | String |**Optional** The id of the element for which to add the click handler (e.g. a "Connect your car" button). |
 | `state`         | String |**Optional** OAuth state parameter passed to the redirect uri. This parameter may be used for identifying the user who initiated the request. |
-| `forcePrompt`   | Boolean |**Optional** Setting `forcePrompt` to `true` will show the permissions approval screen on every authentication attempt, even if the user has previously consented to the exact scope of permission. |
+| `forcePrompt`   | Boolean |**Optional** Setting `forcePrompt` to `true` will show the permissions approval screen on every authentication attempt, even if the user has previously consented to the exact scope of permissions. |
 
 ## Documentation
 Visit https://smartcar.com/docs for detailed documentation of the Smartcar API (with sample code!).
