@@ -3,11 +3,14 @@ window.Smartcar = (function(window) {
 
   /**
    * Initializes Smartcar class
+   *
    * @param {Object} options - the SDK configuration object
    * @param {String} options.clientId - the applications' client id
    * @param {String} options.redirectUri - the registered redirect uri of the application
    * @param {String[]} [options.scope] - requested permission scopes
    * @param {Function} [options.onComplete] - called upon completion of the Auth flow
+   * @param {Boolan} [options.development=false] - launch Smartcar auth in development mode
+   * to enable the mock vehicle brand
    * @constructor
    */
   function Smartcar(options) {
@@ -15,6 +18,7 @@ window.Smartcar = (function(window) {
     this.redirectUri = options.redirectUri;
     this.scope = options.scope;
     this.onComplete = options.onComplete;
+    this.development = options.development || false;
     this.grantType = 'code';
 
     // window._smartcar is used to preserve reference to smartcar when we call
@@ -36,7 +40,6 @@ window.Smartcar = (function(window) {
    * @param {Boolean} [options.forcePrompt] - force permission approval screen to show
    * on every authentication, even if the user has previously consented to the
    * exact scope of permission
-   * @param {Boolan} [options.development=false] - launch OAuth in development mode
    * @return {String} - generated OAuth link
    */
   Smartcar.prototype.generateLink = function(options) {
@@ -62,7 +65,7 @@ window.Smartcar = (function(window) {
       link += `&state=${options.state}`;
     }
 
-    if (options.development) {
+    if (this.development) {
       link += '&mock=true';
     }
 
@@ -131,7 +134,7 @@ window.Smartcar = (function(window) {
     const dialogOptions = {
       state: options.state,
       forcePrompt: options.forcePrompt,
-      development: options.development,
+      development: this.development,
     };
 
     const element = document.getElementById(id);

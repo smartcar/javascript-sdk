@@ -27,6 +27,7 @@ describe('sdk', () => {
         redirectUri: 'https://smartcar.com',
         scope: ['read_vehicle_info', 'read_odometer'],
         onComplete: jest.fn(),
+        development: true,
       };
 
       // eslint-disable-line max-len
@@ -49,6 +50,7 @@ describe('sdk', () => {
 
       // this is set within the constructor
       expect(smartcar.grantType).toEqual('code');
+      expect(smartcar.development).toEqual(false);
 
       // make sure onComplete can be called
       smartcar.onComplete();
@@ -111,6 +113,7 @@ describe('sdk', () => {
         redirectUri: 'https://smartcar.com',
         scope: ['read_vehicle_info', 'read_odometer'],
         onComplete: jest.fn(),
+        development: true,
       };
 
       const smartcar = new window.Smartcar(options);
@@ -119,7 +122,6 @@ describe('sdk', () => {
       const link = smartcar.generateLink({
         state: 'foobarbaz',
         forcePrompt: true,
-        development: true,
       });
       expect(link).toEqual(expectedLink);
     });
@@ -130,6 +132,7 @@ describe('sdk', () => {
         redirectUri: 'https://smartcar.com',
         scope: ['read_vehicle_info', 'read_odometer'],
         onComplete: jest.fn(),
+        development: false,
       };
 
       const smartcar = new window.Smartcar(options);
@@ -138,7 +141,6 @@ describe('sdk', () => {
       const link = smartcar.generateLink({
         state: 'foobarbaz',
         forcePrompt: true,
-        development: false,
       });
       expect(link).toEqual(expectedLink);
     });
