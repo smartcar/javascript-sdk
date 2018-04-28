@@ -40,8 +40,11 @@ const smartcar = new Smartcar({
   onComplete: function() { // optional
     window.location.reload();
   },
+  development: false, // optional
 });
 ```
+The best placement for the above code is just before the closing `</body>` tag.
+
 To open the Smartcar OAuth dialog directly:
 ```javascript
 // note: state and forcePrompt are optional
