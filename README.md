@@ -57,7 +57,7 @@ To add a click handler to an HTML element that will open the Smartcar OAuth dial
 smartcar.addClickHandler({id, state, forcePrompt});
 ```
 
-You may embed `callback.js` in the page that is served by your redirect uri. Upon loading, this file will invoke the `onComplete` callback specified above and close the window:
+You may embed `callback.js` in the page that is served by your redirectUri. Upon loading, this file will invoke the `onComplete` callback specified above and close the window:
 ```html
 <script src="https://cdn.smartcar.com/javascript-sdk/callback-0.1.0.js"></script>
 ```
@@ -86,10 +86,10 @@ You can import this SDK into your application from Smartcar's CDN:
 #### Options:
 | Parameter       | Type | Description   |
 |:--------------- |:---|:------------- |
-| `clientId`      | String |Application client ID obtained from [Smartcar Developer Portal](https://developer.smartcar.com). If you do not have access to the dashboard, please [request access](https://smartcar.com/subscribe). |
+| `clientId`      | String |Application clientId obtained from [Smartcar Developer Portal](https://developer.smartcar.com). If you do not have access to the dashboard, please [request access](https://smartcar.com/subscribe). |
 | `redirectUri`   | String |**Required** RedirectURI set in [application settings](https://developer.smartcar.com/apps). Given URL must match URL in application settings. |
 | `scope`         | String[] |**Optional** List of permissions your application requests access to. This will default to requiring all scopes. The valid permission names are found in the [API Reference](https://smartcar.com/docs#get-all-vehicles). |
-| `onComplete`      | Function |**Optional** Action to perform upon completion of the Smartcar authorization flow. This function will only be invoked if `callback.js` is loaded in the page served by your redirect URI. |
+| `onComplete`      | Function |**Optional** Function to be invoked on completion of the Smartcar authorization flow. This function will only be invoked if `callback.js` is loaded in the page served by your redirectUri. |
 | `development`   | Boolean |**Optional** Launch Smartcar auth in development mode to enable the mock vehicle brand. |
 
 
@@ -106,18 +106,18 @@ You can import this SDK into your application from Smartcar's CDN:
 #### Options
 | Parameter       | Type | Description   |
 |:--------------- |:---|:------------- |
-| `state`         | String |**Optional** OAuth state parameter passed to the redirect uri. This parameter may be used for identifying the user who initiated the request. |
+| `state`         | String |**Optional** OAuth state parameter passed to the redirectUri. This parameter may be used for identifying the user who initiated the request. |
 | `forcePrompt`   | Boolean |**Optional** Setting `forcePrompt` to `true` will show the permissions approval screen on every authentication attempt, even if the user has previously consented to the exact scope of permissions. |
 
 ### `openDialog({options})`
 #### Options
 | Parameter       | Type | Description   |
 |:--------------- |:---|:------------- |
-| `state`         | String |**Optional** OAuth state parameter passed to the redirect uri. This parameter may be used for identifying the user who initiated the request. |
+| `state`         | String |**Optional** OAuth state parameter passed to the redirectUri. This parameter may be used for identifying the user who initiated the request. |
 | `forcePrompt`   | Boolean |**Optional** Setting `forcePrompt` to `true` will show the permissions approval screen on every authentication attempt, even if the user has previously consented to the exact scope of permissions. |
 
 #### `state`
-Arbitrary parameter passed to the redirect uri.
+Arbitrary parameter passed to the redirectUri.
 
 #### `forcePrompt`
 Setting `forcePrompt` to `true` will show the permissions approval screen on every authentication attempt, even if the user has previously consented to the exact scope of permissions.
@@ -127,7 +127,7 @@ Setting `forcePrompt` to `true` will show the permissions approval screen on eve
 | Parameter       | Type | Description   |
 |:--------------- |:---|:------------- |
 | `id`         | String |**Optional** The id of the element for which to add the click handler (e.g. a "Connect your car" button). |
-| `state`         | String |**Optional** OAuth state parameter passed to the redirect uri. This parameter may be used for identifying the user who initiated the request. |
+| `state`         | String |**Optional** OAuth state parameter passed to the redirectUri. This parameter may be used for identifying the user who initiated the request. |
 | `forcePrompt`   | Boolean |**Optional** Setting `forcePrompt` to `true` will show the permissions approval screen on every authentication attempt, even if the user has previously consented to the exact scope of permissions. |
 
 ## Documentation
