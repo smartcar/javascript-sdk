@@ -9,7 +9,7 @@ window.Smartcar = (function(window) {
    * @param {String} options.redirectUri - the registered redirect uri of the application
    * @param {String[]} [options.scope] - requested permission scopes
    * @param {Function} [options.onComplete] - called upon completion of the Auth flow
-   * @param {Boolan} [options.development=false] - launch Smartcar auth in development mode
+   * @param {Boolean} [options.development=false] - launch Smartcar auth in development mode
    * to enable the mock vehicle brand
    * @constructor
    */
@@ -105,7 +105,6 @@ window.Smartcar = (function(window) {
    * @param {Boolean} [options.forcePrompt=false] - force permission approval screen to
    * show on every authentication, even if the user has previously consented
    * to the exact scope of permission
-   * @param {Boolan} [options.development=false] - launch OAuth in development mode
    * @return {String} - generated OAuth link
    */
   Smartcar.prototype.openDialog = function(options) {
@@ -127,7 +126,6 @@ window.Smartcar = (function(window) {
   * @param {Boolean} [options.forcePrompt] - force permission approval screen to
   * show on every authentication, even if the user has previously consented
   * to the exact scope of permission
-  * @param {Boolan} [options.development=false] - launch OAuth in development mode
    */
   Smartcar.prototype.addClickHandler = function(options) {
     const id = options.id;
