@@ -3,11 +3,14 @@ window.Smartcar = (function(window) {
 
   /**
    * Initializes Smartcar class
+   *
    * @param {Object} options - the SDK configuration object
    * @param {String} options.clientId - the applications' client id
    * @param {String} options.redirectUri - the registered redirect uri of the application
    * @param {String[]} [options.scope] - requested permission scopes
    * @param {Function} [options.onComplete] - called upon completion of the Auth flow
+   * @param {Boolean} [options.development=false] - launch Smartcar auth in development mode
+   * to enable the mock vehicle brand
    * @constructor
    */
   function Smartcar(options) {
@@ -15,6 +18,7 @@ window.Smartcar = (function(window) {
     this.redirectUri = options.redirectUri;
     this.scope = options.scope;
     this.onComplete = options.onComplete;
+    this.development = options.development || false;
     this.grantType = 'code';
 
     // window._smartcar is used to preserve reference to smartcar when we call
@@ -30,6 +34,7 @@ window.Smartcar = (function(window) {
 
   /**
    * Generates Smartcar OAuth URL
+   *
    * @param  {Object} options - the link configuration object
    * @param {String} [options.state] - arbitrary parameter passed to the redirect uri
    * @param {Boolean} [options.forcePrompt] - force permission approval screen to show
@@ -58,6 +63,10 @@ window.Smartcar = (function(window) {
 
     if (options.state) {
       link += `&state=${options.state}`;
+    }
+
+    if (this.development) {
+      link += '&mock=true';
     }
 
     return link;
@@ -90,6 +99,7 @@ window.Smartcar = (function(window) {
 
   /**
    * Launch the OAuth dialog flow
+   *
    * @param {Object} options - the link configuration object
    * @param {String} [options.state] - arbitrary parameter passed to the redirect uri
    * @param {Boolean} [options.forcePrompt=false] - force permission approval screen to
@@ -109,6 +119,7 @@ window.Smartcar = (function(window) {
   /**
   * Add an on-click event listener to the element with the provided id.
   * On-click event calls openDialog when the specified element is clicked.
+  *
   * @param {Object} options - clickHandler configuration object
   * @param {String} [options.id] - id of the element for which to add the click handler
   * @param {String} [options.state] - arbitrary parameter passed to the redirect uri
@@ -121,6 +132,7 @@ window.Smartcar = (function(window) {
     const dialogOptions = {
       state: options.state,
       forcePrompt: options.forcePrompt,
+      development: this.development,
     };
 
     const element = document.getElementById(id);
