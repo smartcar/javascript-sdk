@@ -20,7 +20,8 @@ install:
   - git clone git@github.com:smartcar/build.git $HOME/smartcar-build
   - cp $HOME/smartcar-build/resources/Makefile .
 
-  - npm update
+  # --save false flag needed b/c of https://github.com/npm/npm/issues/16901
+  - npm update --save false
   - npm prune
 
 script:
