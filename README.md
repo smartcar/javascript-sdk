@@ -110,12 +110,6 @@ You can import this SDK into your application from Smartcar's CDN:
 | `state`         | String |**Optional** OAuth state parameter passed to the redirectUri. This parameter may be used for identifying the user who initiated the request. |
 | `forcePrompt`   | Boolean |**Optional** Setting `forcePrompt` to `true` will show the permissions approval screen on every authentication attempt, even if the user has previously consented to the exact scope of permissions. |
 
-#### `state`
-Arbitrary parameter passed to the redirectUri.
-
-#### `forcePrompt`
-Setting `forcePrompt` to `true` will show the permissions approval screen on every authentication attempt, even if the user has previously consented to the exact scope of permissions.
-
 ### `addClickHandler({options})`
 #### Options
 | Parameter       | Type | Description   |
