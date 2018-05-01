@@ -6,7 +6,9 @@
     "test": "jest",
     "posttest": "npm run lint -s",
     "lint": "eslint . --cache",
-    "cover": "npm test -- --coverage"
+    "cover": "npm test -- --coverage",
+    "build": "gulp build",
+    "publish": "gulp publish"
   },
   "jest": {
     "moduleFileExtensions": [
@@ -27,7 +29,6 @@
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-preset-env": "^1.6.1",
-    "browser-sync": "^2.18.5",
     "eslint": "^4.1.1",
     "eslint-config-smartcar": "^2.0.0",
     "gulp": "^3.8.5",

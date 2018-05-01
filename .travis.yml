@@ -21,12 +21,12 @@ script:
   - npm test
   - npm run cover
   - make create-tag
-  - gulp compress
+  - npm run build
 
 deploy:
   - provider: script
     skip_cleanup: true
-    script: gulp publish
+    script: npm run publish
     on:
       branch: master
   - provider: script
