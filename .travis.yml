@@ -2,12 +2,7 @@ language:
   - node_js
 
 node_js:
-  - 6
-
-cache:
-  directories:
-    - $HOME/.npm
-    - node_modules
+  - 8
 
 branches:
   except:
@@ -20,8 +15,7 @@ install:
   - git clone git@github.com:smartcar/build.git $HOME/smartcar-build
   - cp $HOME/smartcar-build/resources/Makefile .
 
-  - npm update
-  - npm prune
+  - npm install
 
 script:
   - npm test
