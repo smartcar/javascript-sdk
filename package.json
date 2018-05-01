@@ -6,7 +6,9 @@
     "test": "jest",
     "posttest": "npm run lint -s",
     "lint": "eslint . --cache",
-    "cover": "npm test -- --coverage"
+    "cover": "npm test -- --coverage",
+    "build": "gulp build",
+    "publish": "gulp publish"
   },
   "jest": {
     "moduleFileExtensions": [

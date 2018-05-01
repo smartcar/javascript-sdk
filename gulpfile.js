@@ -6,7 +6,7 @@ const gulp = require('gulp');
 const {version} = require('./package');
 const $ = require('gulp-load-plugins')();
 
-gulp.task('compress', function() {
+gulp.task('build', function() {
   return gulp.src('src/*.js')
     .pipe($.babel())
     .pipe($.uglify())
