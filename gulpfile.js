@@ -5,49 +5,8 @@
 const gulp = require('gulp');
 const {version} = require('./package');
 const $ = require('gulp-load-plugins')();
-const browserSync = require('browser-sync');
 
-const reload = browserSync.reload;
-
-gulp.task('demo', function() {
-  browserSync({
-    port: 5000,
-    notify: false,
-    logPrefix: 'sdk-demo',
-    snippetOptions: {
-      rule: {
-        match: '<span id="browser-sync-binding"></span>',
-        fn: function(snippet) {
-          return snippet;
-        },
-      },
-    },
-    server: {
-      baseDir: 'demo',
-      routes: {
-        '/scripts': 'src',
-      },
-    },
-  });
-
-  gulp.watch(['src/*'], reload);
-  gulp.watch(['demo/*'], reload);
-
-});
-
-gulp.task('test', function() {
-  return gulp.src('src/*.js')
-    .pipe($.babel())
-    .pipe(gulp.dest('dist'));
-});
-
-gulp.task('cover', function() {
-  return gulp.src('instrumented/*.js')
-    .pipe($.babel())
-    .pipe(gulp.dest('instrumented'));
-});
-
-gulp.task('compress', function() {
+gulp.task('build', function() {
   return gulp.src('src/*.js')
     .pipe($.babel())
     .pipe($.uglify())
