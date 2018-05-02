@@ -26,7 +26,7 @@ The SDK will help facilitate the OAuth link generation, popup dialog creation, a
 
 ### Import `sdk.js`:
 ```html
-<script src="https://cdn.smartcar.com/javascript-sdk/sdk-0.1.0.js"></script>
+<script src="https://cdn.smartcar.com/javascript-sdk/sdk-1.0.0.js"></script>
 ```
 
 ### Use `sdk.js`:
@@ -58,7 +58,7 @@ smartcar.addClickHandler({id, state, forcePrompt});
 
 You may embed `callback.js` in the page that is served by your redirectUri. Upon loading, this file will invoke the `onComplete` callback specified above and close the window:
 ```html
-<script src="https://cdn.smartcar.com/javascript-sdk/callback-0.1.0.js"></script>
+<script src="https://cdn.smartcar.com/javascript-sdk/callback-1.0.0.js"></script>
 ```
 
 To retrieve the Smartcar OAuth URL (useful in single page applications when redirecting to Smartcar's OAuth flow in a new tab):
@@ -72,12 +72,12 @@ You can import this SDK into your application from Smartcar's CDN:
 
 ### sdk.js
 ```html
-<script src="https://cdn.smartcar.com/javascript-sdk/sdk-0.1.0.js"></script>
+<script src="https://cdn.smartcar.com/javascript-sdk/sdk-1.0.0.js"></script>
 ```
 
 ### callback.js
 ```html
-<script src="https://cdn.smartcar.com/javascript-sdk/callback-0.1.0.js"></script>
+<script src="https://cdn.smartcar.com/javascript-sdk/callback-1.0.0.js"></script>
 ```
 
 ## Configuration
