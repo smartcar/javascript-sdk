@@ -12,16 +12,17 @@ notifications:
   slack: smartcar:PGJmjtKFPytU5E2FwsImdVp8
 
 install:
-  - git clone git@github.com:smartcar/build.git $HOME/smartcar-build
-  - cp $HOME/smartcar-build/resources/Makefile .
-
   - npm install
 
 script:
   - npm test
   - npm run cover
-  - make create-tag
   - npm run build
+
+  - git config --global user.email "ci@smartcar.com"
+  - git config --global user.name "Travis CI User"
+  - export tag=$(grep 'version' package.json | sed 's/[", ]//g' | cut -d ':' -f 2)
+  - if [ "$TRAVIS_BRANCH" = "master" ]; then git tag -a v$tag -m "Travis Generated Tag"; fi
 
 deploy:
   - provider: script
@@ -31,6 +32,6 @@ deploy:
       branch: master
   - provider: script
     skip_cleanup: true
-    script: make push-tag
+    script: echo -e "machine github.com\n  login $CI_USER_TOKEN" >> ~/.netrc && git push origin v$tag
     on:
       branch: master
