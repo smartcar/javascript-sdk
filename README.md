@@ -1,4 +1,4 @@
-# Smartcar JS Client SDK [![Build Status][ci-image]][ci-url]
+# Smartcar JS Client SDK [![Build Status][ci-image]][ci-url] [![GitHub tag][tag-image]][tag-url]
 
 The official Smartcar Javascript SDK.
 
@@ -126,3 +126,5 @@ The Smartcar API currently supports Tesla vehicles. We ship new brand support on
 
 [ci-url]: https://travis-ci.com/smartcar/javascript-sdk
 [ci-image]: https://travis-ci.com/smartcar/javascript-sdk.svg?token=jMbuVtXPGeJMPdsn7RQ5&branch=master
+[tag-url]: https://github.com/smartcar/javascript-sdk/tags
+[tag-image]: https://img.shields.io/github/tag/smartcar/javascript-sdk.svg
