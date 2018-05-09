@@ -1,7 +1,9 @@
 {
   "name": "smartcar-javascript-sdk",
-  "version": "1.0.1",
-  "private": true,
+  "description": "javascript auth sdk for the smartcar",
+  "version": "1.0.2",
+  "author": "Smartcar <hello@smartcar.com> (https://smartcar.com)",
+  "license" : "MIT",
   "scripts": {
     "test": "jest",
     "posttest": "npm run lint -s",
