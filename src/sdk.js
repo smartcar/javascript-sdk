@@ -17,12 +17,16 @@ window.Smartcar = (function(window) {
    * @param {String[]} [options.scope] - requested permission scopes
    * @param {Function} [options.onComplete] - called upon completion of the Auth flow
    * @param {Boolean} [options.development=false] - launch Smartcar auth in development mode
+   * @param {Boolean} [options.useSmartcarHostedRedirect=false] - use Smartcar's
+      CDN to host auth flow redirect (recommended for single page apps)
    * to enable the mock vehicle brand
    * @constructor
    */
   function Smartcar(options) {
     this.clientId = options.clientId;
-    this.redirectUri = options.redirectUri;
+    this.redirectUri = options.useSmartcarHostedRedirect
+      ? `https://cdn.smartcar.com/redirect?origin=${options.redirectUri}`
+      : options.redirectUri;
     this.scope = options.scope;
     this.onComplete = options.onComplete;
     this.development = options.development || false;
@@ -30,15 +34,23 @@ window.Smartcar = (function(window) {
     // expose AccessDenied error class
     this.AccessDenied = AccessDenied;
 
-    // window._smartcar is used to preserve reference to smartcar when we call
-    // onComplete in the callback (see callback.js)
-    if (window._smartcar) {
-      // throw error if more than one instance
-      // eslint-disable-line max-len
-      throw new Error('Smartcar has already been instantiated in the window. Only one instance of Smartcar can be defined. See https://github.com/smartcar/javascript-sdk for more information');
-    } else {
-      window._smartcar = this;
-    }
+    // add handler for postMessage event on completion of auth flow
+    window.onmessage = (event) => {
+      const message = event.data;
+
+      // if onComplete not specified do nothing, assume user is conveying
+      // completion information from backend server receiving redirect to front
+      // end (not using onComplete)
+      if (this.onComplete) {
+        const maybeError = message.error
+          ? new AccessDenied(message.error)
+          : null;
+        // eslint-disable-next-line no-unused-expressions
+        options.useSmartcarHostedRedirect
+          ? this.onComplete(maybeError, message.authCode, message.state)
+          : this.onComplete();
+      }
+    };
   }
 
   /**
