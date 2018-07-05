@@ -2,6 +2,17 @@ window.Smartcar = (function(window) {
   'use strict';
 
   /**
+   * @callback OnComplete
+   * @param {?Error} error - something went wrong in the authorization flow; this
+   * normally indicates that the user denied access to your application or does not
+   * have a connected vehicle
+   * @param {String} code - the authorization code to be exchanged from a
+   * backend sever for an access token
+   * @param {Object} [state] - contains state if it was set on the initial
+   * authorization request
+   */
+
+  /**
    * Initializes Smartcar class.
    *
    * @constructor
@@ -10,9 +21,9 @@ window.Smartcar = (function(window) {
    * @param {String} options.redirectUri - the registered redirect uri of the
    * application
    * @param {String[]} [options.scope] - requested permission scopes
-   * @param {Function} [options.onComplete] - called on completion of auth flow
-   * @param {Boolean} [options.development=false] - launch Smartcar auth in development mode
-   * to enable the mock vehicle brand
+   * @param {OnComplete} [options.onComplete] - called on completion of auth flow
+   * @param {Boolean} [options.development=false] - launch Smartcar auth in
+   * development mode to enable the mock vehicle brand
    */
   function Smartcar(options) {
 
@@ -25,6 +36,51 @@ window.Smartcar = (function(window) {
     this.onComplete = options.onComplete;
     this.development = options.development || false;
     this.responseType = 'code';
+
+    // handler
+    this.messageHandler = (event) => {
+      // bail if message from unexpected source
+      if (!this.redirectUri.startsWith(event.origin)) { return; }
+
+      const message = event.data || {};
+      // bail if `message.name` is not `SmartcarAuthMessage`
+      // this prevents attempting to handle messages intended for others
+      if (message.name !== 'SmartcarAuthMessage') { return; }
+
+      // if onComplete not specified do nothing, assume developer is conveying
+      // completion information from backend server receiving redirect to front
+      // end (not using onComplete)
+      if (this.onComplete) {
+        // if auth errored generate appropriate error else null
+        const generateError = (error, description) => {
+          if (!error) {
+            return null;
+          }
+
+          return error === 'access_denied'
+            ? new Smartcar.AccessDenied(description)
+            : new Error(`Unexpected error: ${error} - ${description}`);
+        };
+        const err = generateError(message.error, message.errorDescription);
+
+        /**
+         * Call `onComplete` with parameters even if developer is not using
+         * a Smartcar-hosted redirect. Regardless of if they are using a
+         * Smartcar-hosted redirect they may still want `onComplete` to do
+         * something with message.
+         *
+         * If empty onComplete is passed, parameters will be harmlessly ignored.
+         *
+         * If a developer chooses to pass an `onComplete` expecting these
+         * parameters they must also handle populating the corresponding query
+         * parameters in their redirect uri.
+         */
+        this.onComplete(err, message.code, message.state);
+      }
+    };
+
+    // add handler for postMessage event on completion of auth flow
+    window.addEventListener('message', this.messageHandler);
   }
 
   /**
@@ -51,6 +107,18 @@ window.Smartcar = (function(window) {
 
     if (!options.redirectUri) {
       throw new TypeError('A redirect URI option must be provided');
+    }
+
+    if (options.redirectUri.startsWith('https://javascript-sdk.smartcar.com')) {
+      // require onComplete method with at least two parameters (error & code)
+      // when hosting on Smartcar CDN
+      if (!options.onComplete || options.onComplete.length < 2) {
+        throw new Error(
+          "When using Smartcar's CDN redirect an onComplete function with at" +
+          ' least 2 parameters (error & code) is required to handle' +
+          ' completion of authorization flow'
+        );
+      }
     }
   };
 
