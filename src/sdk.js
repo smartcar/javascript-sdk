@@ -168,5 +168,20 @@ window.Smartcar = (function(window) {
     });
   };
 
+  /**
+   * Access denied error returned by authorization flow.
+   *
+   * @extends Error
+   */
+  Smartcar.AccessDenied = class extends Error {
+    /**
+     * @param {String} message - detailed error description
+     */
+    constructor(message) {
+      super(message);
+      this.name = 'AccessDenied';
+    }
+  };
+
   return Smartcar;
 })(window);
