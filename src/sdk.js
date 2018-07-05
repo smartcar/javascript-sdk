@@ -23,6 +23,24 @@ window.Smartcar = (function(window) {
    * @constructor
    */
   function Smartcar(options) {
+    // allow only one instance of Smartcar
+    if (Smartcar._hasBeenInstantiated) {
+      throw new Error('Smartcar has already been instantiated in the window.' +
+        ' Only one instance of Smartcar can be defined. See' +
+        ' https://github.com/smartcar/javascript-sdk for more information');
+    } else {
+      Smartcar._hasBeenInstantiated = true;
+    }
+
+    // require onComplete method with at least two parameters (error & code)
+    // when hosting on Smartcar CDN
+    if (options.useSmartcarHostedRedirect && (!options.onComplete
+      || options.onComplete.length < 2)) {
+      throw new Error("When using Smartcar's CDN redirect an onComplete" +
+        ' function with at least 2 parameters is required to handle' +
+        ' completion of authentication flow');
+    }
+
     this.clientId = options.clientId;
     this.redirectUri = options.useSmartcarHostedRedirect
       ? `https://cdn.smartcar.com/redirect?origin=${options.redirectUri}`
@@ -45,10 +63,10 @@ window.Smartcar = (function(window) {
         const maybeError = message.error
           ? new AccessDenied(message.error)
           : null;
-        // eslint-disable-next-line no-unused-expressions
-        options.useSmartcarHostedRedirect
-          ? this.onComplete(maybeError, message.authCode, message.state)
-          : this.onComplete();
+
+        // call with parameters even if self hosted. if they pass empty
+        // onComplete the parameters will be harmlessly ignored
+        this.onComplete(maybeError, message.authCode, message.state);
       }
     };
   }
