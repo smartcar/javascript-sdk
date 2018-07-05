@@ -251,5 +251,3 @@ Smartcar.AccessDenied = class extends Error {
     this.name = 'AccessDenied';
   }
 };
-
-module.exports = Smartcar;
