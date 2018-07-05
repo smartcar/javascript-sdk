@@ -1,6 +1,6 @@
 'use strict';
 
-const Smartcar = require('../../src/sdk');
+const Smartcar = require('../../dist/umd/sdk.js');
 
 describe('sdk', () => {
   const CDN_ORIGIN = 'https://javascript-sdk.smartcar.com';
