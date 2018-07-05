@@ -1,5 +1,12 @@
 window.Smartcar = (function(window) {
   'use strict';
+  // accesss denied error class
+  class AccessDenied extends Error { // eslint-disable-line no-restricted-syntax
+    constructor(message) {
+      super(message);
+      this.name = 'AccessDenied';
+    }
+  }
 
   /**
    * Initializes Smartcar class
@@ -20,6 +27,8 @@ window.Smartcar = (function(window) {
     this.onComplete = options.onComplete;
     this.development = options.development || false;
     this.grantType = 'code';
+    // expose AccessDenied error class
+    this.AccessDenied = AccessDenied;
 
     // window._smartcar is used to preserve reference to smartcar when we call
     // onComplete in the callback (see callback.js)
