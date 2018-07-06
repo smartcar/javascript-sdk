@@ -1,40 +1,50 @@
+'use strict';
+
 // We override Smartcar's browser lint rules for Jest tests.
 // Note that Jest ships with jsdom so window is loaded globally in Jest tests.
 
 /* eslint strict: ["error", "global"] */
 /* global require, expect, jest */
 
-'use strict';
-
 const _ = require('lodash');
 
 require('../src/sdk.js');
 
 describe('sdk', () => {
-
-  beforeEach(() => {
-    // reset window._smartcar before each test
-    window._smartcar = undefined;
-  });
+  beforeEach(() => { window.Smartcar._hasBeenInstantiated = false; });
 
   describe('constructor', () => {
+    test('throws error if smartcar already instantiated', () => {
+      // initial instantiation
+      window.Smartcar({});
 
-    test('throws error if window._smartcar already defined', () => {
-      window._smartcar = jest.fn();
-
-      const options = {
-        clientId: 'clientId',
-        redirectUri: 'https://smartcar.com',
-        scope: ['read_vehicle_info', 'read_odometer'],
-        onComplete: jest.fn(),
-        development: true,
-      };
-
-      // eslint-disable-line max-len
-      expect(() => new window.Smartcar(options)).toThrow('Smartcar has already been instantiated in the window. Only one instance of Smartcar can be defined. See https://github.com/smartcar/javascript-sdk for more information');
+      expect(() => new window.Smartcar({})).toThrow('Smartcar has' +
+        ' already been instantiated in the window. Only one instance of' +
+        ' Smartcar can be defined. See' +
+        ' https://github.com/smartcar/javascript-sdk for more information');
     });
 
-    test('initializes correctly', () => {
+    test('throws error if using Smartcar hosting without onComplete', () => {
+      expect(() => new window.Smartcar({ useSmartcarHostedRedirect: true }))
+        .toThrow("When using Smartcar's CDN redirect an onComplete function" +
+          ' with at least 2 parameters is required to handle completion of' +
+          ' authentication flow');
+    });
+
+    test('throws error if using Smartcar hosting with onComplete with < 2 parameters', () => {
+      expect(
+          () => new window.Smartcar({
+            useSmartcarHostedRedirect: true,
+            // eslint-disable-next-line no-unused-vars, no-empty-function
+            onComplete: (_) => {},
+          })
+        )
+        .toThrow("When using Smartcar's CDN redirect an onComplete function" +
+          ' with at least 2 parameters is required to handle completion of' +
+          ' authentication flow');
+    });
+
+    test('initializes correctly w/ useSmartcarHostedRedirect=false (default)', () => {
       const options = {
         clientId: 'clientId',
         redirectUri: 'https://smartcar.com',
@@ -54,9 +64,41 @@ describe('sdk', () => {
 
       // make sure onComplete can be called
       smartcar.onComplete();
-      expect(options.onComplete).toHaveBeenCalled();
+      expect(options.onComplete).toBeCalled();
+    });
 
-      expect(window._smartcar).toEqual(smartcar);
+    test('initializes correctly w/ useSmartcarHostedRedirect=true',
+      () => {
+      const options = {
+        clientId: 'clientId',
+        redirectUri: 'https://smartcar.com',
+        scope: ['read_vehicle_info', 'read_odometer'],
+        // eslint-disable-next-line no-unused-vars, no-empty-function
+        onComplete: jest.fn((_, __) => {}), // stub function with >= 2 params
+        useSmartcarHostedRedirect: true,
+      };
+
+      const smartcar = new window.Smartcar(options);
+
+      _.forEach(options, (option, key) => {
+        if (key === 'useSmartcarHostedRedirect') {
+          // this option isn't saved in Smartcar state so nothing to check
+        } else if (key === 'redirectUri') {
+          expect(smartcar[key])
+            .toEqual(
+              'https://cdn.smartcar.com/redirect?origin=https://smartcar.com');
+        } else {
+          expect(smartcar[key]).toEqual(option);
+        }
+      });
+
+      // this is set within the constructor
+      expect(smartcar.responseType).toEqual('code');
+      expect(smartcar.development).toEqual(false);
+
+      // make sure onComplete can be called
+      smartcar.onComplete();
+      expect(options.onComplete).toBeCalled();
     });
 
     test('onComplete undefined if not specified', () => {
@@ -71,10 +113,35 @@ describe('sdk', () => {
       expect(smartcar.onComplete).toBe(undefined);
     });
 
+    // testing postMessage with Jest requires the workaround here
+    // https://github.com/jsdom/jsdom/issues/2245#issuecomment-392556153
+    test('fires onComplete function with expected arguments on postMessage', async function() {
+      const options = {
+        clientId: 'clientId',
+        redirectUri: 'https://smartcar.com',
+        scope: ['read_vehicle_info', 'read_odometer'],
+        // eslint-disable-next-line no-empty-function
+        onComplete: jest.fn(() => {}),
+      };
+
+      const smartcar = new window.Smartcar(options);
+
+      window.postMessage({
+        authCode: 'super-secret-code',
+        error: 'some-error',
+        state: 'some-state',
+      }, '*');
+
+      // Jest workaround - see comment above test
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      expect(smartcar.onComplete)
+        .toBeCalledWith(new smartcar.AccessDenied('some-error'),
+          'super-secret-code', 'some-state');
+    });
   });
 
   describe('generateLink', () => {
-
     test('generates basic link without optional params', () => {
       const options = {
         clientId: 'clientId',
@@ -144,11 +211,9 @@ describe('sdk', () => {
       });
       expect(link).toEqual(expectedLink);
     });
-
   });
 
   describe('getWindowOptions', () => {
-
     test('correctly computes size of popup window', () => {
       window.outerWidth = 1024;
       window.outerHeight = 768;
@@ -161,11 +226,9 @@ describe('sdk', () => {
 
       expect(window.Smartcar._getWindowOptions()).toBe(expectedOptions);
     });
-
   });
 
   describe('openDialog and addClickHandler', () => {
-
     // computed width: (1024 - 430) / 2 = 297
     // computed height: (768 - 500) / 8 = 134
     const expectedOptions = 'top=53.5,left=307,width=430,height=500,';
@@ -211,7 +274,7 @@ describe('sdk', () => {
       // setup document body
       document.body.innerHTML =
       `<div>
-      <button id="${id}">Connect your car</button>
+        <button id="${id}">Connect your car</button>
       </div>`;
 
       // mock window.open
@@ -236,7 +299,7 @@ describe('sdk', () => {
       // setup document body
       document.body.innerHTML =
       `<div>
-      <button id="${id}">Connect your car</button>
+        <button id="${id}">Connect your car</button>
       </div>`;
 
       // mock window.open
@@ -258,7 +321,5 @@ describe('sdk', () => {
 
       expect(mockOpen).toHaveBeenCalledWith(expectedLink, 'Connect your car', expectedOptions);
     });
-
   });
-
 });
