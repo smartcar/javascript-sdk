@@ -48,7 +48,7 @@ window.Smartcar = (function(window) {
     this.scope = options.scope;
     this.onComplete = options.onComplete;
     this.development = options.development || false;
-    this.grantType = 'code';
+    this.responseType = 'code';
     // expose AccessDenied error class
     this.AccessDenied = AccessDenied;
 
@@ -86,7 +86,7 @@ window.Smartcar = (function(window) {
 
     let link = '';
     link += 'https://connect.smartcar.com/oauth/authorize';
-    link += `?response_type=${this.grantType}`;
+    link += `?response_type=${this.responseType}`;
     link += `&client_id=${this.clientId}`;
     link += `&redirect_uri=${encodeURIComponent(this.redirectUri)}`;
 

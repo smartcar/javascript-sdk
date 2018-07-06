@@ -49,7 +49,7 @@ describe('sdk', () => {
       });
 
       // this is set within the constructor
-      expect(smartcar.grantType).toEqual('code');
+      expect(smartcar.responseType).toEqual('code');
       expect(smartcar.development).toEqual(false);
 
       // make sure onComplete can be called
