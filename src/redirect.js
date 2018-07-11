@@ -17,11 +17,12 @@
 
   const message = maybeOriginParam
     ? {
+      name: 'smartcarAuthMessage',
       authCode: params.get('code'),
       error: params.get('error_description'),
       state: params.get('state'),
     }
-    : {};
+    : { name: 'smartcarAuthMessage' };
 
   const targetOrigin = maybeOriginParam
     ? maybeOriginParam

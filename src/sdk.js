@@ -38,7 +38,7 @@ window.Smartcar = (function(window) {
       || options.onComplete.length < 2)) {
       throw new Error("When using Smartcar's CDN redirect an onComplete" +
         ' function with at least 2 parameters is required to handle' +
-        ' completion of authentication flow');
+        ' completion of authorization flow');
     }
 
     this.clientId = options.clientId;
@@ -55,6 +55,7 @@ window.Smartcar = (function(window) {
     // add handler for postMessage event on completion of auth flow
     window.onmessage = (event) => {
       const message = event.data;
+      if(message.name !== 'smartcarAuthMessage') { return; }
 
       // if onComplete not specified do nothing, assume user is conveying
       // completion information from backend server receiving redirect to front
