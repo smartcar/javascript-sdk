@@ -61,6 +61,7 @@ window.Smartcar = (function(window) {
       // if onComplete not specified do nothing, assume user is conveying
       // completion information from backend server receiving redirect to front
       // end (not using onComplete)
+      /* istanbul ignore else  */
       if (this.onComplete) {
         const maybeError = message.error
           ? new AccessDenied(message.error)

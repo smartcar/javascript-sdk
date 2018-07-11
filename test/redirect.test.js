@@ -14,10 +14,9 @@ describe('redirect', () => {
   });
 
   test('throws error if window.opener undefined', () => {
-    expect(() =>
-      // eslint-disable-next-line global-require
-      require('../src/redirect').toThrow('window.opener must be defined')
-    );
+    // eslint-disable-next-line global-require
+    expect(() => require('../src/redirect'))
+      .toThrow('window.opener must be defined');
   });
 
   test('calls close', () => {

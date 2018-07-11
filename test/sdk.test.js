@@ -148,6 +148,32 @@ describe('sdk', () => {
           );
       });
 
+    test('fires onComplete w/o error parameter when error: null in postMessage',
+      async() => {
+        const options = {
+          clientId: 'clientId',
+          redirectUri: 'https://smartcar.com',
+          scope: ['read_vehicle_info', 'read_odometer'],
+          // eslint-disable-next-line no-empty-function
+          onComplete: jest.fn(() => {}),
+        };
+
+        const smartcar = new window.Smartcar(options);
+
+        window.postMessage({
+          authCode: 'super-secret-code',
+          error: undefined,
+          state: 'some-state',
+          name: 'smartcarAuthMessage',
+        }, '*');
+
+        // Jest workaround - see comment above test
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
+        expect(smartcar.onComplete)
+          .toBeCalledWith(null, 'super-secret-code', 'some-state');
+      });
+
     test('fires onComplete function with expected arguments on postMessage',
       async() => {
         const options = {
