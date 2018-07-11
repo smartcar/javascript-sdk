@@ -28,10 +28,12 @@ describe('sdk', () => {
       expect(() => new window.Smartcar({ useSmartcarHostedRedirect: true }))
         .toThrow("When using Smartcar's CDN redirect an onComplete function" +
           ' with at least 2 parameters is required to handle completion of' +
-          ' authentication flow');
+          ' authorization flow');
     });
 
-    test('throws error if using Smartcar hosting with onComplete with < 2 parameters', () => {
+    test('throws error if using Smartcar hosting & passing onComplete with' +
+      ' than 2 parameters', () => {
+
       expect(
           () => new window.Smartcar({
             useSmartcarHostedRedirect: true,
@@ -41,10 +43,12 @@ describe('sdk', () => {
         )
         .toThrow("When using Smartcar's CDN redirect an onComplete function" +
           ' with at least 2 parameters is required to handle completion of' +
-          ' authentication flow');
+          ' authorization flow');
     });
 
-    test('initializes correctly w/ useSmartcarHostedRedirect=false (default)', () => {
+    test('initializes correctly w/ useSmartcarHostedRedirect=false (default)',
+    () => {
+
       const options = {
         clientId: 'clientId',
         redirectUri: 'https://smartcar.com',
@@ -113,9 +117,13 @@ describe('sdk', () => {
       expect(smartcar.onComplete).toBe(undefined);
     });
 
-    // testing postMessage with Jest requires the workaround here
+    // <<<< workaround to test postMessage used for rest of tests in suite >>>>
+    // async/await used as a workaround to enable testing of postMessage in Jest
     // https://github.com/jsdom/jsdom/issues/2245#issuecomment-392556153
-    test('fires onComplete function with expected arguments on postMessage', async function() {
+
+    test('does not fire onComplete function without name field in message',
+      async () => {
+
       const options = {
         clientId: 'clientId',
         redirectUri: 'https://smartcar.com',
@@ -130,6 +138,34 @@ describe('sdk', () => {
         authCode: 'super-secret-code',
         error: 'some-error',
         state: 'some-state',
+      }, '*');
+
+      // Jest workaround - see comment above test
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      expect(smartcar.onComplete)
+        .not
+        .toBeCalledWith(expect.anything(), expect.anything(), expect.anything())
+    });
+
+    test('fires onComplete function with expected arguments on postMessage',
+      async () => {
+
+      const options = {
+        clientId: 'clientId',
+        redirectUri: 'https://smartcar.com',
+        scope: ['read_vehicle_info', 'read_odometer'],
+        // eslint-disable-next-line no-empty-function
+        onComplete: jest.fn(() => {}),
+      };
+
+      const smartcar = new window.Smartcar(options);
+
+      window.postMessage({
+        authCode: 'super-secret-code',
+        error: 'some-error',
+        state: 'some-state',
+        name: 'smartcarAuthMessage'
       }, '*');
 
       // Jest workaround - see comment above test

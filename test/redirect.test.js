@@ -74,7 +74,7 @@ describe('redirect', () => {
     expect(mockPost).toBeCalledWith(expect.anything(), appOrigin);
   });
 
-  test('without origin parameter should post contentless message', () => {
+  test('without origin parameter should post only name', () => {
     window.opener = {};
 
     const selfHostedOrigin = 'https://www.the-next-awesome-car-app.com';
@@ -84,7 +84,8 @@ describe('redirect', () => {
     window.opener.postMessage = mockPost;
 
     require('../src/redirect'); // eslint-disable-line global-require
-    expect(mockPost).toBeCalledWith({}, selfHostedOrigin);
+    expect(mockPost)
+      .toBeCalledWith({ name: 'smartcarAuthMessage' }, selfHostedOrigin);
   });
 
   test('with origin parameter should post message with parameters', () => {
@@ -106,6 +107,7 @@ describe('redirect', () => {
         authCode: code,
         error: errDesc,
         state,
+        name: 'smartcarAuthMessage'
       },
       appOrigin
     );
