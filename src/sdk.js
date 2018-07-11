@@ -13,13 +13,14 @@ window.Smartcar = (function(window) {
    *
    * @param {Object} options - the SDK configuration object
    * @param {String} options.clientId - the applications' client id
-   * @param {String} options.redirectUri - the registered redirect uri of the application
+   * @param {String} options.redirectUri - the registered redirect uri of the
+   * application
    * @param {String[]} [options.scope] - requested permission scopes
-   * @param {Function} [options.onComplete] - called upon completion of the Auth flow
-   * @param {Boolean} [options.development=false] - launch Smartcar auth in development mode
+   * @param {Function} [options.onComplete] - called on completion of auth flow
+   * @param {Boolean} [options.development=false] - launch Smartcar auth in
+   * development mode to enable the mock vehicle brand
    * @param {Boolean} [options.useSmartcarHostedRedirect=false] - use Smartcar's
-      CDN to host auth flow redirect (recommended for single page apps)
-   * to enable the mock vehicle brand
+   * CDN to host auth flow redirect (recommended for single page apps)
    * @constructor
    */
   function Smartcar(options) {
@@ -55,7 +56,7 @@ window.Smartcar = (function(window) {
     // add handler for postMessage event on completion of auth flow
     window.onmessage = (event) => {
       const message = event.data;
-      if(message.name !== 'smartcarAuthMessage') { return; }
+      if (message.name !== 'smartcarAuthMessage') { return; }
 
       // if onComplete not specified do nothing, assume user is conveying
       // completion information from backend server receiving redirect to front
@@ -76,10 +77,10 @@ window.Smartcar = (function(window) {
    * Generates Smartcar OAuth URL
    *
    * @param  {Object} options - the link configuration object
-   * @param {String} [options.state] - arbitrary parameter passed to the redirect uri
-   * @param {Boolean} [options.forcePrompt=false] - force permission approval screen to show
-   * on every authentication, even if the user has previously consented to the
-   * exact scope of permission
+   * @param {String} [options.state] - arbitrary parameter passed to redirect uri
+   * @param {Boolean} [options.forcePrompt=false] - force permission approval
+   * screen to show on every authentication, even if the user has previously
+   * consented to the exact scope of permission
    * @return {String} - generated OAuth link
    */
   Smartcar.prototype.generateLink = function(options) {
@@ -91,7 +92,7 @@ window.Smartcar = (function(window) {
     link += `&client_id=${this.clientId}`;
     link += `&redirect_uri=${encodeURIComponent(this.redirectUri)}`;
 
-    // We map forcePrompt to approvalPrompt, which has two options: 'force' and 'auto'
+    // map forcePrompt to approvalPrompt, two options: 'force' and 'auto'
     const forcePrompt = options.forcePrompt || false;
     link += `&approval_prompt=${forcePrompt ? 'force' : 'auto'}`;
 
@@ -113,8 +114,7 @@ window.Smartcar = (function(window) {
   };
 
   /**
-   * Calculate the popup window size and position based on the current window
-   * settings.
+   * Calculate popup window size and position based on current window settings
    *
    * @return {String} a string of window settings
    */
@@ -141,10 +141,10 @@ window.Smartcar = (function(window) {
    * Launch the OAuth dialog flow
    *
    * @param {Object} options - the link configuration object
-   * @param {String} [options.state] - arbitrary parameter passed to the redirect uri
-   * @param {Boolean} [options.forcePrompt=false] - force permission approval screen to
-   * show on every authentication, even if the user has previously consented
-   * to the exact scope of permission
+   * @param {String} [options.state] - arbitrary parameter passed to redirect uri
+   * @param {Boolean} [options.forcePrompt=false] - force permission approval
+   * screen to show on every authentication, even if the user has previously
+   * consented to the exact scope of permission
    * @return {String} - generated OAuth link
    */
   Smartcar.prototype.openDialog = function(options) {
@@ -161,8 +161,8 @@ window.Smartcar = (function(window) {
   * On-click event calls openDialog when the specified element is clicked.
   *
   * @param {Object} options - clickHandler configuration object
-  * @param {String} [options.id] - id of the element for which to add the click handler
-  * @param {String} [options.state] - arbitrary parameter passed to the redirect uri
+  * @param {String} [options.id] - id of the element to add click handler to
+  * @param {String} [options.state] - arbitrary parameter passed to redirect uri
   * @param {Boolean} [options.forcePrompt] - force permission approval screen to
   * show on every authentication, even if the user has previously consented
   * to the exact scope of permission
@@ -177,7 +177,8 @@ window.Smartcar = (function(window) {
 
     const element = document.getElementById(id);
     if (!element) {
-      throw new Error(`Could not add click handler: element with id '${id}' was not found.`);
+      throw new Error(`Could not add click handler: element with id '${id}'` +
+        ' was not found.');
     }
 
     element.addEventListener('click', () => this.openDialog(dialogOptions));

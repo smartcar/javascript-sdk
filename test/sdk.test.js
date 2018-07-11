@@ -25,7 +25,7 @@ describe('sdk', () => {
     });
 
     test('throws error if using Smartcar hosting without onComplete', () => {
-      expect(() => new window.Smartcar({ useSmartcarHostedRedirect: true }))
+      expect(() => new window.Smartcar({useSmartcarHostedRedirect: true}))
         .toThrow("When using Smartcar's CDN redirect an onComplete function" +
           ' with at least 2 parameters is required to handle completion of' +
           ' authorization flow');
@@ -34,76 +34,73 @@ describe('sdk', () => {
     test('throws error if using Smartcar hosting & passing onComplete with' +
       ' than 2 parameters', () => {
 
-      expect(
-          () => new window.Smartcar({
-            useSmartcarHostedRedirect: true,
-            // eslint-disable-next-line no-unused-vars, no-empty-function
-            onComplete: (_) => {},
-          })
-        )
+      expect(() => new window.Smartcar({
+        useSmartcarHostedRedirect: true,
+        // eslint-disable-next-line no-unused-vars, no-empty-function
+        onComplete: (_) => {},
+      }))
         .toThrow("When using Smartcar's CDN redirect an onComplete function" +
           ' with at least 2 parameters is required to handle completion of' +
           ' authorization flow');
     });
 
     test('initializes correctly w/ useSmartcarHostedRedirect=false (default)',
-    () => {
+      () => {
+        const options = {
+          clientId: 'clientId',
+          redirectUri: 'https://smartcar.com',
+          scope: ['read_vehicle_info', 'read_odometer'],
+          onComplete: jest.fn(),
+        };
 
-      const options = {
-        clientId: 'clientId',
-        redirectUri: 'https://smartcar.com',
-        scope: ['read_vehicle_info', 'read_odometer'],
-        onComplete: jest.fn(),
-      };
+        const smartcar = new window.Smartcar(options);
 
-      const smartcar = new window.Smartcar(options);
+        _.forEach(options, (option, key) => {
+          expect(smartcar[key]).toEqual(option);
+        });
 
-      _.forEach(options, (option, key) => {
-        expect(smartcar[key]).toEqual(option);
+        // this is set within the constructor
+        expect(smartcar.responseType).toEqual('code');
+        expect(smartcar.development).toEqual(false);
+
+        // make sure onComplete can be called
+        smartcar.onComplete();
+        expect(options.onComplete).toBeCalled();
       });
-
-      // this is set within the constructor
-      expect(smartcar.responseType).toEqual('code');
-      expect(smartcar.development).toEqual(false);
-
-      // make sure onComplete can be called
-      smartcar.onComplete();
-      expect(options.onComplete).toBeCalled();
-    });
 
     test('initializes correctly w/ useSmartcarHostedRedirect=true',
       () => {
-      const options = {
-        clientId: 'clientId',
-        redirectUri: 'https://smartcar.com',
-        scope: ['read_vehicle_info', 'read_odometer'],
-        // eslint-disable-next-line no-unused-vars, no-empty-function
-        onComplete: jest.fn((_, __) => {}), // stub function with >= 2 params
-        useSmartcarHostedRedirect: true,
-      };
+        const options = {
+          clientId: 'clientId',
+          redirectUri: 'https://smartcar.com',
+          scope: ['read_vehicle_info', 'read_odometer'],
+          // eslint-disable-next-line no-unused-vars, no-empty-function
+          onComplete: jest.fn((_, __) => {}), // stub function with >= 2 params
+          useSmartcarHostedRedirect: true,
+        };
 
-      const smartcar = new window.Smartcar(options);
+        const smartcar = new window.Smartcar(options);
 
-      _.forEach(options, (option, key) => {
-        if (key === 'useSmartcarHostedRedirect') {
-          // this option isn't saved in Smartcar state so nothing to check
-        } else if (key === 'redirectUri') {
-          expect(smartcar[key])
-            .toEqual(
-              'https://cdn.smartcar.com/redirect?origin=https://smartcar.com');
-        } else {
-          expect(smartcar[key]).toEqual(option);
-        }
+        _.forEach(options, (option, key) => {
+          if (key === 'useSmartcarHostedRedirect') {
+            // this option isn't saved in Smartcar state so nothing to check
+          } else if (key === 'redirectUri') {
+            expect(smartcar[key])
+              .toEqual(
+                'https://cdn.smartcar.com/redirect?origin=https://smartcar.com');
+          } else {
+            expect(smartcar[key]).toEqual(option);
+          }
+        });
+
+        // this is set within the constructor
+        expect(smartcar.responseType).toEqual('code');
+        expect(smartcar.development).toEqual(false);
+
+        // make sure onComplete can be called
+        smartcar.onComplete();
+        expect(options.onComplete).toBeCalled();
       });
-
-      // this is set within the constructor
-      expect(smartcar.responseType).toEqual('code');
-      expect(smartcar.development).toEqual(false);
-
-      // make sure onComplete can be called
-      smartcar.onComplete();
-      expect(options.onComplete).toBeCalled();
-    });
 
     test('onComplete undefined if not specified', () => {
       const options = {
@@ -122,59 +119,61 @@ describe('sdk', () => {
     // https://github.com/jsdom/jsdom/issues/2245#issuecomment-392556153
 
     test('does not fire onComplete function without name field in message',
-      async () => {
+      async() => {
+        const options = {
+          clientId: 'clientId',
+          redirectUri: 'https://smartcar.com',
+          scope: ['read_vehicle_info', 'read_odometer'],
+          // eslint-disable-next-line no-empty-function
+          onComplete: jest.fn(() => {}),
+        };
 
-      const options = {
-        clientId: 'clientId',
-        redirectUri: 'https://smartcar.com',
-        scope: ['read_vehicle_info', 'read_odometer'],
-        // eslint-disable-next-line no-empty-function
-        onComplete: jest.fn(() => {}),
-      };
+        const smartcar = new window.Smartcar(options);
 
-      const smartcar = new window.Smartcar(options);
+        window.postMessage({
+          authCode: 'super-secret-code',
+          error: 'some-error',
+          state: 'some-state',
+        }, '*');
 
-      window.postMessage({
-        authCode: 'super-secret-code',
-        error: 'some-error',
-        state: 'some-state',
-      }, '*');
+        // Jest workaround - see comment above test
+        await new Promise((resolve) => setTimeout(resolve, 100));
 
-      // Jest workaround - see comment above test
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
-      expect(smartcar.onComplete)
-        .not
-        .toBeCalledWith(expect.anything(), expect.anything(), expect.anything())
-    });
+        expect(smartcar.onComplete)
+          .not
+          .toBeCalledWith(
+            expect.anything(),
+            expect.anything(),
+            expect.anything()
+          );
+      });
 
     test('fires onComplete function with expected arguments on postMessage',
-      async () => {
+      async() => {
+        const options = {
+          clientId: 'clientId',
+          redirectUri: 'https://smartcar.com',
+          scope: ['read_vehicle_info', 'read_odometer'],
+          // eslint-disable-next-line no-empty-function
+          onComplete: jest.fn(() => {}),
+        };
 
-      const options = {
-        clientId: 'clientId',
-        redirectUri: 'https://smartcar.com',
-        scope: ['read_vehicle_info', 'read_odometer'],
-        // eslint-disable-next-line no-empty-function
-        onComplete: jest.fn(() => {}),
-      };
+        const smartcar = new window.Smartcar(options);
 
-      const smartcar = new window.Smartcar(options);
+        window.postMessage({
+          authCode: 'super-secret-code',
+          error: 'some-error',
+          state: 'some-state',
+          name: 'smartcarAuthMessage',
+        }, '*');
 
-      window.postMessage({
-        authCode: 'super-secret-code',
-        error: 'some-error',
-        state: 'some-state',
-        name: 'smartcarAuthMessage'
-      }, '*');
+        // Jest workaround - see comment above test
+        await new Promise((resolve) => setTimeout(resolve, 100));
 
-      // Jest workaround - see comment above test
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
-      expect(smartcar.onComplete)
-        .toBeCalledWith(new smartcar.AccessDenied('some-error'),
-          'super-secret-code', 'some-state');
-    });
+        expect(smartcar.onComplete)
+          .toBeCalledWith(new smartcar.AccessDenied('some-error'),
+            'super-secret-code', 'some-state');
+      });
   });
 
   describe('generateLink', () => {
@@ -187,7 +186,9 @@ describe('sdk', () => {
 
       const smartcar = new window.Smartcar(options);
 
-      const expectedLink = 'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=auto';
+      const expectedLink = 'https://connect.smartcar.com/oauth/authorize?' +
+        'response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2F' +
+        'smartcar.com&approval_prompt=auto';
       const link = smartcar.generateLink();
       expect(link).toEqual(expectedLink);
     });
@@ -202,7 +203,10 @@ describe('sdk', () => {
 
       const smartcar = new window.Smartcar(options);
 
-      const expectedLink = 'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&state=foobarbaz';
+      const expectedLink = 'https://connect.smartcar.com/oauth/authorize' +
+        '?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2F' +
+        'smartcar.com&approval_prompt=force&scope=read_vehicle_info%20' +
+        'read_odometer&state=foobarbaz';
       const link = smartcar.generateLink({
         state: 'foobarbaz',
         forcePrompt: true,
@@ -221,7 +225,10 @@ describe('sdk', () => {
 
       const smartcar = new window.Smartcar(options);
 
-      const expectedLink = 'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&state=foobarbaz&mock=true';
+      const expectedLink = 'https://connect.smartcar.com/oauth/authorize?' +
+        'response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2F' +
+        'smartcar.com&approval_prompt=force&scope=read_vehicle_info%20' +
+        'read_odometer&state=foobarbaz&mock=true';
       const link = smartcar.generateLink({
         state: 'foobarbaz',
         forcePrompt: true,
@@ -240,7 +247,10 @@ describe('sdk', () => {
 
       const smartcar = new window.Smartcar(options);
 
-      const expectedLink = 'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&state=foobarbaz';
+      const expectedLink = 'https://connect.smartcar.com/oauth/authorize?' +
+        'response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2F' +
+        'smartcar.com&approval_prompt=force&scope=read_vehicle_info%20' +
+        'read_odometer&state=foobarbaz';
       const link = smartcar.generateLink({
         state: 'foobarbaz',
         forcePrompt: true,
@@ -282,7 +292,10 @@ describe('sdk', () => {
     };
 
     // expected OAuth link
-    const expectedLink = 'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&state=foobarbaz';
+    const expectedLink = 'https://connect.smartcar.com/oauth/authorize?' +
+      'response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2F' +
+      'smartcar.com&approval_prompt=force&scope=read_vehicle_info%20' +
+      'read_odometer&state=foobarbaz';
 
     beforeEach(() => {
       // set window options
@@ -301,7 +314,8 @@ describe('sdk', () => {
 
       smartcar.openDialog(dialogOptions);
 
-      expect(mockOpen).toHaveBeenCalledWith(expectedLink, 'Connect your car', expectedOptions);
+      expect(mockOpen)
+        .toHaveBeenCalledWith(expectedLink, 'Connect your car', expectedOptions);
     });
 
     test('addClickHandler throws error if id does not exist', () => {
@@ -325,37 +339,44 @@ describe('sdk', () => {
       };
 
       expect(() => smartcar.addClickHandler(clickHandlerOptions)).toThrow(
-        'Could not add click handler: element with id \'incorrect-id\' was not found.'
+        "Could not add click handler: element with id 'incorrect-id' was not" +
+        ' found.'
       );
     });
 
-    test('addClickHandler adds event listener that calls openDialog on click event', () => {
-      const id = 'connect-car-button';
+    test('addClickHandler adds event listener that calls openDialog on click',
+      () => {
+        const id = 'connect-car-button';
 
-      // setup document body
-      document.body.innerHTML =
-      `<div>
-        <button id="${id}">Connect your car</button>
-      </div>`;
+        // setup document body
+        document.body.innerHTML =
+        `<div>
+          <button id="${id}">Connect your car</button>
+        </div>`;
 
-      // mock window.open
-      const mockOpen = jest.fn();
-      window.open = mockOpen;
+        // mock window.open
+        const mockOpen = jest.fn();
+        window.open = mockOpen;
 
-      const smartcar = new window.Smartcar(options);
-      const clickHandlerOptions = {
-        id,
-        state: dialogOptions.state,
-        forcePrompt: dialogOptions.forcePrompt,
-      };
+        const smartcar = new window.Smartcar(options);
+        const clickHandlerOptions = {
+          id,
+          state: dialogOptions.state,
+          forcePrompt: dialogOptions.forcePrompt,
+        };
 
-      smartcar.addClickHandler(clickHandlerOptions);
+        smartcar.addClickHandler(clickHandlerOptions);
 
-      expect(mockOpen).toHaveBeenCalledTimes(0);
+        expect(mockOpen).toHaveBeenCalledTimes(0);
 
-      document.getElementById(id).click();
+        document.getElementById(id).click();
 
-      expect(mockOpen).toHaveBeenCalledWith(expectedLink, 'Connect your car', expectedOptions);
-    });
+        expect(mockOpen)
+          .toHaveBeenCalledWith(
+            expectedLink,
+            'Connect your car',
+            expectedOptions
+          );
+      });
   });
 });

@@ -22,7 +22,7 @@
       error: params.get('error_description'),
       state: params.get('state'),
     }
-    : { name: 'smartcarAuthMessage' };
+    : {name: 'smartcarAuthMessage'};
 
   const targetOrigin = maybeOriginParam
     ? maybeOriginParam

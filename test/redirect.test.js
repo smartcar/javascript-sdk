@@ -85,7 +85,7 @@ describe('redirect', () => {
 
     require('../src/redirect'); // eslint-disable-line global-require
     expect(mockPost)
-      .toBeCalledWith({ name: 'smartcarAuthMessage' }, selfHostedOrigin);
+      .toBeCalledWith({name: 'smartcarAuthMessage'}, selfHostedOrigin);
   });
 
   test('with origin parameter should post message with parameters', () => {
@@ -95,7 +95,8 @@ describe('redirect', () => {
     const code = 'super-secret-code';
     const errDesc = 'this-is-an-error-description';
     const state = 'some-random-state';
-    const cdnOrigin = `https://cdn.smartcar.com/redirect?origin=${appOrigin}&code=${code}&error_description=${errDesc}&state=${state}`;
+    const cdnOrigin = `https://cdn.smartcar.com/redirect?origin=${appOrigin}&` +
+      `code=${code}&error_description=${errDesc}&state=${state}`;
     jsdom.reconfigure({url: cdnOrigin}); // eslint-disable-line no-undef
 
     const mockPost = jest.fn();
@@ -107,7 +108,7 @@ describe('redirect', () => {
         authCode: code,
         error: errDesc,
         state,
-        name: 'smartcarAuthMessage'
+        name: 'smartcarAuthMessage',
       },
       appOrigin
     );
