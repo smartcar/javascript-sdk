@@ -8,7 +8,7 @@
 
 const _ = require('lodash');
 
-require('../src/sdk.js');
+require('../../src/sdk.js');
 
 describe('sdk', () => {
   beforeEach(() => { window.Smartcar._hasBeenInstantiated = false; });

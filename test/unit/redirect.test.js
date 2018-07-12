@@ -15,7 +15,7 @@ describe('redirect', () => {
 
   test('throws error if window.opener undefined', () => {
     // eslint-disable-next-line global-require
-    expect(() => require('../src/redirect'))
+    expect(() => require('../../src/redirect'))
       .toThrow('window.opener must be defined');
   });
 
@@ -26,7 +26,7 @@ describe('redirect', () => {
     const mockClose = jest.fn();
     window.close = mockClose;
 
-    require('../src/redirect'); // eslint-disable-line global-require
+    require('../../src/redirect'); // eslint-disable-line global-require
     expect(mockClose).toBeCalled();
   });
 
@@ -39,7 +39,7 @@ describe('redirect', () => {
     const mockPostMessage = jest.fn();
     window.opener.postMessage = mockPostMessage;
 
-    require('../src/redirect'); // eslint-disable-line global-require
+    require('../../src/redirect'); // eslint-disable-line global-require
 
     // verify postMessage and close are called on load
     expect(mockPostMessage).toBeCalled();
@@ -55,7 +55,7 @@ describe('redirect', () => {
     const mockPost = jest.fn();
     window.opener.postMessage = mockPost;
 
-    require('../src/redirect'); // eslint-disable-line global-require
+    require('../../src/redirect'); // eslint-disable-line global-require
     expect(mockPost).toBeCalledWith(expect.anything(), selfHostedOrigin);
   });
 
@@ -69,7 +69,7 @@ describe('redirect', () => {
     const mockPost = jest.fn();
     window.opener.postMessage = mockPost;
 
-    require('../src/redirect'); // eslint-disable-line global-require
+    require('../../src/redirect'); // eslint-disable-line global-require
     expect(mockPost).toBeCalledWith(expect.anything(), appOrigin);
   });
 
@@ -82,7 +82,7 @@ describe('redirect', () => {
     const mockPost = jest.fn();
     window.opener.postMessage = mockPost;
 
-    require('../src/redirect'); // eslint-disable-line global-require
+    require('../../src/redirect'); // eslint-disable-line global-require
     expect(mockPost)
       .toBeCalledWith({name: 'smartcarAuthMessage'}, selfHostedOrigin);
   });
@@ -101,7 +101,7 @@ describe('redirect', () => {
     const mockPost = jest.fn();
     window.opener.postMessage = mockPost;
 
-    require('../src/redirect'); // eslint-disable-line global-require
+    require('../../src/redirect'); // eslint-disable-line global-require
     expect(mockPost).toBeCalledWith(
       {
         authCode: code,
