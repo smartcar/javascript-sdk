@@ -12,7 +12,7 @@ describe('redirect', () => {
   });
 
   test('throws error if window.opener undefined', () => {
-    expect(() => require('../src/redirect')).toThrow(
+    expect(() => require('../../src/redirect')).toThrow(
       'window.opener must be defined'
     );
   });
@@ -24,7 +24,7 @@ describe('redirect', () => {
     const mockClose = jest.fn();
     window.close = mockClose;
 
-    require('../src/redirect');
+    require('../../src/redirect');
     expect(mockClose).toBeCalled();
   });
 
@@ -37,7 +37,7 @@ describe('redirect', () => {
     const mockPostMessage = jest.fn();
     window.opener.postMessage = mockPostMessage;
 
-    require('../src/redirect');
+    require('../../src/redirect');
 
     // verify postMessage and close are called on load
     expect(mockPostMessage).toBeCalled();
@@ -53,7 +53,7 @@ describe('redirect', () => {
     const mockPost = jest.fn();
     window.opener.postMessage = mockPost;
 
-    require('../src/redirect');
+    require('../../src/redirect');
     expect(mockPost).toBeCalledWith(expect.anything(), selfHostedOrigin);
   });
 
@@ -67,7 +67,7 @@ describe('redirect', () => {
     const mockPost = jest.fn();
     window.opener.postMessage = mockPost;
 
-    require('../src/redirect');
+    require('../../src/redirect');
     expect(mockPost).toBeCalledWith(expect.anything(), appOrigin);
   });
 
@@ -81,7 +81,7 @@ describe('redirect', () => {
     const mockPost = jest.fn();
     window.opener.postMessage = mockPost;
 
-    require('../src/redirect');
+    require('../../src/redirect');
     expect(mockPost).toBeCalledWith(
       {
         code: null,
@@ -106,7 +106,7 @@ describe('redirect', () => {
     const mockPost = jest.fn();
     window.opener.postMessage = mockPost;
 
-    require('../src/redirect');
+    require('../../src/redirect');
     expect(mockPost).toBeCalledWith(
       {
         code: null,
@@ -142,7 +142,7 @@ describe('redirect', () => {
     const mockPost = jest.fn();
     window.opener.postMessage = mockPost;
 
-    require('../src/redirect');
+    require('../../src/redirect');
     expect(mockPost).toBeCalledWith(
       {
         code,
