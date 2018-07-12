@@ -53,9 +53,13 @@ window.Smartcar = (function(window) {
     // expose AccessDenied error class
     this.AccessDenied = AccessDenied;
 
-    // add handler for postMessage event on completion of auth flow
-    window.onmessage = (event) => {
+    // handler
+    this.messageHandler = (event) => {
+      // bail if message from unexpected source
+      if (!this.redirectUri.startsWith(event.origin)) { return; }
+
       const message = event.data;
+      // bail if message not formatted as expected
       if (message.name !== 'smartcarAuthMessage') { return; }
 
       // if onComplete not specified do nothing, assume user is conveying
@@ -72,6 +76,9 @@ window.Smartcar = (function(window) {
         this.onComplete(maybeError, message.authCode, message.state);
       }
     };
+
+    // add handler for postMessage event on completion of auth flow
+    window.addEventListener('message', this.messageHandler);
   }
 
   /**
