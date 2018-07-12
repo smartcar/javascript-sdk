@@ -1,6 +1,6 @@
 'use strict';
 
-require('../src/sdk.js');
+require('../../src/sdk.js');
 
 describe('sdk', () => {
   const CDN_ORIGIN = 'https://javascript-sdk.smartcar.com';
