@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <meta charset='utf-8'>
+  <title>SDK SPA Test</title>
+  <script src='sdk.js'></script>
+  <script>
+    const redirectUri = 'http://localhost:4000';
+    // this file tests redirect scheme used with a smartcar hosted redirect
+    // that is, a separate front and back end. for the purposes of this test,
+    // however, we don't want to pass `useSmartcarHostedRedirect: true` as
+    // the message handler would then check that our post message comes from
+    // `cdn.smartcar.com` (the sanctioned redirect) but for testing our redirect
+    // is hosted at localhost
+    // provided the redirect url we hit has an `origin` param it will still post
+    // back to that origin param as this behavior is not dependent on the value
+    // of the `useSmartcarHostedRedirect` option
+    const options = {
+      // checked against event origin for security
+      redirectUri,
+      // redirect page to arbitrary url for testing
+      onComplete: () => location.replace('on-post-message-url'),
+    }
+
+    // don't need reference, just bind to window
+    window.Smartcar(options);
+
+    // on page load, open redirect page which should immediately post
+    // back, causing onComplete to replace the page url
+    // note that we manually add `origin` here which cause posts back to 3000
+    window.open(`${redirectUri}/redirect.html?origin=http://localhost:3000`);
+  </script>
+</html>

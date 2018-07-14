@@ -1,9 +1,9 @@
 'use strict';
 
-// We override Smartcar's browser lint rules for Jest tests.
-// Note that Jest ships with jsdom so window is loaded globally in Jest tests.
+// override Smartcar's browser lint rules for Jest tests
+// note that Jest ships with jsdom so window is loaded globally in Jest tests
 
-/* eslint strict: ["error", "global"] */
+/* eslint strict: ['error', 'global'] */
 /* global require, expect, jest */
 
 const _ = require('lodash');
