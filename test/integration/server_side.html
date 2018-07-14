@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <meta charset='utf-8'>
+  <title>SDK Server Side Rendered Test</title>
+  <script src='sdk.js'></script>
+  <script>
+    const redirectUri = 'http://localhost:3000';
+    // this file tests redirect scheme when developer hosts redirect and front
+    // end at same origin (e.g. a server side rendered app)
+    const options = {
+      // checked against event origin for security
+      redirectUri,
+      // redirect page to arbitrary url for testing
+      onComplete: () => location.replace('on-post-message-url'),
+    }
+
+    // don't need reference, just bind to window
+    window.Smartcar(options);
+
+    // on page load, open redirect page which should immediately post
+    // back, causing onComplete to replace the page url
+    window.open(`${redirectUri}/redirect.html`);
+  </script>
+</html>
