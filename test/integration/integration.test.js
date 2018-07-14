@@ -35,6 +35,20 @@ describe('postMessage', () => {
       // for single page
       .get('/spa', (_, res) =>
         res.sendFile(path.join(__dirname, '/spa.html')))
+      // for server side
+      .get('/server-side', (_, res) =>
+        res.sendFile(path.join(__dirname, '/server-side.html')))
+      // for server side
+      .get('/redirect', (_, res) =>
+        res.sendFile(
+          path.join(__dirname, redirectHtmlPath),
+          // force treating of extensionless file as html
+          {headers: {'content-type': 'text/html'}}
+        )
+      )
+      .get(redirectJavascriptPath, (_, res) =>
+        res.sendFile(path.join(__dirname, getVersionedPath('redirect', 'js'))))
+      // for both single page and server side
       .get('/sdk.js', (_, res) =>
         res.sendFile(path.join(__dirname, getVersionedPath('sdk', 'js'))))
       .listen(clientPort);
@@ -67,6 +81,23 @@ describe('postMessage', () => {
     // see spa.html for code run on page load
     shared.browser
       .url(`http://localhost:${clientPort}/spa`)
+      // this assertion will be retried until it succeeds or we timeout
+      .assert.urlEquals(`http://localhost:${clientPort}/on-post-message-url`)
+      .end();
+
+    shared.client.start(done);
+  });
+
+  test('using server side rendered variant, fires onComplete on postMessage' +
+    ' from expected origin (same as redirect page origin)', (done) => {
+    // minimal test, does not go through OAuth flow, just tests that with
+    // redirect and client hosted on same server, redirect page posts back
+    // to the correct client origin (same origin as itself) which is then
+    // handled as expected by client at origin
+
+    // see server-side.html for code run on page load
+    shared.browser
+      .url(`http://localhost:${clientPort}/server-side`)
       // this assertion will be retried until it succeeds or we timeout
       .assert.urlEquals(`http://localhost:${clientPort}/on-post-message-url`)
       .end();
