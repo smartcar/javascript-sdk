@@ -1,8 +1,13 @@
+sudo: required
+
 language:
   - node_js
 
 node_js:
   - 8
+
+services:
+  - docker
 
 branches:
   except:
@@ -10,6 +15,9 @@ branches:
 
 notifications:
   slack: smartcar:PGJmjtKFPytU5E2FwsImdVp8
+
+before_install:
+  - docker run --name selenium-container -d --net host -v /dev/shm:/dev/shm selenium/standalone-chrome
 
 install:
   - npm install
