@@ -59,8 +59,9 @@ window.Smartcar = (function(window) {
       if (!this.redirectUri.startsWith(event.origin)) { return; }
 
       const message = event.data;
-      // bail if message not formatted as expected
-      if (message.name !== 'smartcarAuthMessage') { return; }
+      // bail if message does not contain `isSmartcarHosted` key
+      // this prevents attempting to handle messages intended for others
+      if (!message.hasOwnProperty('isSmartcarHosted')) { return; }
 
       // if onComplete not specified do nothing, assume user is conveying
       // completion information from backend server receiving redirect to front
@@ -71,9 +72,13 @@ window.Smartcar = (function(window) {
           ? new AccessDenied(message.error)
           : null;
 
-        // call with parameters even if self hosted. if they pass empty
-        // onComplete the parameters will be harmlessly ignored
-        this.onComplete(maybeError, message.authCode, message.state);
+        // call with parameters even if developer is not using smartcar hosting
+        // as they may still want onComplete to do something with message
+        // if empty onComplete is passed, parameters will be harmlessly ignored
+        // if a developer chooses to pass an `onComplete` expecting these
+        // parameters they must also handle populating the corresponding query
+        // parameters in their redirect uri
+        this.onComplete(maybeError, message.code, message.state);
       }
     };
 
