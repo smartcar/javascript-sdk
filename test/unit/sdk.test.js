@@ -182,7 +182,7 @@ describe('sdk', () => {
 
       const evnt = {
         data: {
-          authCode: 'super-secret-code',
+          code: 'super-secret-code',
           error: undefined,
           state: 'some-state',
         },
@@ -210,10 +210,10 @@ describe('sdk', () => {
 
         const evnt = {
           data: {
-            authCode: 'super-secret-code',
+            code: 'super-secret-code',
             error: undefined,
             state: 'some-state',
-            name: 'smartcarAuthMessage',
+            isSmartcarHosted: true,
           },
           origin: 'https://cdn.smartcar.com',
         };
@@ -237,10 +237,10 @@ describe('sdk', () => {
 
       const evnt = {
         data: {
-          authCode: 'super-secret-code',
+          code: 'super-secret-code',
           error: undefined,
           state: 'some-state',
-          name: 'smartcarAuthMessage',
+          isSmartcarHosted: true,
         },
         origin: 'https://cdn.smartcar.com',
       };
@@ -264,10 +264,10 @@ describe('sdk', () => {
 
       const evnt = {
         data: {
-          authCode: 'super-secret-code',
+          code: 'super-secret-code',
           error: 'some-error',
           state: 'some-state',
-          name: 'smartcarAuthMessage',
+          isSmartcarHosted: true,
         },
         origin: 'https://cdn.smartcar.com',
       };

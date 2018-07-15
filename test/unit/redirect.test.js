@@ -73,21 +73,44 @@ describe('redirect', () => {
     expect(mockPost).toBeCalledWith(expect.anything(), appOrigin);
   });
 
-  test('without origin parameter should post only name', () => {
-    window.opener = {};
+  test('if redirect origin is not cdn.smartcar.com then isSmartcarHosted: false',
+    () => {
+      window.opener = {};
 
-    const selfHostedOrigin = 'https://www.the-next-awesome-car-app.com';
-    jsdom.reconfigure({url: selfHostedOrigin}); // eslint-disable-line no-undef
+      const selfHostedOrigin = 'https://www.the-next-awesome-car-app.com';
+      jsdom.reconfigure({url: selfHostedOrigin}); // eslint-disable-line no-undef
 
-    const mockPost = jest.fn();
-    window.opener.postMessage = mockPost;
+      const mockPost = jest.fn();
+      window.opener.postMessage = mockPost;
 
-    require('../../src/redirect'); // eslint-disable-line global-require
-    expect(mockPost)
-      .toBeCalledWith({name: 'smartcarAuthMessage'}, selfHostedOrigin);
-  });
+      require('../../src/redirect'); // eslint-disable-line global-require
+      expect(mockPost)
+        .toBeCalledWith(
+          {isSmartcarHosted: false, error: null, code: null, state: null},
+          selfHostedOrigin
+        );
+    });
 
-  test('with origin parameter should post message with parameters', () => {
+  test('if redirect origin is cdn.smartcar.com then isSmartcarHosted: true',
+    () => {
+      window.opener = {};
+
+      const appOrigin = 'https://www.the-next-awesome-car-app.com';
+      const cdnOrigin = `https://cdn.smartcar.com/redirect?origin=${appOrigin}`;
+      jsdom.reconfigure({url: cdnOrigin}); // eslint-disable-line no-undef
+
+      const mockPost = jest.fn();
+      window.opener.postMessage = mockPost;
+
+      require('../../src/redirect'); // eslint-disable-line global-require
+      expect(mockPost)
+        .toBeCalledWith(
+          {isSmartcarHosted: true, error: null, code: null, state: null},
+          appOrigin
+        );
+    });
+
+  test('should post message with expected parameters', () => {
     window.opener = {};
 
     const appOrigin = 'https://www.the-next-awesome-car-app.com';
@@ -104,10 +127,10 @@ describe('redirect', () => {
     require('../../src/redirect'); // eslint-disable-line global-require
     expect(mockPost).toBeCalledWith(
       {
-        authCode: code,
+        code,
         error: errDesc,
         state,
-        name: 'smartcarAuthMessage',
+        isSmartcarHosted: true,
       },
       appOrigin
     );
