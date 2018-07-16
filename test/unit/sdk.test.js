@@ -1,31 +1,45 @@
 'use strict';
 
 // override Smartcar's browser lint rules for Jest tests
-// note that Jest ships with jsdom so window is loaded globally in Jest tests
-
 /* eslint strict: ['error', 'global'] */
 /* global require, expect, jest */
 
 const _ = require('lodash');
 
+// note that Jest ships with jsdom so window is loaded globally in Jest tests
 require('../../src/sdk.js');
 
 describe('sdk', () => {
   beforeEach(() => { window.Smartcar._hasBeenInstantiated = false; });
 
   describe('constructor', () => {
+    test('throws error if constructor called without redirectUri', () => {
+      expect(() => new window.Smartcar({}))
+        .toThrow('A redirect URI option must be provided');
+    });
+
+    test('throws error if constructor called without clientId', () => {
+      expect(() => new window.Smartcar({redirectUri: 'http://example.com'}))
+        .toThrow('A client ID option must be provided');
+    });
+
     test('throws error if smartcar already instantiated', () => {
       // initial instantiation
-      window.Smartcar({});
+      window.Smartcar({redirectUri: 'http://example.com', clientId: 'my-id'});
 
-      expect(() => new window.Smartcar({})).toThrow('Smartcar has' +
-        ' already been instantiated in the window. Only one instance of' +
-        ' Smartcar can be defined. See' +
-        ' https://github.com/smartcar/javascript-sdk for more information');
+      expect(() => {
+        window.Smartcar({redirectUri: 'http://example.com', clientId: 'my-id'});
+      })
+        .toThrow('Smartcar has already been instantiated in the window. Only' +
+          ' one instance of Smartcar can be defined. See' +
+          ' https://github.com/smartcar/javascript-sdk for more information');
     });
 
     test('throws error if using Smartcar hosting without onComplete', () => {
-      expect(() => new window.Smartcar({useSmartcarHostedRedirect: true}))
+      expect(() => window.Smartcar({
+        redirectUri: 'https://cdn.smartcar.com',
+        clientId: 'my-id',
+      }))
         .toThrow("When using Smartcar's CDN redirect an onComplete function" +
           ' with at least 2 parameters is required to handle completion of' +
           ' authorization flow');
@@ -33,9 +47,9 @@ describe('sdk', () => {
 
     test('throws error if using Smartcar hosting & passing onComplete with' +
       ' than 2 parameters', () => {
-
-      expect(() => new window.Smartcar({
-        useSmartcarHostedRedirect: true,
+      expect(() => window.Smartcar({
+        redirectUri: 'https://cdn.smartcar.com',
+        clientId: 'my-id',
         // eslint-disable-next-line no-unused-vars, no-empty-function
         onComplete: (_) => {},
       }))
@@ -44,7 +58,7 @@ describe('sdk', () => {
           ' authorization flow');
     });
 
-    test('initializes correctly w/ useSmartcarHostedRedirect=false (default)',
+    test('initializes correctly w/ self hosted redirect',
       () => {
         const options = {
           clientId: 'clientId',
@@ -68,29 +82,20 @@ describe('sdk', () => {
         expect(options.onComplete).toBeCalled();
       });
 
-    test('initializes correctly w/ useSmartcarHostedRedirect=true',
+    test('initializes correctly w/ smartcar CDN hosted redirect',
       () => {
         const options = {
           clientId: 'clientId',
-          redirectUri: 'https://smartcar.com',
+          redirectUri: 'https://cdn.smartcar.com',
           scope: ['read_vehicle_info', 'read_odometer'],
           // eslint-disable-next-line no-unused-vars, no-empty-function
           onComplete: jest.fn((_, __) => {}), // stub function with >= 2 params
-          useSmartcarHostedRedirect: true,
         };
 
         const smartcar = new window.Smartcar(options);
 
         _.forEach(options, (option, key) => {
-          if (key === 'useSmartcarHostedRedirect') {
-            // this option isn't saved in Smartcar state so nothing to check
-          } else if (key === 'redirectUri') {
-            expect(smartcar[key])
-              .toEqual(
-                'https://cdn.smartcar.com/redirect?origin=https://smartcar.com');
-          } else {
-            expect(smartcar[key]).toEqual(option);
-          }
+          expect(smartcar[key]).toEqual(option);
         });
 
         // this is set within the constructor
@@ -202,8 +207,8 @@ describe('sdk', () => {
           clientId: 'clientId',
           redirectUri: 'https://cdn.smartcar.com?origin=https://cool-app.com',
           scope: ['read_vehicle_info', 'read_odometer'],
-          // eslint-disable-next-line no-empty-function
-          onComplete: jest.fn(() => {}),
+          // eslint-disable-next-line no-unused-vars, no-empty-function
+          onComplete: jest.fn((__, _) => {}),
         };
 
         const smartcar = new window.Smartcar(options);
@@ -229,8 +234,8 @@ describe('sdk', () => {
         clientId: 'clientId',
         redirectUri: 'https://cdn.smartcar.com?origin=https://cool-app.com',
         scope: ['read_vehicle_info', 'read_odometer'],
-        // eslint-disable-next-line no-empty-function
-        onComplete: jest.fn(() => {}),
+        // eslint-disable-next-line no-unused-vars, no-empty-function
+        onComplete: jest.fn((__, _) => {}),
       };
 
       const smartcar = new window.Smartcar(options);
@@ -256,8 +261,8 @@ describe('sdk', () => {
         clientId: 'clientId',
         redirectUri: 'https://cdn.smartcar.com?origin=https://cool-app.com',
         scope: ['read_vehicle_info', 'read_odometer'],
-        // eslint-disable-next-line no-empty-function
-        onComplete: jest.fn(() => {}),
+        // eslint-disable-next-line no-unused-vars, no-empty-function
+        onComplete: jest.fn((__, _) => {}),
       };
 
       const smartcar = new window.Smartcar(options);

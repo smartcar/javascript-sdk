@@ -5,16 +5,14 @@
   <script src='sdk.js'></script>
   <script>
     const redirectUri = 'http://localhost:4000';
-    // this file tests redirect scheme used with a smartcar hosted redirect
-    // that is, a separate front and back end. for the purposes of this test,
-    // however, we don't want to pass `useSmartcarHostedRedirect: true` as
-    // the message handler would then check that our post message comes from
-    // `cdn.smartcar.com` (the sanctioned redirect) but for testing our redirect
-    // is hosted at localhost
-    // provided the redirect url we hit has an `origin` param it will still post
-    // back to that origin param as this behavior is not dependent on the value
-    // of the `useSmartcarHostedRedirect` option
+    // this file tests a redirect scheme with a separate front end client & back
+    // end server. This is the same scheme that will be used if a developer
+    // chooses to host their redirect on Smartcar's CDN. For the purposes of
+    // this test we hit a local redirect server where we provide the `origin`
+    // param ensuring it will post back to that origin param
     const options = {
+      // required
+      clientId: 'clientId',
       // checked against event origin for security
       redirectUri,
       // redirect page to arbitrary url for testing

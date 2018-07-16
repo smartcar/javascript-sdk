@@ -8,6 +8,8 @@
     // this file tests redirect scheme when developer hosts redirect and front
     // end at same origin (e.g. a server side rendered app)
     const options = {
+      // required
+      clientId: 'clientId',
       // checked against event origin for security
       redirectUri,
       // redirect page to arbitrary url for testing
