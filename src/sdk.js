@@ -15,23 +15,44 @@ window.Smartcar = (function(window) {
    * to enable the mock vehicle brand
    */
   function Smartcar(options) {
+
+    // ensure options are well formed
+    Smartcar._validateConstructorOptions(options);
+
     this.clientId = options.clientId;
     this.redirectUri = options.redirectUri;
     this.scope = options.scope;
     this.onComplete = options.onComplete;
     this.development = options.development || false;
     this.responseType = 'code';
-
-    // window._smartcar is used to preserve reference to smartcar when we call
-    // onComplete in the callback (see callback.js)
-    if (window._smartcar) {
-      // throw error if more than one instance
-      // eslint-disable-line max-len
-      throw new Error('Smartcar has already been instantiated in the window. Only one instance of Smartcar can be defined. See https://github.com/smartcar/javascript-sdk for more information');
-    } else {
-      window._smartcar = this;
-    }
   }
+
+  /**
+   * Validate options passed to Smartcar constructor.
+   *
+   * See constructor documentation for enumeration of options properties.
+   *
+   * @private
+   * @param {Object} options - the SDK configuration object
+   */
+  Smartcar._validateConstructorOptions = function(options) {
+    // allow only one instance of Smartcar
+    if (Smartcar._hasBeenInstantiated) {
+      throw new Error(
+        'Smartcar has already been instantiated in the window. Only one' +
+        ' instance of Smartcar can be defined.');
+    } else {
+      Smartcar._hasBeenInstantiated = true;
+    }
+
+    if (!options.clientId) {
+      throw new TypeError('A client ID option must be provided');
+    }
+
+    if (!options.redirectUri) {
+      throw new TypeError('A redirect URI option must be provided');
+    }
+  };
 
   /**
    * Generates Smartcar OAuth URL.
