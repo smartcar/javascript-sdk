@@ -4,26 +4,30 @@ require('../src/sdk.js');
 
 describe('sdk', () => {
 
-  beforeEach(() => {
-    // reset window._smartcar before each test
-    window._smartcar = undefined;
-  });
+  beforeEach(() => { window.Smartcar._hasBeenInstantiated = false; });
 
   describe('constructor', () => {
+    test('throws error if constructor called without redirectUri', () => {
+      expect(() => new window.Smartcar({clientId: 'uuid'}))
+        .toThrow('A redirect URI option must be provided');
+    });
 
-    test('throws error if window._smartcar already defined', () => {
-      window._smartcar = jest.fn();
+    test('throws error if constructor called without clientId', () => {
+      expect(() => new window.Smartcar({redirectUri: 'http://example.com'}))
+        .toThrow('A client ID option must be provided');
+    });
 
-      const options = {
-        clientId: 'clientId',
-        redirectUri: 'https://smartcar.com',
-        scope: ['read_vehicle_info', 'read_odometer'],
-        onComplete: jest.fn(),
-        development: true,
-      };
-
-      // eslint-disable-line max-len
-      expect(() => new window.Smartcar(options)).toThrow('Smartcar has already been instantiated in the window. Only one instance of Smartcar can be defined. See https://github.com/smartcar/javascript-sdk for more information');
+    test('throws error if smartcar already instantiated', () => {
+      // initial instantiation
+      // eslint-disable-next-line no-new
+      new window.Smartcar({redirectUri: 'http://example.com', clientId: 'my-id'});
+      expect(() =>
+        new window.Smartcar({redirectUri: 'http://example.com', clientId: 'my-id'})
+      )
+        .toThrow(
+          'Smartcar has already been instantiated in the window. Only one' +
+          ' instance of Smartcar can be defined.'
+        );
     });
 
     test('initializes correctly', () => {
@@ -48,7 +52,7 @@ describe('sdk', () => {
       smartcar.onComplete();
       expect(options.onComplete).toHaveBeenCalled();
 
-      expect(window._smartcar).toEqual(smartcar);
+      expect(window.Smartcar._hasBeenInstantiated).toEqual(true);
     });
 
     test('onComplete undefined if not specified', () => {
