@@ -33,6 +33,14 @@ window.Smartcar = (function(window) {
       Smartcar._hasBeenInstantiated = true;
     }
 
+    if (!options.redirectUri) {
+      throw new TypeError('A redirect URI option must be provided');
+    }
+
+    if (!options.clientId) {
+      throw new TypeError('A client ID option must be provided');
+    }
+
     // require onComplete method with at least two parameters (error & code)
     // when hosting on Smartcar CDN
     if (options.useSmartcarHostedRedirect && (!options.onComplete
