@@ -19,8 +19,6 @@ window.Smartcar = (function(window) {
    * @param {Function} [options.onComplete] - called on completion of auth flow
    * @param {Boolean} [options.development=false] - launch Smartcar auth in
    * development mode to enable the mock vehicle brand
-   * @param {Boolean} [options.useSmartcarHostedRedirect=false] - use Smartcar's
-   * CDN to host auth flow redirect (recommended for single page apps)
    * @constructor
    */
   function Smartcar(options) {
@@ -43,17 +41,15 @@ window.Smartcar = (function(window) {
 
     // require onComplete method with at least two parameters (error & code)
     // when hosting on Smartcar CDN
-    if (options.useSmartcarHostedRedirect && (!options.onComplete
-      || options.onComplete.length < 2)) {
+    if (options.redirectUri.startsWith('https://cdn.smartcar.com')
+      && (!options.onComplete || options.onComplete.length < 2)) {
       throw new Error("When using Smartcar's CDN redirect an onComplete" +
         ' function with at least 2 parameters is required to handle' +
         ' completion of authorization flow');
     }
 
     this.clientId = options.clientId;
-    this.redirectUri = options.useSmartcarHostedRedirect
-      ? `https://cdn.smartcar.com/redirect?origin=${options.redirectUri}`
-      : options.redirectUri;
+    this.redirectUri = options.redirectUri;
     this.scope = options.scope;
     this.onComplete = options.onComplete;
     this.development = options.development || false;
@@ -74,7 +70,7 @@ window.Smartcar = (function(window) {
       // if onComplete not specified do nothing, assume user is conveying
       // completion information from backend server receiving redirect to front
       // end (not using onComplete)
-      /* istanbul ignore else  */
+      /* istanbul ignore else */
       if (this.onComplete) {
         const maybeError = message.error
           ? new AccessDenied(message.error)
