@@ -4,8 +4,6 @@
 /* eslint strict: ['error', 'global'] */
 /* global require, expect, jest */
 
-const _ = require('lodash');
-
 // note that Jest ships with jsdom so window is loaded globally in Jest tests
 require('../../src/sdk.js');
 
@@ -69,9 +67,9 @@ describe('sdk', () => {
 
         const smartcar = new window.Smartcar(options);
 
-        _.forEach(options, (option, key) => {
-          expect(smartcar[key]).toEqual(option);
-        });
+        Object.entries(options).forEach(
+          ([key, option]) => expect(smartcar[key]).toEqual(option)
+        );
 
         // this is set within the constructor
         expect(smartcar.responseType).toEqual('code');
@@ -94,9 +92,9 @@ describe('sdk', () => {
 
         const smartcar = new window.Smartcar(options);
 
-        _.forEach(options, (option, key) => {
-          expect(smartcar[key]).toEqual(option);
-        });
+        Object.entries(options).forEach(
+          ([key, option]) => expect(smartcar[key]).toEqual(option)
+        );
 
         // this is set within the constructor
         expect(smartcar.responseType).toEqual('code');
