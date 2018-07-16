@@ -21,6 +21,11 @@
   };
 
   // may still host with origin param even if not using smartcar hosted redirect
+  // if a developer chooses not to use Smartcar hosting but still wants to have
+  // a separate front and back end they can serve their redirect page with an
+  // `origin` query paramater specifying the front-end origin to post back to.
+  // if no origin parameter is given then the postMessage is sent back to the
+  // same origin the redirect is hosted at (this assumes server side rendered).
   const targetOrigin = params.get('origin') || window.location.origin;
 
   window.opener.postMessage(message, targetOrigin);
