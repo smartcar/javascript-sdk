@@ -1,8 +1,13 @@
+sudo: required
+
 language:
   - node_js
 
 node_js:
   - 8
+
+services:
+  - docker
 
 branches:
   except:
@@ -15,6 +20,7 @@ install:
   - npm install
 
 script:
+  - docker run --name selenium-container -d --net host -v /dev/shm:/dev/shm selenium/standalone-chrome
   - npm run lint
   - npm test
   - npm run cover

@@ -1,6 +1,6 @@
 {
   "nightwatch": {
-    "selenium_host": "selenium-container",
+    "selenium_host": "localhost",
     "desiredCapabilities": {
       "browserName": "chrome",
       "javascriptEnabled": true,
