@@ -72,9 +72,7 @@ window.Smartcar = (function(window) {
       // end (not using onComplete)
       /* istanbul ignore else */
       if (this.onComplete) {
-        const maybeError = message.error
-          ? new AccessDenied(message.error)
-          : null;
+        const err = message.error ? new AccessDenied(message.error) : null;
 
         // call with parameters even if developer is not using smartcar hosting
         // as they may still want onComplete to do something with message
@@ -82,7 +80,7 @@ window.Smartcar = (function(window) {
         // if a developer chooses to pass an `onComplete` expecting these
         // parameters they must also handle populating the corresponding query
         // parameters in their redirect uri
-        this.onComplete(maybeError, message.code, message.state);
+        this.onComplete(err, message.code, message.state);
       }
     };
 
