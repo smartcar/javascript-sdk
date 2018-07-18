@@ -3,6 +3,7 @@
 'use strict';
 
 const gulp = require('gulp');
+const template = require('gulp-template');
 const {version} = require('./package');
 const $ = require('gulp-load-plugins')();
 
@@ -18,8 +19,9 @@ gulp.task('build-js', function() {
 
 gulp.task('build-html', function() {
   return gulp.src('src/redirect.html')
-    .pipe($.rename('index.html'))
-    .pipe(gulp.dest('dist/javascript-sdk/redirect'));
+    .pipe(template({redirectJS: `'redirect-${version}.js'`}))
+    .pipe(rename('index.html'))
+    .pipe(gulp.dest(`dist/javascript-sdk/redirect-${version}`));
 });
 
 gulp.task('build', ['build-js', 'build-html']);
