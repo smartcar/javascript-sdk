@@ -36,7 +36,6 @@
     "gulp": "^3.8.5",
     "gulp-awspublish": "^3.0.1",
     "gulp-babel": "^7.0.0",
-    "gulp-load-plugins": "^1.2.0",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^3.0.0",
     "jest": "^22.4.3"
