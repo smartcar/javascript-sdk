@@ -5,7 +5,7 @@
   "author": "Smartcar <hello@smartcar.com> (https://smartcar.com)",
   "license": "MIT",
   "scripts": {
-    "test": "jest",
+    "test": "npm run build && jest",
     "posttest": "npm run lint -s",
     "lint": "eslint . --cache",
     "cover": "npm test -- --coverage",

@@ -7,6 +7,7 @@
 const config = require('./config');
 const express = require('express');
 const nightwatch = require('nightwatch');
+const {version} = require('../../package.json');
 const path = require('path');
 
 describe('postMessage', () => {
@@ -18,27 +19,43 @@ describe('postMessage', () => {
     shared.client = nightwatch.initClient(config.get('nightwatch'));
     shared.browser = shared.client.api();
 
+    // append version
+    const addVersion = (appendee) => `${appendee}-${version}`;
+    // get path to built files
+    const getVersionedPath =
+      (file, ext) => `../../dist/javascript-sdk/${addVersion(file)}.${ext}`;
+
+    // redirect hosted at /redirect
+    // file structure -> dist/javascript-sdk/redirect-${version}/index.js
+    const redirectIndexPath =
+      `../../dist/javascript-sdk/${addVersion('redirect')}/index.html`;
+    // built redirect-${version}.html references redirect-${version}.js
+    const redirectJavascriptPath = `/${addVersion('redirect')}.js`;
+
     // client setup
     client = express()
       // for single page
-      .get('/spa',
-        (_, res) => res.sendFile(path.join(__dirname, '/spa.html')))
+      .get('/spa', (_, res) =>
+        res.sendFile(path.join(__dirname, '/spa.html')))
       // for server side
-      .get('/server-side',
-        (_, res) => res.sendFile(path.join(__dirname, '/server_side.html')))
+      .get('/server-side', (_, res) =>
+        res.sendFile(path.join(__dirname, '/server-side.html')))
       // for server side
-      .get('/redirect.html',
-        (_, res) => res.sendFile(path.join(__dirname, '../../src/redirect.html')))
-      .get('/redirect.js',
-        (_, res) => res.sendFile(path.join(__dirname, '../../src/redirect.js')))
+      .get('/redirect', (_, res) =>
+        res.sendFile(path.join(__dirname, redirectIndexPath)))
+      .get(redirectJavascriptPath, (_, res) =>
+        res.sendFile(path.join(__dirname, getVersionedPath('redirect', 'js'))))
       // for both single page and server side
-      .get('/sdk.js',
-        (_, res) => res.sendFile(path.join(__dirname, '../../src/sdk.js')))
+      .get('/sdk.js', (_, res) =>
+        res.sendFile(path.join(__dirname, getVersionedPath('sdk', 'js'))))
       .listen(3000);
 
     // redirect setup
     redirect = express()
-      .use('/', express.static(path.join(__dirname, '../../src')))
+      .get('/redirect', (_, res) =>
+        res.sendFile(path.join(__dirname, redirectIndexPath)))
+      .get(redirectJavascriptPath, (_, res) =>
+        res.sendFile(path.join(__dirname, getVersionedPath('redirect', 'js'))))
       .listen(4000);
   });
 
