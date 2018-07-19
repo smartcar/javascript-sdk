@@ -11,8 +11,9 @@ const {version} = require('../../package.json');
 const path = require('path');
 
 describe('postMessage', () => {
-  let client;
-  let redirect;
+  let client, redirect;
+  const clientPort = 3000;
+  const redirectPort = 4000;
   const shared = {};
 
   beforeAll(() => {
@@ -48,7 +49,7 @@ describe('postMessage', () => {
       // for both single page and server side
       .get('/sdk.js', (_, res) =>
         res.sendFile(path.join(__dirname, getVersionedPath('sdk', 'js'))))
-      .listen(3000);
+      .listen(clientPort);
 
     // redirect setup
     redirect = express()
@@ -56,7 +57,7 @@ describe('postMessage', () => {
         res.sendFile(path.join(__dirname, redirectIndexPath)))
       .get(redirectJavascriptPath, (_, res) =>
         res.sendFile(path.join(__dirname, getVersionedPath('redirect', 'js'))))
-      .listen(4000);
+      .listen(redirectPort);
   });
 
   afterAll(() => {
@@ -72,9 +73,9 @@ describe('postMessage', () => {
 
     // see spa.html for code run on page load
     shared.browser
-      .url('http://localhost:3000/spa')
+      .url(`http://localhost:${clientPort}/spa`)
       // this assertion will be retried until it succeeds or we timeout
-      .assert.urlEquals('http://localhost:3000/on-post-message-url')
+      .assert.urlEquals(`http://localhost:${clientPort}/on-post-message-url`)
       .end();
 
     shared.client.start(done);
@@ -89,9 +90,9 @@ describe('postMessage', () => {
 
     // see server_side.html for code run on page load
     shared.browser
-      .url('http://localhost:3000/server-side')
+      .url(`http://localhost:${clientPort}/server-side`)
       // this assertion will be retried until it succeeds or we timeout
-      .assert.urlEquals('http://localhost:3000/on-post-message-url')
+      .assert.urlEquals(`http://localhost:${clientPort}/on-post-message-url`)
       .end();
 
     shared.client.start(done);

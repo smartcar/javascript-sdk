@@ -4,7 +4,9 @@
   <title>SDK SPA Test</title>
   <script src='sdk.js'></script>
   <script>
-    const redirectUri = 'http://localhost:4000';
+    const clientPort = 3000;
+    const redirectPort = 4000;
+    const redirectUri = `http://localhost:${redirectPort}`;
     // this file tests a redirect scheme with a separate front end client & back
     // end server. This is the same scheme that will be used if a developer
     // chooses to host their redirect on Smartcar's CDN. For the purposes of
@@ -25,6 +27,8 @@
     // on page load, open redirect page which should immediately post
     // back, causing onComplete to replace the page url
     // note that we manually add `origin` here which cause posts back to 3000
-    window.open(`${redirectUri}/redirect?origin=http://localhost:3000`);
+    window.open(
+      `${redirectUri}/redirect?origin=http://localhost:${clientPort}`
+    );
   </script>
 </html>
