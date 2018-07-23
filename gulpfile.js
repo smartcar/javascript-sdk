@@ -10,6 +10,7 @@ const template = require('gulp-template');
 const uglify = require('gulp-uglify');
 const {version} = require('./package');
 
+// builds js files by babeling, uglifying & versioning
 gulp.task('build-js', function() {
   return gulp.src('src/*.js')
     .pipe(babel())
@@ -20,6 +21,7 @@ gulp.task('build-js', function() {
     .pipe(gulp.dest('dist/javascript-sdk'));
 });
 
+// builds html file by templating & versioning
 gulp.task('build-html', function() {
   return gulp.src('src/redirect.html')
     .pipe(template({redirectJS: `'redirect-${version}.js'`}))
