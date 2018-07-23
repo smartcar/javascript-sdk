@@ -66,7 +66,7 @@ describe('postMessage', () => {
   });
 
   test('using single page app variant, fires onComplete on postMessage from' +
-    'expected origin specified by `origin` param', (done) => {
+    ' expected origin specified by `origin` param', (done) => {
     // minimal test, does not go through OAuth flow, just tests that redirect
     // page hosted on separate backend posts back to origin parameter which
     // is then handled as expected by front end at origin
@@ -82,7 +82,7 @@ describe('postMessage', () => {
   });
 
   test('using server side rendered variant, fires onComplete on postMessage' +
-    'from expected origin (same as redirect origin)', (done) => {
+    ' from expected origin (same as redirect origin)', (done) => {
     // minimal test, does not go through OAuth flow, just tests that with
     // redirect and front end hosted on same server, redirect page posts back
     // to the correct front end origin (same origin as itself) which is then

@@ -6,19 +6,7 @@
 const convict = require('convict');
 const path = require('path');
 
-convict.addFormat({
-  name: 'CI',
-  validate: () => undefined,
-  coerce: (isCI) => { return isCI === 'true' ? 'travis' : 'local'; },
-});
-
 const config = convict({
-  env: {
-    doc: 'The test environment.',
-    format: 'CI',
-    default: 'local',
-    env: 'CI',
-  },
   nightwatch: {
     // eslint-disable-next-line camelcase
     selenium_host: {
@@ -70,8 +58,7 @@ const config = convict({
   },
 });
 
-const env = config.get('env');
-config.loadFile(path.join(__dirname, env + '.json'));
+config.loadFile(path.join(__dirname, 'config.json'));
 config.validate({allowed: 'strict'});
 
 module.exports = config;
