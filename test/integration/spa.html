@@ -10,8 +10,8 @@
     // this file tests a redirect scheme with a separate front end client & back
     // end server. This is the same scheme that will be used if a developer
     // chooses to host their redirect on Smartcar's CDN. For the purposes of
-    // this test we hit a local redirect server where we provide the `origin`
-    // param ensuring it will post back to that origin param
+    // this test we hit a local redirect server where we provide the
+    // `app_origin` param ensuring it will post back to that `app_origin` param
     const options = {
       // required
       clientId: 'clientId',
@@ -26,9 +26,9 @@
 
     // on page load, open redirect page which should immediately post
     // back, causing onComplete to replace the page url
-    // note that we manually add `origin` here which cause posts back to 3000
+    // note that we manually add `app_origin` here to cause post back to 3000
     window.open(
-      `${redirectUri}/redirect?origin=http://localhost:${clientPort}`
+      `${redirectUri}/redirect?app_origin=http://localhost:${clientPort}`
     );
   </script>
 </html>

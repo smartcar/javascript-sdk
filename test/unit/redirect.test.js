@@ -59,11 +59,12 @@ describe('redirect', () => {
     expect(mockPost).toBeCalledWith(expect.anything(), selfHostedOrigin);
   });
 
-  test('should post to origin param', () => {
+  test('should post to `app_origin` param', () => {
     window.opener = {};
 
     const appOrigin = 'https://www.the-next-awesome-car-app.com';
-    const cdnOrigin = `https://cdn.smartcar.com/redirect?origin=${appOrigin}`;
+    const cdnOrigin =
+      `https://cdn.smartcar.com/redirect?app_origin=${appOrigin}`;
     jsdom.reconfigure({url: cdnOrigin}); // eslint-disable-line no-undef
 
     const mockPost = jest.fn();
@@ -73,30 +74,32 @@ describe('redirect', () => {
     expect(mockPost).toBeCalledWith(expect.anything(), appOrigin);
   });
 
-  test('if redirect origin is not cdn.smartcar.com then isSmartcarHosted: false',
-    () => {
-      window.opener = {};
+  test('if redirect origin is not cdn.smartcar.com then isSmartcarHosted:' +
+    ' false', () => {
+    window.opener = {};
 
-      const selfHostedOrigin = 'https://www.the-next-awesome-car-app.com';
-      jsdom.reconfigure({url: selfHostedOrigin}); // eslint-disable-line no-undef
+    const selfHostedOrigin = 'https://www.the-next-awesome-car-app.com';
+    // eslint-disable-next-line no-undef
+    jsdom.reconfigure({url: selfHostedOrigin});
 
-      const mockPost = jest.fn();
-      window.opener.postMessage = mockPost;
+    const mockPost = jest.fn();
+    window.opener.postMessage = mockPost;
 
-      require('../../src/redirect'); // eslint-disable-line global-require
-      expect(mockPost)
-        .toBeCalledWith(
-          {isSmartcarHosted: false, error: null, code: null, state: null},
-          selfHostedOrigin
-        );
-    });
+    require('../../src/redirect'); // eslint-disable-line global-require
+    expect(mockPost)
+      .toBeCalledWith(
+        {isSmartcarHosted: false, error: null, code: null, state: null},
+        selfHostedOrigin
+      );
+  });
 
   test('if redirect origin is cdn.smartcar.com then isSmartcarHosted: true',
     () => {
       window.opener = {};
 
       const appOrigin = 'https://www.the-next-awesome-car-app.com';
-      const cdnOrigin = `https://cdn.smartcar.com/redirect?origin=${appOrigin}`;
+      const cdnOrigin =
+        `https://cdn.smartcar.com/redirect?app_origin=${appOrigin}`;
       jsdom.reconfigure({url: cdnOrigin}); // eslint-disable-line no-undef
 
       const mockPost = jest.fn();
@@ -117,8 +120,8 @@ describe('redirect', () => {
     const code = 'super-secret-code';
     const errDesc = 'this-is-an-error-description';
     const state = 'some-random-state';
-    const cdnOrigin = `https://cdn.smartcar.com/redirect?origin=${appOrigin}&` +
-      `code=${code}&error_description=${errDesc}&state=${state}`;
+    const cdnOrigin = 'https://cdn.smartcar.com/redirect?app_origin=' +
+      `${appOrigin}&code=${code}&error_description=${errDesc}&state=${state}`;
     jsdom.reconfigure({url: cdnOrigin}); // eslint-disable-line no-undef
 
     const mockPost = jest.fn();

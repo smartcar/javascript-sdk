@@ -66,10 +66,10 @@ describe('postMessage', () => {
   });
 
   test('using single page app variant, fires onComplete on postMessage from' +
-    ' expected origin specified by `origin` param', (done) => {
+    ' expected origin specified by `app_origin` query param', (done) => {
     // minimal test, does not go through OAuth flow, just tests that redirect
-    // page hosted on separate backend posts back to origin parameter which
-    // is then handled as expected by front end at origin
+    // page hosted on separate server posts back to `app_origin` parameter which
+    // is then handled as expected by client at `app_origin`
 
     // see spa.html for code run on page load
     shared.browser
@@ -82,13 +82,13 @@ describe('postMessage', () => {
   });
 
   test('using server side rendered variant, fires onComplete on postMessage' +
-    ' from expected origin (same as redirect origin)', (done) => {
+    ' from expected origin (same as redirect page origin)', (done) => {
     // minimal test, does not go through OAuth flow, just tests that with
-    // redirect and front end hosted on same server, redirect page posts back
-    // to the correct front end origin (same origin as itself) which is then
-    // handled as expected by front end at origin
+    // redirect and client hosted on same server, redirect page posts back
+    // to the correct client origin (same origin as itself) which is then
+    // handled as expected by client at origin
 
-    // see server_side.html for code run on page load
+    // see server-side.html for code run on page load
     shared.browser
       .url(`http://localhost:${clientPort}/server-side`)
       // this assertion will be retried until it succeeds or we timeout

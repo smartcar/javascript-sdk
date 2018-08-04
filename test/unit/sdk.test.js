@@ -172,41 +172,14 @@ describe('sdk', () => {
         .toBeCalledWith(null, expect.anything(), expect.anything());
     });
 
-    test("doesn't fire onComplete when message has no name field", () => {
-      const options = {
-        clientId: 'clientId',
-        redirectUri: 'https://smartcar.com',
-        scope: ['read_vehicle_info', 'read_odometer'],
-        // eslint-disable-next-line no-empty-function
-        onComplete: jest.fn(() => {}),
-      };
-
-      const smartcar = new window.Smartcar(options);
-
-      const evnt = {
-        data: {
-          code: 'super-secret-code',
-          error: undefined,
-          state: 'some-state',
-        },
-        origin: 'https://smartcar.com',
-      };
-
-      smartcar.messageHandler(evnt);
-
-      expect(smartcar.onComplete)
-        .not
-        .toBeCalledWith(null, expect.anything(), expect.anything());
-    });
-
-    test('fires onComplete when redirectUri & origin agree, & message has name',
+    test("doesn't fire onComplete when message has no isSmartcarHosted field",
       () => {
         const options = {
           clientId: 'clientId',
-          redirectUri: 'https://cdn.smartcar.com?origin=https://cool-app.com',
+          redirectUri: 'https://smartcar.com',
           scope: ['read_vehicle_info', 'read_odometer'],
-          // eslint-disable-next-line no-unused-vars, no-empty-function
-          onComplete: jest.fn((__, _) => {}),
+          // eslint-disable-next-line no-empty-function
+          onComplete: jest.fn(() => {}),
         };
 
         const smartcar = new window.Smartcar(options);
@@ -216,21 +189,49 @@ describe('sdk', () => {
             code: 'super-secret-code',
             error: undefined,
             state: 'some-state',
-            isSmartcarHosted: true,
           },
-          origin: 'https://cdn.smartcar.com',
+          origin: 'https://smartcar.com',
         };
 
         smartcar.messageHandler(evnt);
 
         expect(smartcar.onComplete)
+          .not
           .toBeCalledWith(null, expect.anything(), expect.anything());
       });
+
+    test('fires onComplete when redirectUri & origin agree, & message has' +
+      ' isSmartcarHosted field', () => {
+      const options = {
+        clientId: 'clientId',
+        redirectUri: 'https://cdn.smartcar.com?app_origin=https://app.com',
+        scope: ['read_vehicle_info', 'read_odometer'],
+        // eslint-disable-next-line no-unused-vars, no-empty-function
+        onComplete: jest.fn((__, _) => {}),
+      };
+
+      const smartcar = new window.Smartcar(options);
+
+      const evnt = {
+        data: {
+          code: 'super-secret-code',
+          error: undefined,
+          state: 'some-state',
+          isSmartcarHosted: true,
+        },
+        origin: 'https://cdn.smartcar.com',
+      };
+
+      smartcar.messageHandler(evnt);
+
+      expect(smartcar.onComplete)
+        .toBeCalledWith(null, expect.anything(), expect.anything());
+    });
 
     test('fires onComplete w/o error when error: null in postMessage', () => {
       const options = {
         clientId: 'clientId',
-        redirectUri: 'https://cdn.smartcar.com?origin=https://cool-app.com',
+        redirectUri: 'https://cdn.smartcar.com?app_origin=https://app.com',
         scope: ['read_vehicle_info', 'read_odometer'],
         // eslint-disable-next-line no-unused-vars, no-empty-function
         onComplete: jest.fn((__, _) => {}),
@@ -257,7 +258,7 @@ describe('sdk', () => {
     test('fires onComplete w/ error when ! error: null in postMessage', () => {
       const options = {
         clientId: 'clientId',
-        redirectUri: 'https://cdn.smartcar.com?origin=https://cool-app.com',
+        redirectUri: 'https://cdn.smartcar.com?app_origin=https://app.com',
         scope: ['read_vehicle_info', 'read_odometer'],
         // eslint-disable-next-line no-unused-vars, no-empty-function
         onComplete: jest.fn((__, _) => {}),
