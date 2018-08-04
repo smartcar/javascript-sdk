@@ -278,7 +278,7 @@ describe('sdk', () => {
       smartcar.messageHandler(evnt);
 
       expect(smartcar.onComplete)
-        .toBeCalledWith(new smartcar.AccessDenied('some-error'),
+        .toBeCalledWith(new window.Smartcar.AccessDenied('some-error'),
           'super-secret-code', 'some-state');
     });
   });

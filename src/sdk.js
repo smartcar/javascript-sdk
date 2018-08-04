@@ -54,8 +54,6 @@ window.Smartcar = (function(window) {
     this.onComplete = options.onComplete;
     this.development = options.development || false;
     this.responseType = 'code';
-    // expose AccessDenied error class
-    this.AccessDenied = AccessDenied;
 
     // handler
     this.messageHandler = (event) => {
@@ -199,5 +197,7 @@ window.Smartcar = (function(window) {
     element.addEventListener('click', () => this.openDialog(dialogOptions));
   };
 
+  // expose AccessDenied error class
+  Smartcar.AccessDenied = AccessDenied;
   return Smartcar;
 })(window);
