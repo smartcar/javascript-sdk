@@ -88,7 +88,13 @@ describe('redirect', () => {
     require('../../src/redirect'); // eslint-disable-line global-require
     expect(mockPost)
       .toBeCalledWith(
-        {isSmartcarHosted: false, error: null, code: null, state: null},
+        {
+          code: null,
+          error: null,
+          isSmartcarHosted: false,
+          name: 'SmartcarAuthMessage',
+          state: null,
+        },
         selfHostedOrigin
       );
   });
@@ -108,7 +114,13 @@ describe('redirect', () => {
       require('../../src/redirect'); // eslint-disable-line global-require
       expect(mockPost)
         .toBeCalledWith(
-          {isSmartcarHosted: true, error: null, code: null, state: null},
+          {
+            code: null,
+            error: null,
+            isSmartcarHosted: true,
+            name: 'SmartcarAuthMessage',
+            state: null,
+          },
           appOrigin
         );
     });
@@ -132,8 +144,9 @@ describe('redirect', () => {
       {
         code,
         error: errDesc,
-        state,
         isSmartcarHosted: true,
+        name: 'SmartcarAuthMessage',
+        state,
       },
       appOrigin
     );
