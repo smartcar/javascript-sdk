@@ -5,7 +5,7 @@
 * your front end) to close out the redirect and trigger specified `onComplete`
 */
 
-(function() {
+(function(window) {
   'use strict';
   if (!window.opener) {
     throw new Error('window.opener must be defined');
@@ -14,6 +14,7 @@
   const params = new URLSearchParams(window.location.search);
 
   const message = {
+    name: 'SmartcarAuthMessage',
     isSmartcarHosted: window.location.origin === 'https://cdn.smartcar.com',
     code: params.get('code'),
     error: params.get('error_description'),
@@ -31,4 +32,4 @@
 
   window.opener.postMessage(message, targetOrigin);
   window.close();
-})();
+})(window);
