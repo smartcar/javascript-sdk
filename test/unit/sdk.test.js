@@ -27,12 +27,14 @@ describe('sdk', () => {
       // initial instantiation
       window.Smartcar({redirectUri: 'http://example.com', clientId: 'my-id'});
 
-      expect(() => {
-        window.Smartcar({redirectUri: 'http://example.com', clientId: 'my-id'});
-      })
-        .toThrow('Smartcar has already been instantiated in the window. Only' +
-          ' one instance of Smartcar can be defined. See' +
-          ' https://github.com/smartcar/javascript-sdk for more information');
+      expect(() =>
+        window.Smartcar({redirectUri: 'http://example.com', clientId: 'my-id'})
+      )
+        .toThrow(
+          'Smartcar has already been instantiated in the window. Only one' +
+          ' instance of Smartcar can be defined. See' +
+          ' https://github.com/smartcar/javascript-sdk for more information'
+        );
     });
 
     test('throws error if using Smartcar hosting without onComplete', () => {
@@ -40,23 +42,79 @@ describe('sdk', () => {
         redirectUri: CDN_ORIGIN,
         clientId: 'my-id',
       }))
-        .toThrow("When using Smartcar's CDN redirect an onComplete function" +
-          ' with at least 2 parameters is required to handle completion of' +
-          ' authorization flow');
+        .toThrow(
+          "When using Smartcar's CDN redirect an onComplete function with at" +
+          ' least 2 parameters (error & code) is required to handle' +
+          ' completion of authorization flow'
+        );
     });
 
-    test('throws error if using Smartcar hosting & passing onComplete with' +
-      ' less than 2 parameters', () => {
+    test(
+      // eslint-disable-next-line max-len
+      'throws error if using Smartcar hosting & passing onComplete with less than 2 parameters',
+      () => {
+        expect(() => window.Smartcar({
+          redirectUri: CDN_ORIGIN,
+          clientId: 'my-id',
+          // eslint-disable-next-line no-unused-vars, no-empty-function
+          onComplete: (_) => {}, // stub function w/ < 2 params
+        }))
+          .toThrow(
+            "When using Smartcar's CDN redirect an onComplete function with at" +
+            ' least 2 parameters (error & code) is required to handle' +
+            ' completion of authorization flow'
+          );
+      }
+    );
+
+    test('throws error if using Smartcar hosting w/o `app_origin`', () => {
       expect(() => window.Smartcar({
         redirectUri: CDN_ORIGIN,
         clientId: 'my-id',
         // eslint-disable-next-line no-unused-vars, no-empty-function
-        onComplete: (_) => {},
+        onComplete: (_, __) => {}, // stub function w/ >= 2 params
       }))
-        .toThrow("When using Smartcar's CDN redirect an onComplete function" +
-          ' with at least 2 parameters is required to handle completion of' +
-          ' authorization flow');
+        .toThrow(
+          "When using Smartcar's CDN redirect an `app_origin` query parameter" +
+          ' is required to specify the origin the extracted `code` should be' +
+          ' sent to. This `app_origin` URI must be served over HTTPS'
+        );
     });
+
+    test(
+      'throws error if using Smartcar hosting w/ invalid URL `app_origin`',
+      () => {
+        expect(() => window.Smartcar({
+          redirectUri: `${CDN_ORIGIN}/redirect?app_origin=not-a-valid-url`,
+          clientId: 'my-id',
+          // eslint-disable-next-line no-unused-vars, no-empty-function
+          onComplete: (_, __) => {}, // stub function w/ >= 2 params
+        }))
+          .toThrow(
+            "When using Smartcar's CDN redirect an `app_origin` query" +
+            ' parameter is required to specify the origin the extracted' +
+            ' `code` should be sent to. This `app_origin` URI must be served' +
+            ' over HTTPS'
+          );
+      }
+    );
+
+    test(
+      'throws error if using Smartcar hosting w/ non-HTTPS `app_origin`',
+      () => {
+        expect(() => window.Smartcar({
+          redirectUri: `${CDN_ORIGIN}/redirect?app_origin=http://not-https.com`,
+          clientId: 'my-id',
+          // eslint-disable-next-line no-unused-vars, no-empty-function
+          onComplete: (_, __) => {}, // stub function w/ >= 2 params
+        }))
+          .toThrow(
+            "When using Smartcar's CDN redirect an `app_origin` query parameter" +
+            ' is required to specify the origin the extracted `code` should be' +
+            ' sent to. This `app_origin` URI must be served over HTTPS'
+          );
+      }
+    );
 
     test('initializes correctly w/ self hosted redirect',
       () => {
@@ -86,10 +144,10 @@ describe('sdk', () => {
       () => {
         const options = {
           clientId: 'clientId',
-          redirectUri: CDN_ORIGIN,
+          redirectUri: `${CDN_ORIGIN}/redirect?app_origin=https://app.com`,
           scope: ['read_vehicle_info', 'read_odometer'],
           // eslint-disable-next-line no-unused-vars, no-empty-function
-          onComplete: jest.fn((_, __) => {}), // stub function with >= 2 params
+          onComplete: jest.fn((_, __) => {}), // stub function w/ >= 2 params
         };
 
         const smartcar = new window.Smartcar(options);
