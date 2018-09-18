@@ -75,34 +75,37 @@ describe('redirect', () => {
     expect(mockPost).toBeCalledWith(expect.anything(), appOrigin);
   });
 
-  // eslint-disable-next-line max-len
-  test('if redirect origin is not javascript-sdk.smartcar.com then isSmartcarHosted:' +
-    ' false', () => {
-    window.opener = {};
+  test(
+    // eslint-disable-next-line max-len
+    'if redirect origin is not javascript-sdk.smartcar.com then isSmartcarHosted: false',
+    () => {
+      window.opener = {};
 
-    const selfHostedOrigin = 'https://www.the-next-awesome-car-app.com';
-    // eslint-disable-next-line no-undef
-    jsdom.reconfigure({url: selfHostedOrigin});
+      const selfHostedOrigin = 'https://www.the-next-awesome-car-app.com';
+      // eslint-disable-next-line no-undef
+      jsdom.reconfigure({url: selfHostedOrigin});
 
-    const mockPost = jest.fn();
-    window.opener.postMessage = mockPost;
+      const mockPost = jest.fn();
+      window.opener.postMessage = mockPost;
 
-    require('../../src/redirect'); // eslint-disable-line global-require
-    expect(mockPost)
-      .toBeCalledWith(
-        {
-          code: null,
-          error: null,
-          isSmartcarHosted: false,
-          name: 'SmartcarAuthMessage',
-          state: null,
-        },
-        selfHostedOrigin
-      );
-  });
+      require('../../src/redirect'); // eslint-disable-line global-require
+      expect(mockPost)
+        .toBeCalledWith(
+          {
+            code: null,
+            error: null,
+            isSmartcarHosted: false,
+            name: 'SmartcarAuthMessage',
+            state: null,
+          },
+          selfHostedOrigin
+        );
+    }
+  );
 
-  // eslint-disable-next-line max-len
-  test('if redirect origin is javascript-sdk.smartcar.com then isSmartcarHosted: true',
+  test(
+    // eslint-disable-next-line max-len
+    'if redirect origin is javascript-sdk.smartcar.com then isSmartcarHosted: true',
     () => {
       window.opener = {};
 
@@ -125,7 +128,8 @@ describe('redirect', () => {
           },
           appOrigin
         );
-    });
+    }
+  );
 
   test('should post message with expected parameters', () => {
     window.opener = {};

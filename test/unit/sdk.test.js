@@ -46,7 +46,7 @@ describe('sdk', () => {
     });
 
     test('throws error if using Smartcar hosting & passing onComplete with' +
-      ' than 2 parameters', () => {
+      ' less than 2 parameters', () => {
       expect(() => window.Smartcar({
         redirectUri: CDN_ORIGIN,
         clientId: 'my-id',
@@ -202,33 +202,36 @@ describe('sdk', () => {
           .toBeCalledWith(null, expect.anything(), expect.anything());
       });
 
-    test('fires onComplete when redirectUri & origin agree, & message has' +
-      ' isSmartcarHosted field', () => {
-      const options = {
-        clientId: 'clientId',
-        redirectUri: `${CDN_ORIGIN}?app_origin=https://app.com`,
-        scope: ['read_vehicle_info', 'read_odometer'],
-        // eslint-disable-next-line no-unused-vars, no-empty-function
-        onComplete: jest.fn((__, _) => {}),
-      };
+    test(
+      // eslint-disable-next-line max-len
+      'fires onComplete when redirectUri & origin agree, & message has isSmartcarHosted field',
+      () => {
+        const options = {
+          clientId: 'clientId',
+          redirectUri: `${CDN_ORIGIN}?app_origin=https://app.com`,
+          scope: ['read_vehicle_info', 'read_odometer'],
+          // eslint-disable-next-line no-unused-vars, no-empty-function
+          onComplete: jest.fn((__, _) => {}),
+        };
 
-      const smartcar = new window.Smartcar(options);
+        const smartcar = new window.Smartcar(options);
 
-      const evnt = {
-        data: {
-          code: 'super-secret-code',
-          error: undefined,
-          state: 'some-state',
-          isSmartcarHosted: true,
-        },
-        origin: CDN_ORIGIN,
-      };
+        const evnt = {
+          data: {
+            code: 'super-secret-code',
+            error: undefined,
+            state: 'some-state',
+            isSmartcarHosted: true,
+          },
+          origin: CDN_ORIGIN,
+        };
 
-      smartcar.messageHandler(evnt);
+        smartcar.messageHandler(evnt);
 
-      expect(smartcar.onComplete)
-        .toBeCalledWith(null, expect.anything(), expect.anything());
-    });
+        expect(smartcar.onComplete)
+          .toBeCalledWith(null, expect.anything(), expect.anything());
+      }
+    );
 
     test('fires onComplete w/o error when error: null in postMessage', () => {
       const options = {
@@ -296,9 +299,7 @@ describe('sdk', () => {
 
       const smartcar = new window.Smartcar(options);
 
-      const expectedLink = 'https://connect.smartcar.com/oauth/authorize?' +
-        'response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2F' +
-        'smartcar.com&approval_prompt=auto';
+      const expectedLink = 'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=auto';
       const link = smartcar.generateLink();
       expect(link).toEqual(expectedLink);
     });
@@ -313,10 +314,7 @@ describe('sdk', () => {
 
       const smartcar = new window.Smartcar(options);
 
-      const expectedLink = 'https://connect.smartcar.com/oauth/authorize' +
-        '?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2F' +
-        'smartcar.com&approval_prompt=force&scope=read_vehicle_info%20' +
-        'read_odometer&state=foobarbaz';
+      const expectedLink = 'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&state=foobarbaz';
       const link = smartcar.generateLink({
         state: 'foobarbaz',
         forcePrompt: true,
@@ -335,10 +333,7 @@ describe('sdk', () => {
 
       const smartcar = new window.Smartcar(options);
 
-      const expectedLink = 'https://connect.smartcar.com/oauth/authorize?' +
-        'response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2F' +
-        'smartcar.com&approval_prompt=force&scope=read_vehicle_info%20' +
-        'read_odometer&state=foobarbaz&mock=true';
+      const expectedLink = 'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&state=foobarbaz&mock=true';
       const link = smartcar.generateLink({
         state: 'foobarbaz',
         forcePrompt: true,
@@ -357,10 +352,7 @@ describe('sdk', () => {
 
       const smartcar = new window.Smartcar(options);
 
-      const expectedLink = 'https://connect.smartcar.com/oauth/authorize?' +
-        'response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2F' +
-        'smartcar.com&approval_prompt=force&scope=read_vehicle_info%20' +
-        'read_odometer&state=foobarbaz';
+      const expectedLink = 'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&state=foobarbaz';
       const link = smartcar.generateLink({
         state: 'foobarbaz',
         forcePrompt: true,
@@ -402,10 +394,7 @@ describe('sdk', () => {
     };
 
     // expected OAuth link
-    const expectedLink = 'https://connect.smartcar.com/oauth/authorize?' +
-      'response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2F' +
-      'smartcar.com&approval_prompt=force&scope=read_vehicle_info%20' +
-      'read_odometer&state=foobarbaz';
+    const expectedLink = 'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&state=foobarbaz';
 
     beforeEach(() => {
       // set window options
