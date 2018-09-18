@@ -24,8 +24,9 @@ window.Smartcar = (function(window) {
   function Smartcar(options) {
     // allow only one instance of Smartcar
     if (Smartcar._hasBeenInstantiated) {
-      throw new Error('Smartcar has already been instantiated in the window.' +
-        ' Only one instance of Smartcar can be defined. See' +
+      throw new Error(
+        'Smartcar has already been instantiated in the window. Only one' +
+        ' instance of Smartcar can be defined. See' +
         ' https://github.com/smartcar/javascript-sdk for more information');
     } else {
       Smartcar._hasBeenInstantiated = true;
@@ -39,16 +40,34 @@ window.Smartcar = (function(window) {
       throw new TypeError('A client ID option must be provided');
     }
 
-    // require onComplete method with at least two parameters (error & code)
-    // when hosting on Smartcar CDN
-    if (
-      options.redirectUri.startsWith('https://javascript-sdk.smartcar.com')
-      && (new URL(options.redirectUri)).searchParams.has('app_origin')
-      && (!options.onComplete || options.onComplete.length < 2)
-    ) {
-      throw new Error("When using Smartcar's CDN redirect an onComplete" +
-        ' function with at least 2 parameters is required to handle' +
-        ' completion of authorization flow');
+    if (options.redirectUri.startsWith('https://javascript-sdk.smartcar.com')) {
+      // require `onComplete` method with at least two parameters (error & code)
+      // when hosting on Smartcar CDN
+      if (!options.onComplete || options.onComplete.length < 2) {
+        throw new Error(
+          "When using Smartcar's CDN redirect an onComplete function with at" +
+          ' least 2 parameters (error & code) is required to handle' +
+          ' completion of authorization flow'
+        );
+      }
+
+      // require `app_origin` query parameter containing HTTPS served URI
+      try {
+        const searchParams = (new URL(options.redirectUri)).searchParams;
+        // `.get()` returns null if query parameter doesn't exist which will
+        // then error as null isn't a valid url
+        const appOriginUrl = new URL(searchParams.get('app_origin'));
+        if (appOriginUrl.protocol !== 'https:') {
+          throw new Error(); // throw to force descriptive error in catch
+        }
+      } catch (err) {
+        throw new Error(
+          "When using Smartcar's CDN redirect an `app_origin` query" +
+          ' parameter is required to specify the origin the extracted' +
+          ' `code` should be sent to. This `app_origin` URI must be served' +
+          ' over HTTPS'
+        );
+      }
     }
 
     this.clientId = options.clientId;
