@@ -4,11 +4,12 @@
 /* eslint strict: ['error', 'global'] */
 /* global require, __dirname, beforeAll, afterAll */
 
-const config = require('./config');
 const express = require('express');
 const nightwatch = require('nightwatch');
-const {version} = require('../../package.json');
 const path = require('path');
+
+const config = require('./config');
+const {version} = require('../../package.json');
 
 describe('postMessage', () => {
   let client, redirect;
