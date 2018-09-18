@@ -22,13 +22,18 @@
     state: params.get('state'),
   };
 
-  // may still host with `app_origin` param even if not using smartcar hosted
-  // redirect if a developer chooses not to use Smartcar hosting but still wants
-  // to have a separate client & server they can serve their redirect page with
-  // an `app_origin` query paramater specifying the client origin to post back
-  // to. if no `app_origin` parameter is given then we post a message back to
-  // the same origin the redirect is hosted at (this assumes server side
-  // rendered).
+  /**
+   * Even if not using a Smartcar hosted redirect this script can stil be loaded
+   * in the self hosted redirect page.
+   *
+   * If the redirect URI has a valid `app_origin` param (an HTTPS URL) the
+   * extracted code will be posted to the origin specified by `app_origin`.
+   *
+   * If no `app_origin` parameter is given (only possible when self hosting,
+   * this parameter is required for using a Smartcar hosted redirect) then
+   * the `code` (or error) is posted to the same origin the redirect is hosted
+   * at (this assumes a server side rendered architecture).
+   */
   const targetOrigin = params.get('app_origin') || origin;
 
   window.opener.postMessage(message, targetOrigin);
