@@ -49,12 +49,18 @@ window.Smartcar = (function(window) {
       if (this.onComplete) {
         const err = message.error ? new AccessDenied(message.error) : null;
 
-        // call with parameters even if developer is not using smartcar hosting
-        // as they may still want onComplete to do something with message
-        // if empty onComplete is passed, parameters will be harmlessly ignored
-        // if a developer chooses to pass an `onComplete` expecting these
-        // parameters they must also handle populating the corresponding query
-        // parameters in their redirect uri
+        /**
+         * Call `onComplete` with parameters even if developer is not using
+         * a Smartcar hosted redirect. Regardless of if they are using a
+         * Smartcar hosted redirect they may still want `onComplete` to do
+         * something with message.
+         *
+         * If empty onComplete is passed, parameters will be harmlessly ignored.
+         *
+         * If a developer chooses to pass an `onComplete` expecting these
+         * parameters they must also handle populating the corresponding query
+         * parameters in their redirect uri.
+         */
         this.onComplete(err, message.code, message.state);
       }
     };
