@@ -22,6 +22,52 @@ window.Smartcar = (function(window) {
    * @constructor
    */
   function Smartcar(options) {
+    // ensure options are well formed
+    Smartcar._validateConstructorOptions(options);
+
+    this.clientId = options.clientId;
+    this.redirectUri = options.redirectUri;
+    this.scope = options.scope;
+    this.onComplete = options.onComplete;
+    this.development = options.development || false;
+    this.responseType = 'code';
+
+    // handler
+    this.messageHandler = (event) => {
+      // bail if message from unexpected source
+      if (!this.redirectUri.startsWith(event.origin)) { return; }
+
+      const message = event.data;
+      // bail if message does not contain `isSmartcarHosted` key
+      // this prevents attempting to handle messages intended for others
+      if (!message.hasOwnProperty('isSmartcarHosted')) { return; }
+
+      // if onComplete not specified do nothing, assume user is conveying
+      // completion information from backend server receiving redirect to front
+      // end (not using onComplete)
+      /* istanbul ignore else */
+      if (this.onComplete) {
+        const err = message.error ? new AccessDenied(message.error) : null;
+
+        // call with parameters even if developer is not using smartcar hosting
+        // as they may still want onComplete to do something with message
+        // if empty onComplete is passed, parameters will be harmlessly ignored
+        // if a developer chooses to pass an `onComplete` expecting these
+        // parameters they must also handle populating the corresponding query
+        // parameters in their redirect uri
+        this.onComplete(err, message.code, message.state);
+      }
+    };
+
+    // add handler for postMessage event on completion of auth flow
+    window.addEventListener('message', this.messageHandler);
+  }
+
+  /**
+   * Validate options passed to Smartcar constructor. See constructor
+   * documentation for enumeration of options properties.
+   */
+  Smartcar._validateConstructorOptions = function(options) {
     // allow only one instance of Smartcar
     if (Smartcar._hasBeenInstantiated) {
       throw new Error(
@@ -69,44 +115,7 @@ window.Smartcar = (function(window) {
         );
       }
     }
-
-    this.clientId = options.clientId;
-    this.redirectUri = options.redirectUri;
-    this.scope = options.scope;
-    this.onComplete = options.onComplete;
-    this.development = options.development || false;
-    this.responseType = 'code';
-
-    // handler
-    this.messageHandler = (event) => {
-      // bail if message from unexpected source
-      if (!this.redirectUri.startsWith(event.origin)) { return; }
-
-      const message = event.data;
-      // bail if message does not contain `isSmartcarHosted` key
-      // this prevents attempting to handle messages intended for others
-      if (!message.hasOwnProperty('isSmartcarHosted')) { return; }
-
-      // if onComplete not specified do nothing, assume user is conveying
-      // completion information from backend server receiving redirect to front
-      // end (not using onComplete)
-      /* istanbul ignore else */
-      if (this.onComplete) {
-        const err = message.error ? new AccessDenied(message.error) : null;
-
-        // call with parameters even if developer is not using smartcar hosting
-        // as they may still want onComplete to do something with message
-        // if empty onComplete is passed, parameters will be harmlessly ignored
-        // if a developer chooses to pass an `onComplete` expecting these
-        // parameters they must also handle populating the corresponding query
-        // parameters in their redirect uri
-        this.onComplete(err, message.code, message.state);
-      }
-    };
-
-    // add handler for postMessage event on completion of auth flow
-    window.addEventListener('message', this.messageHandler);
-  }
+  };
 
   /**
    * Generates Smartcar OAuth URL
