@@ -12,10 +12,11 @@
   }
 
   const params = new URLSearchParams(window.location.search);
+  const origin = window.location.origin;
 
   const message = {
     name: 'SmartcarAuthMessage',
-    isSmartcarHosted: window.location.origin === 'https://cdn.smartcar.com',
+    isSmartcarHosted: origin === 'https://javascript-sdk.smartcar.com',
     code: params.get('code'),
     error: params.get('error_description'),
     state: params.get('state'),
@@ -28,7 +29,7 @@
   // to. if no `app_origin` parameter is given then we post a message back to
   // the same origin the redirect is hosted at (this assumes server side
   // rendered).
-  const targetOrigin = params.get('app_origin') || window.location.origin;
+  const targetOrigin = params.get('app_origin') || origin;
 
   window.opener.postMessage(message, targetOrigin);
   window.close();

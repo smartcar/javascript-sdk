@@ -7,6 +7,8 @@
 'use strict';
 
 describe('redirect', () => {
+  const CDN_ORIGIN = 'https://javascript-sdk.smartcar.com';
+
   beforeEach(() => {
     // reset window.opener before each test
     window.opener = undefined;
@@ -63,8 +65,7 @@ describe('redirect', () => {
     window.opener = {};
 
     const appOrigin = 'https://www.the-next-awesome-car-app.com';
-    const cdnOrigin =
-      `https://cdn.smartcar.com/redirect?app_origin=${appOrigin}`;
+    const cdnOrigin = `${CDN_ORIGIN}/redirect?app_origin=${appOrigin}`;
     jsdom.reconfigure({url: cdnOrigin}); // eslint-disable-line no-undef
 
     const mockPost = jest.fn();
@@ -74,7 +75,8 @@ describe('redirect', () => {
     expect(mockPost).toBeCalledWith(expect.anything(), appOrigin);
   });
 
-  test('if redirect origin is not cdn.smartcar.com then isSmartcarHosted:' +
+  // eslint-disable-next-line max-len
+  test('if redirect origin is not javascript-sdk.smartcar.com then isSmartcarHosted:' +
     ' false', () => {
     window.opener = {};
 
@@ -99,13 +101,13 @@ describe('redirect', () => {
       );
   });
 
-  test('if redirect origin is cdn.smartcar.com then isSmartcarHosted: true',
+  // eslint-disable-next-line max-len
+  test('if redirect origin is javascript-sdk.smartcar.com then isSmartcarHosted: true',
     () => {
       window.opener = {};
 
       const appOrigin = 'https://www.the-next-awesome-car-app.com';
-      const cdnOrigin =
-        `https://cdn.smartcar.com/redirect?app_origin=${appOrigin}`;
+      const cdnOrigin = `${CDN_ORIGIN}/redirect?app_origin=${appOrigin}`;
       jsdom.reconfigure({url: cdnOrigin}); // eslint-disable-line no-undef
 
       const mockPost = jest.fn();
@@ -132,8 +134,10 @@ describe('redirect', () => {
     const code = 'super-secret-code';
     const errDesc = 'this-is-an-error-description';
     const state = 'some-random-state';
-    const cdnOrigin = 'https://cdn.smartcar.com/redirect?app_origin=' +
-      `${appOrigin}&code=${code}&error_description=${errDesc}&state=${state}`;
+    const cdnOrigin = `${CDN_ORIGIN}/redirect?app_origin=${
+      appOrigin
+    }&code=${code}&error_description=${errDesc}&state=${state}`;
+
     jsdom.reconfigure({url: cdnOrigin}); // eslint-disable-line no-undef
 
     const mockPost = jest.fn();

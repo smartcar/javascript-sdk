@@ -8,6 +8,8 @@
 require('../../src/sdk.js');
 
 describe('sdk', () => {
+  const CDN_ORIGIN = 'https://javascript-sdk.smartcar.com';
+
   beforeEach(() => { window.Smartcar._hasBeenInstantiated = false; });
 
   describe('constructor', () => {
@@ -35,7 +37,7 @@ describe('sdk', () => {
 
     test('throws error if using Smartcar hosting without onComplete', () => {
       expect(() => window.Smartcar({
-        redirectUri: 'https://cdn.smartcar.com',
+        redirectUri: CDN_ORIGIN,
         clientId: 'my-id',
       }))
         .toThrow("When using Smartcar's CDN redirect an onComplete function" +
@@ -46,7 +48,7 @@ describe('sdk', () => {
     test('throws error if using Smartcar hosting & passing onComplete with' +
       ' than 2 parameters', () => {
       expect(() => window.Smartcar({
-        redirectUri: 'https://cdn.smartcar.com',
+        redirectUri: CDN_ORIGIN,
         clientId: 'my-id',
         // eslint-disable-next-line no-unused-vars, no-empty-function
         onComplete: (_) => {},
@@ -60,7 +62,7 @@ describe('sdk', () => {
       () => {
         const options = {
           clientId: 'clientId',
-          redirectUri: 'https://smartcar.com',
+          redirectUri: 'https://selfhosted.com',
           scope: ['read_vehicle_info', 'read_odometer'],
           onComplete: jest.fn(),
         };
@@ -84,7 +86,7 @@ describe('sdk', () => {
       () => {
         const options = {
           clientId: 'clientId',
-          redirectUri: 'https://cdn.smartcar.com',
+          redirectUri: CDN_ORIGIN,
           scope: ['read_vehicle_info', 'read_odometer'],
           // eslint-disable-next-line no-unused-vars, no-empty-function
           onComplete: jest.fn((_, __) => {}), // stub function with >= 2 params
@@ -108,7 +110,7 @@ describe('sdk', () => {
     test('onComplete undefined if not specified', () => {
       const options = {
         clientId: 'clientId',
-        redirectUri: 'https://smartcar.com',
+        redirectUri: 'https://selfhosted.com',
         scope: ['read_vehicle_info', 'read_odometer'],
       };
 
@@ -120,7 +122,7 @@ describe('sdk', () => {
     test("doesn't fire onComplete w/o origin", () => {
       const options = {
         clientId: 'clientId',
-        redirectUri: 'https://smartcar.com',
+        redirectUri: 'https://selfhosted.com',
         scope: ['read_vehicle_info', 'read_odometer'],
         // eslint-disable-next-line no-empty-function
         onComplete: jest.fn(() => {}),
@@ -147,7 +149,7 @@ describe('sdk', () => {
     test("doesn't fire onComplete when redirectUri & origin disagree", () => {
       const options = {
         clientId: 'clientId',
-        redirectUri: 'https://smartcar.com',
+        redirectUri: 'https://selfhosted.com',
         scope: ['read_vehicle_info', 'read_odometer'],
         // eslint-disable-next-line no-empty-function
         onComplete: jest.fn(() => {}),
@@ -176,7 +178,7 @@ describe('sdk', () => {
       () => {
         const options = {
           clientId: 'clientId',
-          redirectUri: 'https://smartcar.com',
+          redirectUri: 'https://selfhosted.com',
           scope: ['read_vehicle_info', 'read_odometer'],
           // eslint-disable-next-line no-empty-function
           onComplete: jest.fn(() => {}),
@@ -190,7 +192,7 @@ describe('sdk', () => {
             error: undefined,
             state: 'some-state',
           },
-          origin: 'https://smartcar.com',
+          origin: 'https://selfhosted.com',
         };
 
         smartcar.messageHandler(evnt);
@@ -204,7 +206,7 @@ describe('sdk', () => {
       ' isSmartcarHosted field', () => {
       const options = {
         clientId: 'clientId',
-        redirectUri: 'https://cdn.smartcar.com?app_origin=https://app.com',
+        redirectUri: `${CDN_ORIGIN}?app_origin=https://app.com`,
         scope: ['read_vehicle_info', 'read_odometer'],
         // eslint-disable-next-line no-unused-vars, no-empty-function
         onComplete: jest.fn((__, _) => {}),
@@ -219,7 +221,7 @@ describe('sdk', () => {
           state: 'some-state',
           isSmartcarHosted: true,
         },
-        origin: 'https://cdn.smartcar.com',
+        origin: CDN_ORIGIN,
       };
 
       smartcar.messageHandler(evnt);
@@ -231,7 +233,7 @@ describe('sdk', () => {
     test('fires onComplete w/o error when error: null in postMessage', () => {
       const options = {
         clientId: 'clientId',
-        redirectUri: 'https://cdn.smartcar.com?app_origin=https://app.com',
+        redirectUri: `${CDN_ORIGIN}?app_origin=https://app.com`,
         scope: ['read_vehicle_info', 'read_odometer'],
         // eslint-disable-next-line no-unused-vars, no-empty-function
         onComplete: jest.fn((__, _) => {}),
@@ -246,7 +248,7 @@ describe('sdk', () => {
           state: 'some-state',
           isSmartcarHosted: true,
         },
-        origin: 'https://cdn.smartcar.com',
+        origin: CDN_ORIGIN,
       };
 
       smartcar.messageHandler(evnt);
@@ -258,7 +260,7 @@ describe('sdk', () => {
     test('fires onComplete w/ error when ! error: null in postMessage', () => {
       const options = {
         clientId: 'clientId',
-        redirectUri: 'https://cdn.smartcar.com?app_origin=https://app.com',
+        redirectUri: `${CDN_ORIGIN}?app_origin=https://app.com`,
         scope: ['read_vehicle_info', 'read_odometer'],
         // eslint-disable-next-line no-unused-vars, no-empty-function
         onComplete: jest.fn((__, _) => {}),
@@ -273,7 +275,7 @@ describe('sdk', () => {
           state: 'some-state',
           isSmartcarHosted: true,
         },
-        origin: 'https://cdn.smartcar.com',
+        origin: CDN_ORIGIN,
       };
 
       smartcar.messageHandler(evnt);

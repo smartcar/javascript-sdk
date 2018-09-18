@@ -41,7 +41,7 @@ window.Smartcar = (function(window) {
 
     // require onComplete method with at least two parameters (error & code)
     // when hosting on Smartcar CDN
-    if (options.redirectUri.startsWith('https://cdn.smartcar.com')
+    if (options.redirectUri.startsWith('https://javascript-sdk.smartcar.com')
       && (!options.onComplete || options.onComplete.length < 2)) {
       throw new Error("When using Smartcar's CDN redirect an onComplete" +
         ' function with at least 2 parameters is required to handle' +
