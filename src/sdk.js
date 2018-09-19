@@ -78,8 +78,8 @@ window.Smartcar = (function(window) {
     if (Smartcar._hasBeenInstantiated) {
       throw new Error(
         'Smartcar has already been instantiated in the window. Only one' +
-        ' instance of Smartcar can be defined. See' +
-        ' https://github.com/smartcar/javascript-sdk for more information');
+        ' instance of Smartcar can be defined.'
+      );
     } else {
       Smartcar._hasBeenInstantiated = true;
     }
