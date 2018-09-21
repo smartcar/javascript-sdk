@@ -1,9 +1,9 @@
 /**
-* If you use a Smartcar hosted redirect this code is served automatically. If
-* you host your own redirect you can source this file (along with sourcing the
-* Javascript SDK on your front end) to close out the redirect and trigger
-* specified `onComplete`
-*/
+ * If you use a Smartcar hosted redirect this code is served automatically. If
+ * you host your own redirect you can source this file (along with sourcing the
+ * Javascript SDK on your front end) to close out the redirect and trigger
+ * specified `onComplete`
+ */
 
 (function(window) {
   'use strict';
