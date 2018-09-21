@@ -33,7 +33,7 @@ gulp.task('build', ['build-js', 'build-html']);
 
 gulp.task('publish', function() {
   const S3_REGION = 'us-west-2';
-  const S3_BUCKET = 'smartcar-javascript-sdk';
+  const S3_BUCKET = 'smartcar-production-javascript-sdk';
 
   const publisher = awspublish.create({
     region: S3_REGION,
