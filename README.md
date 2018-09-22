@@ -4,57 +4,68 @@ The official Smartcar Javascript SDK
 
 ## Overview
 
-The [Smartcar API](https://smartcar.com/docs) lets you read vehicle data (location, odometer) and send commands (lock, unlock) to connected vehicles using HTTP requests.
+Smartcar is the connected car [API](https://smartcar.com/docs) that allows mobile and web apps to communicate with connected vehicles across brands (think “check odometer” or “unlock doors.”)
 
-To make requests to a vehicle from a web application the end user must connect their vehicle using [Smartcar's authorization flow](https://smartcar.com/docs#authentication). The Smartcar Javascript SDK provides two scripts that assist with running Smartcar's authorization flow.
+To make requests to a vehicle from a web application the end user must connect their vehicle using [Smartcar's authorization flow](https://smartcar.com/docs#authentication). The Smartcar Javascript SDK provides two scripts that assist with running this flow.
 
 - `sdk.js`: Sourced on the page your authorization flow begins from. Attaches to the browser's window as `Smartcar`. Allows you to generate a Smartcar OAuth URL and launch Smartcar's authorization flow in a pop-up.
-- `redirect.js`: Sourced on redirect page following completion of OAuth flow. Runs on load. This *optional* file can be served in the last page of your OAuth flow to close the popup window and trigger firing of an optional `onComplete` method passed to the `Smartcar` constructor from `sdk.js`. If you use a Smartcar hosted redirect (explained in greater detail below) this file is automatically served and the `onComplete` method becomes required.
+- `redirect.js`: Sourced on redirect page following completion of OAuth flow. Runs on load. This *optional* file can be served in the last page of your OAuth flow to close the popup window and trigger firing of an optional `onComplete` method passed to the `Smartcar` constructor from `sdk.js`. If you use a Smartcar-hosted redirect (explained in greater detail below) this file is automatically served and the `onComplete` method becomes required.
 
 For more information about Smartcar's authorization flow, please visit our [API documentation](https://smartcar.com/docs#authentication).
+
+## Why Use This
+
+This SDK facilitates OAuth link generation, click handler creation and popup dialog creation. A user must authenticate their vehicles with your application to use it. Smartcar handles the majority of this process but you need to handle launching the authentication flow and handling the redirect following completion of the flow.
+
+This SDK provides functions that assist in launching the authentication flow. Additionally, the `redirect.js` script helps in extracting the authorization code from a redirect.
+
+In conjunction with this SDK, Smartcar simplify redirect handling through Smartcar-hosted redirects. If you use a Smartcar-hosted redirect we handle extracting the authorization code and call an `onComplete` function you provide on the client with the code.
 
 ## Quick Start
 
 Before integrating with Smartcar's SDK, you'll need to register an application in the [Smartcar Developer portal](https://dashboard.smartcar.com).
 
-The SDK helps ease the [OAuth authorization process](https://tools.ietf.org/html/rfc6749#section-4.1).
+You have a choice of using a Smartcar-hosted redirect or hosting your own. This choice is made when you add redirect URIs in the developer dashboard and influences how you use this SDK. As a developer there are several key differences between the two strategies.
 
-We offer a choice of using a Smartcar hosted redirect or hosting your own. This choice is made when you add redirect URIs in the developer dashboard and influences how you use this SDK. As a developer there are several key differences between the two strategies.
+First, if you use Smartcar hosting you will add a redirect URI to your application of the form `https://javascript-sdk.smartcar.com/redirect-{version}?app_origin={your-client-origin-here}`. So for example, if your client was served at `https://my-awesome-app.com` you'd add the following redirect URI to your app in the dashboard: `https://javascript-sdk.smartcar.com/redirect-2.0.0?app_origin=https://my-awesome-app.com`. Note: this value is only your app's origin. If your client was served at `https://my-awesome-app.com/application` you would add the same example redirect URI leaving the `/application` in the `app_origin`. This `app_origin` URL (your client) must be either an HTTP localhost or HTTPS URL. See the [Register](https://smartcar.com/docs#redirect-uris) section of our docs for valid formats.
 
-First, if you use Smartcar hosting you will add a redirect URI to your application of the form `https://javascript-sdk.smartcar.com/redirect?app_origin=<your-client-uri-here>`. So for example, if your application URI was `https://my-awesome-app.com` you'd add the following redirect URI to your app in the dashboard: `https://javascript-sdk.smartcar.com/redirect?app_origin=https://my-awesome-app.com`. Note, this value is only your app's origin, if your application was at `https://my-awesome-app.com/application` you would still have the example redirect URI listed without the `/application`. Any restrictions on normal redirect URIs (like requiring `https` when not using `localhost` still apply to the value you give for `app_origin`). See the [Register](https://smartcar.com/docs#register) section of our docs for valid formats.
+Second, if you use Smartcar hosting you must provide an `onComplete` function with the following signature `onComplete(error, code, [state])` to the Smartcar constructor. This `onComplete` method will be called when the user completes the authorization flow. If they approved access you'll need to exchange the `code` parameter for an access token. If they denied access you'll need to handle the error (passed in the `error` argument).
 
-Second, if you use Smartcar hosting you must provide an `onComplete` function with the following signature `onComplete(err, code, state <optional>)` to the Smartcar constructor. This `onComplete` method will be called when the user completes the authorization flow. If they approved access you'll need to exchange the `code` parameter for an access token, otherwise you'll need to handle the given `err` parameter holding the error.
+If you host the redirect yourself you can provide any valid redirect URI (see the [Register](https://smartcar.com/docs#redirect-uris) section of our docs) and `onComplete` is optional. You may source `redirect.js` in your redirect popup to close out the window and trigger firing of the `onComplete` (if you've provided one to the `Smartcar` constructor).
 
-If you host the redirect yourself you can provide any valid redirect URI (see the [Register](https://smartcar.com/docs#register) section of our docs) and `onComplete` is optional. You may source `redirect.js` in your redirect popup to close out the window and trigger firing of the `onComplete` (if you've provided one to the `Smartcar` constructor).
-
-Here are example flows for each method:
+Below are example flows for each method.
 
 ### Example Flows
 
-#### Smartcar Hosted
+#### Smartcar-hosted
 
 1. User clicks "Connect your car" button (or similar) on your application's website.
-2. The user is redirected to an OAuth authentication page, using the `openDialog` or `addClickHandler` methods. This page requires the user to authenticate with their vehicle credentials. **Note**: because the Smartcar hosted redirect page uses `postMessage` to communicate the access code back to the client page the redirect page must be opened in a separate window.
-3. After entering credentials the user will be presented with a list of their vehicles to authorize and a selection of permissions to allow your app.
-4. Once they've selected their vehicles & permissions Smartcar's services will redirect to the Smartcar hosted redirect URI. This page will load `redirect.js` which will post a message to the original client page that opened the redirect. The `Smartcar` class instantiated on the client page handles this redirect, calling the required `onComplete` method provided to the constructor. The `onComplete` method you provided must handle an error if the user refused authorization or sending the code to your backend to exchange for an access token if the user authorized your application.
+2. User is redirected to an OAuth authentication page, using the `openDialog` or `addClickHandler` methods. This page requires the user to authenticate with their vehicle credentials.
+
+    *Note:* due to the implementation of `redirect.js`, the redirect page must be opened in a separate window.
+3. After entering credentials the user will be presented with a list of their vehicles to authorize and a selection of permissions to grant your app.
+4. Once the user has selected their vehicle & selected permissions, this SDK will automagically trigger the `onComplete` function you provide with the authorization code or an error. If called with a code you must send this code to your backend to then exchange with Smartcar for an access token.
+
+    *Note:* Okay so about that automagically. Here's what happens behind the scenes. Let's say your website is `https://my-amazing-app.com`. Following the OAuth flow the user is redirected to the Smartcar-hosted redirect URI - `https://javascript-sdk.smartcar.com/redirect-2.0.0?app_origin=https://my-amazing-app.com&code={authorization-code}`. This page sources `redirect.js` which uses `postMessage` to send a message with the authorization code or error to the origin specified by the `app_origin` query param - `https://my-amazing-app.com`. The redirect page then closes itself out. On `https://my-amazing-app.com` the Smartcar instance you created receives the posted message and fires your `onComplete` method with the appropriate arguments. From your user's perspective all they'll see is a brief flicker of the redirect page before it closes out depending on their connection speed.
 5. Your application's backend server will need to accept the authorization code and exchange it for an access token.
 
-<!-- depending on timing this probably won't make it to initial launch of redirect scheme -->
-For a more detailed explanation of our Smartcar hosted redirect scheme see our [blog post](TODO: LINK HERE?) on the topic.
+For a more detailed explanation of our Smartcar-hosted redirect scheme see our [blog post](TODO: LINK HERE) on the topic.
 
-#### Self Hosted
+#### Self-Hosted
 
 Here's an example flow should you host the redirect yourself (many of the steps remain similar):
 
 1. User clicks "Connect your car" button (or similar) on your application's website.
-2. The user is redirected to an OAuth authentication page, using the `openDialog`, `addClickHandler` or `generateLink` methods. This page requires the user to authenticate with their vehicle credentials.
+2. User is redirected to an OAuth authentication page, using the `openDialog`, `addClickHandler` or `generateLink` methods. This page requires the user to authenticate with their vehicle credentials.
 3. After entering credentials the user will be presented with a list of their vehicles to authorize and a selection of permissions to allow your app.
-4. Smartcar's services will redirect back to your application's redirect URI. The redirect URI will include an authorization code query parameter if the user approved the authorization, an error query parameter otherwise. If you import the `redirect.js` script at the redirect URI it will trigger execution of your optionally provided `onComplete` method (passed to the `Smartcar` constructor) and close out the redirect page. **Note:** in the Smartcar hosted scheme `redirect.js` handles extracting the query parameters from the redirect URI. In a manual hosting scheme you can choose to do this extraction client (making use of `redirect.js` if you'd like) or server side.
+4. Smartcar's services will redirect back to your application's redirect URI. The redirect URI will include a `code` query parameter holding the authorization code if the user approved the authorization. If they denied access the URI will include `error` & `error_description` parameters. If you source `redirect.js` on your redirect page it will trigger execution of your optionally provided `onComplete` method (passed to the `Smartcar` constructor on the client) and close out the redirect page.
+
+    *Note:* in the Smartcar-hosted scheme `redirect.js` handles extracting the query parameters from the redirect URI. In a manual hosting scheme you can choose to do this extraction client side (making use of `redirect.js` if you'd like) or server side. If they approved access you'll need to exchange the `code` parameter for an access token. If they denied access you'll need to handle the error (passed in the `error` argument).
 5. Your application's backend server will need to accept the authorization code and exchange it for an access token.
 
 ## Next Steps
 
-This SDK will help facilitate OAuth link generation, popup dialog creation, and Smartcar will handle user authentication and authorization. This SDK will not assist in exchanging authorization codes for an access token. Should you choose to self host the redirect this SDK will not assist with extracting the authorization code query parameter from the redirect URI.
+This SDK facilitates OAuth link generation, click handler creation and popup dialog creation. This SDK will not assist in exchanging authorization codes for an access token. Should you choose to self-host the redirect this SDK will not assist with extracting the authorization code query parameter from the redirect URI.
 
 See the links below to various SDKs for help in exchanging the authorization code for an access token. If the backend language you want to use isn't listed below you can still use Smartcar you'll just have to make HTTP requests manually based on our [API specification](https://smartcar.com/docs#get-all-vehicles).
 
@@ -86,7 +97,7 @@ const smartcar = new Smartcar({
   // arguments - error & code
   // otherwise optional (will be called with the same arguments but is not
   // required to handle them)
-  onComplete: function(error, code, state <optional>) {
+  onComplete: function(error, code, [state]) {
     // actions to take on completion of auth flow
     // if using smartcar hosting this should send the code to your backend
     // server to exchange for an access token
@@ -96,7 +107,27 @@ const smartcar = new Smartcar({
 });
 ```
 
+Here's an example `onComplete` function:
+
+```javascript
+function(error, code
+if (error) {
+  // redirect user to error page
+} else {
+  // using the axios library
+  // posting to a domain specified by SERVER variable
+  axios
+    .post(`${SERVER}/auth`, {code})
+    .then((_) => {
+      // take action now that authorization is complete
+      // maybe pull odometer or location and display to your user?
+      // at this point the limit is your own creativity :)
+    });
+}
+```
+
 <!-- TODO: why show state and forcePrompt in this? just seems to add unnecessary disclaimers -->
+<!-- TODO: give examples of usage for each instance method -->
 
 Once initialized there are three instance methods for setting up the OAuth flow:
 
@@ -118,6 +149,8 @@ You can import this SDK into your application from Smartcar's CDN:
 
 ### redirect.js
 
+Automatically sourced if you use a Smartcar-hosted redirect.
+
 ```html
 <script src="https://cdn.smartcar.com/javascript-sdk/callback-1.0.0.js"></script>
 ```
@@ -126,24 +159,23 @@ You can import this SDK into your application from Smartcar's CDN:
 
 ### `new Smartcar({options})`
 
-#### Options:
+#### Options
+
 | Parameter       | Type | Description   |
 |:--------------- |:---|:------------- |
 | `clientId`      | String |Application clientId obtained from [Smartcar Developer Portal](https://dashboard.smartcar.com). |
-| `redirectUri`   | String |**Required** Redirect URI set in [application settings](https://dashboard.smartcar.com/apps). Given URL must match URL in application settings. To use Smartcar hosting this URI must be of the form `https://javascript-sdk.smartcar.com/redirect?app_origin=<your client URI here>` |
+| `redirectUri`   | String |**Required** Redirect URI set in [application settings](https://dashboard.smartcar.com/apps). Given URI must match URI in application settings. To use Smartcar hosting this URI must be of the form `https://javascript-sdk.smartcar.com/redirect?app_origin=<your client URI here>` |
 | `scope`         | String[] |**Optional** List of permissions your application requires. This will default to requiring all scopes. The valid permission names are found in the [API Reference](https://smartcar.com/docs#get-all-vehicles). |
 | `onComplete`      | Function |**Optional** Function to be invoked on completion of the Smartcar authorization flow. This function will only be invoked if `redirect.js` is loaded in the page served at your redirect URI. |
 | `development`   | Boolean |**Optional** Launch Smartcar auth in development mode to enable the mock vehicle brand. |
 
-
-<!-- TODO: I think it might be useful to consolidate the three instance methods reference as they are so similar outside of the `id` parameter to `addClickHandler` but want to get others' thoughts before doing so -->
 ### `generateLink({options})`
 
-**Note:** if you use Smartcar hosting you *MUST* open the redirect page in a separate window from your client in order for `postMessage` to succeed.
+*Note:* due to the implementation of `redirect.js`, the redirect page **must** be opened in a separate window.
 
 #### Example
 
-```
+```text
 'https://connect.smartcar.com/oauth/authorize?response_type=token...'
 ```
 
