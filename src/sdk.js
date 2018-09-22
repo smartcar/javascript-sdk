@@ -47,7 +47,7 @@ window.Smartcar = (function(window) {
       // this prevents attempting to handle messages intended for others
       if (message.name !== 'SmartcarAuthMessage') { return; }
 
-      // if onComplete not specified do nothing, assume user is conveying
+      // if onComplete not specified do nothing, assume developer is conveying
       // completion information from backend server receiving redirect to front
       // end (not using onComplete)
       /* istanbul ignore else */
