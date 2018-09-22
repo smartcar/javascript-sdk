@@ -43,9 +43,9 @@ window.Smartcar = (function(window) {
       if (!this.redirectUri.startsWith(event.origin)) { return; }
 
       const message = event.data;
-      // bail if message does not contain `isSmartcarHosted` key
+      // bail if `message.name` is not `SmartcarAuthMessage`
       // this prevents attempting to handle messages intended for others
-      if (!message.hasOwnProperty('isSmartcarHosted')) { return; }
+      if (message.name !== 'SmartcarAuthMessage') { return; }
 
       // if onComplete not specified do nothing, assume user is conveying
       // completion information from backend server receiving redirect to front

@@ -189,10 +189,11 @@ describe('sdk', () => {
 
       const evnt = {
         data: {
-          authCode: 'super-secret-code',
+          name: 'SmartcarAuthMessage',
+          isSmartcarHosted: false,
+          code: 'super-secret-code',
           error: undefined,
           state: 'some-state',
-          name: 'smartcarAuthMessage',
         },
       };
 
@@ -216,10 +217,11 @@ describe('sdk', () => {
 
       const evnt = {
         data: {
-          authCode: 'super-secret-code',
+          name: 'SmartcarAuthMessage',
+          isSmartcarHosted: false,
+          code: 'super-secret-code',
           error: undefined,
           state: 'some-state',
-          name: 'smartcarAuthMessage',
         },
         origin: 'https://some-other-url.com',
       };
@@ -231,7 +233,8 @@ describe('sdk', () => {
         .toBeCalledWith(null, expect.anything(), expect.anything());
     });
 
-    test("doesn't fire onComplete when message has no isSmartcarHosted field",
+    test(
+      "doesn't fire onComplete when message has no name field",
       () => {
         const options = {
           clientId: 'clientId',
@@ -245,6 +248,7 @@ describe('sdk', () => {
 
         const evnt = {
           data: {
+            isSmartcarHosted: false,
             code: 'super-secret-code',
             error: undefined,
             state: 'some-state',
@@ -257,11 +261,44 @@ describe('sdk', () => {
         expect(smartcar.onComplete)
           .not
           .toBeCalledWith(null, expect.anything(), expect.anything());
-      });
+      }
+    );
+
+    test(
+      "doesn't fire onComplete when message.name is not 'SmartcarAuthMessage'",
+      () => {
+        const options = {
+          clientId: 'clientId',
+          redirectUri: 'https://selfhosted.com',
+          scope: ['read_vehicle_info', 'read_odometer'],
+          // eslint-disable-next-line no-empty-function
+          onComplete: jest.fn(() => {}),
+        };
+
+        const smartcar = new window.Smartcar(options);
+
+        const evnt = {
+          data: {
+            name: 'definitely not SmartcarAuthMessage',
+            isSmartcarHosted: false,
+            code: 'super-secret-code',
+            error: undefined,
+            state: 'some-state',
+          },
+          origin: 'https://selfhosted.com',
+        };
+
+        smartcar.messageHandler(evnt);
+
+        expect(smartcar.onComplete)
+          .not
+          .toBeCalledWith(null, expect.anything(), expect.anything());
+      }
+    );
 
     test(
       // eslint-disable-next-line max-len
-      'fires onComplete when redirectUri & origin agree, & message has isSmartcarHosted field',
+      'fires onComplete when redirectUri & origin agree, & message.name is SmartcarAuthMessage',
       () => {
         const options = {
           clientId: 'clientId',
@@ -275,10 +312,11 @@ describe('sdk', () => {
 
         const evnt = {
           data: {
+            name: 'SmartcarAuthMessage',
+            isSmartcarHosted: true,
             code: 'super-secret-code',
             error: undefined,
             state: 'some-state',
-            isSmartcarHosted: true,
           },
           origin: CDN_ORIGIN,
         };
@@ -303,10 +341,11 @@ describe('sdk', () => {
 
       const evnt = {
         data: {
+          name: 'SmartcarAuthMessage',
+          isSmartcarHosted: true,
           code: 'super-secret-code',
           error: undefined,
           state: 'some-state',
-          isSmartcarHosted: true,
         },
         origin: CDN_ORIGIN,
       };
@@ -330,10 +369,11 @@ describe('sdk', () => {
 
       const evnt = {
         data: {
+          name: 'SmartcarAuthMessage',
+          isSmartcarHosted: true,
           code: 'super-secret-code',
           error: 'some-error',
           state: 'some-state',
-          isSmartcarHosted: true,
         },
         origin: CDN_ORIGIN,
       };
