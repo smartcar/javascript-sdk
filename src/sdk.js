@@ -9,16 +9,21 @@ window.Smartcar = (function(window) {
   }
 
   /**
+   * @typedef Options
+   *
+   * @property {String} clientId - the application's client id
+   * @property {String} redirectUri - the registered redirect uri of the
+   * application
+   * @property {String[]} scope - requested permission scopes
+   * @property {Function} onComplete - called on completion of auth flow
+   * @property {Boolean} [development=false] - launch Smartcar auth in
+   * development mode to enable the mock vehicle brand
+   */
+
+  /**
    * Initializes Smartcar class
    *
-   * @param {Object} options - the SDK configuration object
-   * @param {String} options.clientId - the applications' client id
-   * @param {String} options.redirectUri - the registered redirect uri of the
-   * application
-   * @param {String[]} [options.scope] - requested permission scopes
-   * @param {Function} [options.onComplete] - called on completion of auth flow
-   * @param {Boolean} [options.development=false] - launch Smartcar auth in
-   * development mode to enable the mock vehicle brand
+   * @param {Options} options - the SDK configuration object
    * @constructor
    */
   function Smartcar(options) {
@@ -72,6 +77,9 @@ window.Smartcar = (function(window) {
   /**
    * Validate options passed to Smartcar constructor. See constructor
    * documentation for enumeration of options properties.
+   *
+   * @param {Options} options - the SDK configuration object
+   * @private
    */
   Smartcar._validateConstructorOptions = function(options) {
     // allow only one instance of Smartcar
