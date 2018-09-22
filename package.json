@@ -1,7 +1,7 @@
 {
   "name": "smartcar-javascript-sdk",
   "description": "javascript auth sdk for the smartcar",
-  "version": "2.0.0",
+  "version": "2.0.0-rc.1",
   "author": "Smartcar <hello@smartcar.com> (https://smartcar.com)",
   "license": "MIT",
   "scripts": {
