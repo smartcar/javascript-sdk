@@ -11,7 +11,7 @@ services:
 
 branches:
   except:
-    - /^v\d+\.\d+\.\d+$/
+    - /^v\d+\.\d+\.\d+(-rc\.\d+)?$/
 
 notifications:
   slack: smartcar:PGJmjtKFPytU5E2FwsImdVp8
