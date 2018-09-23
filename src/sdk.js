@@ -42,7 +42,7 @@ window.Smartcar = (function(window) {
       // bail if message from unexpected source
       if (!this.redirectUri.startsWith(event.origin)) { return; }
 
-      const message = event.data;
+      const message = event.data || {};
       // bail if `message.name` is not `SmartcarAuthMessage`
       // this prevents attempting to handle messages intended for others
       if (message.name !== 'SmartcarAuthMessage') { return; }

@@ -234,6 +234,31 @@ describe('sdk', () => {
     });
 
     test(
+      "doesn't fire onComplete or error when event.data is undefined",
+      () => {
+        const options = {
+          clientId: 'clientId',
+          redirectUri: 'https://selfhosted.com',
+          scope: ['read_vehicle_info', 'read_odometer'],
+          // eslint-disable-next-line no-empty-function
+          onComplete: jest.fn(() => {}),
+        };
+
+        const smartcar = new window.Smartcar(options);
+
+        const evnt = {
+          origin: 'https://selfhosted.com',
+        };
+
+        smartcar.messageHandler(evnt);
+
+        expect(smartcar.onComplete)
+          .not
+          .toBeCalledWith(null, expect.anything(), expect.anything());
+      }
+    );
+
+    test(
       "doesn't fire onComplete when message has no name field",
       () => {
         const options = {
