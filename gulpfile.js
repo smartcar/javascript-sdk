@@ -15,10 +15,8 @@ gulp.task('build-js', function() {
   return gulp.src('src/*.js')
     .pipe(babel())
     .pipe(uglify())
-    .pipe(rename({
-      suffix: `-${version}`,
-    }))
-    .pipe(gulp.dest('dist/javascript-sdk'));
+    .pipe(rename({suffix: `-${version}`}))
+    .pipe(gulp.dest('dist'));
 });
 
 // builds html file by templating and versioning
@@ -26,7 +24,7 @@ gulp.task('build-html', function() {
   return gulp.src('src/redirect.html')
     .pipe(template({redirectJS: `'redirect-${version}.js'`}))
     .pipe(rename('index.html'))
-    .pipe(gulp.dest(`dist/javascript-sdk/redirect-${version}`));
+    .pipe(gulp.dest(`dist/redirect-${version}`));
 });
 
 gulp.task('build', ['build-js', 'build-html']);
@@ -37,9 +35,7 @@ gulp.task('publish', function() {
 
   const publisher = awspublish.create({
     region: S3_REGION,
-    params: {
-      Bucket: S3_BUCKET,
-    },
+    params: {Bucket: S3_BUCKET},
   });
 
   return gulp.src('dist/**/*.js')
