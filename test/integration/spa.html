@@ -6,7 +6,9 @@
   <script>
     const clientPort = 3000;
     const redirectPort = 4000;
-    const redirectUri = `http://localhost:${redirectPort}`;
+    const clientUri = `http://localhost:${clientPort}`;
+    const redirectUri = `http://localhost:${redirectPort}/redirect?app_origin=${clientUri}`
+
     // this file tests a redirect scheme with a separate front end client & back
     // end server. This is the same scheme that will be used if a developer
     // chooses to host their redirect on Smartcar's CDN. For the purposes of
@@ -16,6 +18,11 @@
       // required
       clientId: 'clientId',
       // checked against event origin for security
+      // Note: this test does not actually use any Smartcar instance methods for
+      // triggering OAuth. Therefore the only important part of this redirectUri
+      // is the host (`app_origin` value does not matter). This is because we
+      // manually load the redirect page with the correct `app_origin` query
+      // param further below
       redirectUri,
       // redirect page to arbitrary url for testing
       onComplete: () => location.replace('on-post-message-url'),
@@ -26,9 +33,8 @@
 
     // on page load, open redirect page which should immediately post
     // back, causing onComplete to replace the page url
-    // note that we manually add `app_origin` here to cause post back to 3000
-    window.open(
-      `${redirectUri}/redirect?app_origin=http://localhost:${clientPort}`
-    );
+    // note that we are manually launching the redirect page with the expected
+    // `app_origin` to cause post back to 3000
+    window.open(redirectUri);
   </script>
 </html>
