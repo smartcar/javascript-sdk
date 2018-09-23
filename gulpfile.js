@@ -38,7 +38,7 @@ gulp.task('publish', function() {
     params: {Bucket: S3_BUCKET},
   });
 
-  return gulp.src('dist/**/*.js')
+  return gulp.src('dist/**')
     .pipe(publisher.publish())
     .pipe(awspublish.reporter());
 });
