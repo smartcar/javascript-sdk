@@ -22,7 +22,7 @@ gulp.task('build-js', function() {
 // builds html file by templating and versioning
 gulp.task('build-html', function() {
   return gulp.src('src/redirect.html')
-    .pipe(template({redirectJS: `'redirect-${version}.js'`}))
+    .pipe(template({redirectJS: `'/redirect-${version}.js'`}))
     .pipe(rename('index.html'))
     .pipe(gulp.dest(`dist/redirect-${version}`));
 });
