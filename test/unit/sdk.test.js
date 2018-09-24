@@ -340,7 +340,8 @@ describe('sdk', () => {
             name: 'SmartcarAuthMessage',
             isSmartcarHosted: true,
             code: 'super-secret-code',
-            error: undefined,
+            error: null,
+            errorDescription: null,
             state: 'some-state',
           },
           origin: CDN_ORIGIN,
@@ -369,7 +370,7 @@ describe('sdk', () => {
           name: 'SmartcarAuthMessage',
           isSmartcarHosted: true,
           code: 'super-secret-code',
-          error: undefined,
+          error: null,
           state: 'some-state',
         },
         origin: CDN_ORIGIN,
@@ -381,34 +382,40 @@ describe('sdk', () => {
         .toBeCalledWith(null, 'super-secret-code', 'some-state');
     });
 
-    test('fires onComplete w/ error when ! error: null in postMessage', () => {
-      const options = {
-        clientId: 'clientId',
-        redirectUri: `${CDN_ORIGIN}?app_origin=https://app.com`,
-        scope: ['read_vehicle_info', 'read_odometer'],
-        // eslint-disable-next-line no-unused-vars, no-empty-function
-        onComplete: jest.fn((__, _) => {}),
-      };
+    test(
+      // eslint-disable-next-line max-len
+      'fires onComplete w/ AccessDenied error when `error: access_denied` in postMessage',
+      () => {
+        const options = {
+          clientId: 'clientId',
+          redirectUri: `${CDN_ORIGIN}?app_origin=https://app.com`,
+          scope: ['read_vehicle_info', 'read_odometer'],
+          // eslint-disable-next-line no-unused-vars, no-empty-function
+          onComplete: jest.fn((__, _) => {}),
+        };
 
-      const smartcar = new window.Smartcar(options);
+        const smartcar = new window.Smartcar(options);
+        const errorDescription = 'describes the error';
 
-      const evnt = {
-        data: {
-          name: 'SmartcarAuthMessage',
-          isSmartcarHosted: true,
-          code: 'super-secret-code',
-          error: 'some-error',
-          state: 'some-state',
-        },
-        origin: CDN_ORIGIN,
-      };
+        const evnt = {
+          data: {
+            name: 'SmartcarAuthMessage',
+            isSmartcarHosted: true,
+            code: 'super-secret-code',
+            error: 'access_denied',
+            errorDescription,
+            state: 'some-state',
+          },
+          origin: CDN_ORIGIN,
+        };
 
-      smartcar.messageHandler(evnt);
+        smartcar.messageHandler(evnt);
 
-      expect(smartcar.onComplete)
-        .toBeCalledWith(new window.Smartcar.AccessDenied('some-error'),
-          'super-secret-code', 'some-state');
-    });
+        expect(smartcar.onComplete)
+          .toBeCalledWith(new window.Smartcar.AccessDenied(errorDescription),
+            'super-secret-code', 'some-state');
+      }
+    );
   });
 
   describe('generateLink', () => {

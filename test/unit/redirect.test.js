@@ -94,6 +94,7 @@ describe('redirect', () => {
           {
             code: null,
             error: null,
+            errorDescription: null,
             isSmartcarHosted: false,
             name: 'SmartcarAuthMessage',
             state: null,
@@ -122,6 +123,7 @@ describe('redirect', () => {
           {
             code: null,
             error: null,
+            errorDescription: null,
             isSmartcarHosted: true,
             name: 'SmartcarAuthMessage',
             state: null,
@@ -136,11 +138,13 @@ describe('redirect', () => {
 
     const appOrigin = 'https://www.the-next-awesome-car-app.com';
     const code = 'super-secret-code';
-    const errDesc = 'this-is-an-error-description';
+    const error = 'access_denied';
+    const errorDescription = 'this-is-an-error-description';
     const state = 'some-random-state';
     const cdnOrigin = `${CDN_ORIGIN}/redirect?app_origin=${
       appOrigin
-    }&code=${code}&error_description=${errDesc}&state=${state}`;
+    }&code=${code}&error=access_denied&error_description=${
+      errorDescription}&state=${state}`;
 
     jsdom.reconfigure({url: cdnOrigin}); // eslint-disable-line no-undef
 
@@ -151,7 +155,8 @@ describe('redirect', () => {
     expect(mockPost).toBeCalledWith(
       {
         code,
-        error: errDesc,
+        error,
+        errorDescription,
         isSmartcarHosted: true,
         name: 'SmartcarAuthMessage',
         state,
