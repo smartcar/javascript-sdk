@@ -26,7 +26,8 @@
     name: 'SmartcarAuthMessage',
     isSmartcarHosted: origin === 'https://javascript-sdk.smartcar.com',
     code: params.get('code'),
-    error: params.get('error_description'),
+    error: params.get('error'),
+    errorDescription: params.get('error_description'),
     state: params.get('state'),
   };
 

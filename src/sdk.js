@@ -52,7 +52,17 @@ window.Smartcar = (function(window) {
       // end (not using onComplete)
       /* istanbul ignore else */
       if (this.onComplete) {
-        const err = message.error ? new AccessDenied(message.error) : null;
+        // if auth errored generate appropriate error else null
+        const generateError = (error, description) => {
+          if (!error) {
+            return null;
+          }
+
+          return error === 'access_denied'
+            ? new AccessDenied(description)
+            : new Error(`Unexpected error: ${error} - ${description}`);
+        };
+        const err = generateError(message.error, message.errorDescription);
 
         /**
          * Call `onComplete` with parameters even if developer is not using
