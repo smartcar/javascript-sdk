@@ -9,13 +9,24 @@ window.Smartcar = (function(window) {
   }
 
   /**
+   * @callback OnComplete
+   * @param {?Error} error - should be only AccessDenied error but can be common
+   * Error in case of unxpected issues. Indicates end user declined to provide
+   * access to their vehicle
+   * @param {String} code - the authorization code to be exchanged from a
+   * backend sever for an access token
+   * @param {Object} state - user provided state for holding miscellaneous data
+   * connected to authenticating user
+   */
+
+  /**
    * @typedef Options
    *
    * @property {String} clientId - the application's client id
    * @property {String} redirectUri - the registered redirect uri of the
    * application
-   * @property {String[]} scope - requested permission scopes
-   * @property {Function} onComplete - called on completion of auth flow
+   * @property {String[]} [scope] - requested permission scopes
+   * @property {OnComplete} [onComplete] - called on completion of auth flow
    * @property {Boolean} [development=false] - launch Smartcar auth in
    * development mode to enable the mock vehicle brand
    */
