@@ -5,15 +5,14 @@
   <script src='sdk.js'></script>
   <script>
     const clientPort = 3000;
+    // should have same port as client since testing server side
     const redirectUri = `http://localhost:${clientPort}`;
 
     // this file tests redirect scheme when developer hosts redirect and client
     // at same origin (e.g. a server side rendered app)
     const options = {
-      // required
-      clientId: 'clientId',
-      // checked against event origin for security
-      redirectUri,
+      clientId: 'clientId', // required
+      redirectUri, // checked against event origin for security
       // redirect page to arbitrary url for testing
       onComplete: () => location.replace('on-post-message-url'),
     }
@@ -21,8 +20,8 @@
     // don't need reference, just bind to window
     window.Smartcar(options);
 
-    // on page load, open redirect page which should immediately post
-    // back, causing onComplete to replace the page url
+    // on page load, open redirect page which should immediately post back,
+    // causing onComplete to replace the page url
     window.open(`${redirectUri}/redirect`);
   </script>
 </html>

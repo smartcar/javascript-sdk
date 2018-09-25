@@ -52,7 +52,7 @@ describe('postMessage', () => {
         res.sendFile(path.join(__dirname, getVersionedPath('sdk', 'js'))))
       .listen(clientPort);
 
-    // redirect setup
+    // mock out Smartcar Javascript SDK CDN
     redirect = express()
       .get('/redirect', (_, res) =>
         res.sendFile(path.join(__dirname, redirectIndexPath)))

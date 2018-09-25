@@ -4,26 +4,21 @@
   <title>SDK SPA Test</title>
   <script src='sdk.js'></script>
   <script>
-    const clientPort = 3000;
-    const redirectPort = 4000;
-    const clientUri = `http://localhost:${clientPort}`;
-    const redirectUri = `http://localhost:${redirectPort}/redirect?app_origin=${clientUri}`
-
     // this file tests a redirect scheme with a separate front end client & back
     // end server. This is the same scheme that will be used if a developer
     // chooses to host their redirect on Smartcar's CDN. For the purposes of
     // this test we hit a local redirect server where we provide the
     // `app_origin` param ensuring it will post back to that `app_origin` param
+
+    const clientPort = 3000;
+    const redirectPort = 4000;
+    const clientUri = `http://localhost:${clientPort}`;
+    const redirectUri =
+      `http://localhost:${redirectPort}/redirect?app_origin=${clientUri}`
+
     const options = {
-      // required
-      clientId: 'clientId',
-      // checked against event origin for security
-      // Note: this test does not actually use any Smartcar instance methods for
-      // triggering OAuth. Therefore the only important part of this redirectUri
-      // is the host (`app_origin` value does not matter). This is because we
-      // manually load the redirect page with the correct `app_origin` query
-      // param further below
-      redirectUri,
+      clientId: 'clientId', // required
+      redirectUri, // checked against event origin for security
       // redirect page to arbitrary url for testing
       onComplete: () => location.replace('on-post-message-url'),
     }
@@ -31,10 +26,10 @@
     // don't need reference, just bind to window
     window.Smartcar(options);
 
-    // on page load, open redirect page which should immediately post
-    // back, causing onComplete to replace the page url
-    // note that we are manually launching the redirect page with the expected
-    // `app_origin` to cause post back to 3000
+    // on page load, open redirect page which should immediately post back,
+    // causing onComplete to replace the page url. Note that we are manually
+    // launching the redirect page with the expected `app_origin` to cause post
+    // back to port 3000
     window.open(redirectUri);
   </script>
 </html>
