@@ -31,16 +31,31 @@ gulp.task('build-html', function() {
 
 gulp.task('build', ['build-js', 'build-html']);
 
-gulp.task('publish', function() {
-  const S3_REGION = 'us-west-2';
-  const S3_BUCKET = 'smartcar-production-javascript-sdk';
+// publishing
+const S3_REGION = 'us-west-2';
+const S3_BUCKET = 'smartcar-production-javascript-sdk';
 
-  const publisher = awspublish.create({
-    region: S3_REGION,
-    params: {Bucket: S3_BUCKET},
-  });
+const publisher = awspublish.create({
+  region: S3_REGION,
+  params: {Bucket: S3_BUCKET},
+});
 
-  return gulp.src('dist/**')
+// we strip the `.html` extension from our html file so add content-type header
+// to identify the file as `text/html`
+gulp.task('publish-html', function() {
+  const headers = {
+    'content-type': 'text/html',
+  };
+
+  return gulp.src(`dist/redirect-${version}`)
+    .pipe(publisher.publish(headers))
+    .pipe(awspublish.reporter());
+});
+
+gulp.task('publish-js', function() {
+  return gulp.src('dist/**/*.js')
     .pipe(publisher.publish())
     .pipe(awspublish.reporter());
 });
+
+gulp.task('publish', ['publish-html', 'publish-js']);
