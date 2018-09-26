@@ -10,6 +10,8 @@ const template = require('gulp-template');
 const uglify = require('gulp-uglify');
 const {version} = require('./package');
 
+// building
+
 // builds js files by babeling, uglifying, and versioning
 gulp.task('build-js', function() {
   return gulp.src('src/*.js')
@@ -23,8 +25,8 @@ gulp.task('build-js', function() {
 gulp.task('build-html', function() {
   return gulp.src('src/redirect.html')
     .pipe(template({redirectJS: `'/redirect-${version}.js'`}))
-    .pipe(rename('index.html'))
-    .pipe(gulp.dest(`dist/redirect-${version}`));
+    .pipe(rename(`redirect-${version}`))
+    .pipe(gulp.dest('dist'));
 });
 
 gulp.task('build', ['build-js', 'build-html']);
