@@ -1,12 +1,17 @@
+sudo: required
+
 language:
   - node_js
 
 node_js:
   - 8
 
+services:
+  - docker
+
 branches:
   except:
-    - /^v\d+\.\d+\.\d+$/
+    - /^v\d+\.\d+\.\d+(-rc\.\d+)?$/
 
 notifications:
   slack: smartcar:PGJmjtKFPytU5E2FwsImdVp8
@@ -15,6 +20,8 @@ install:
   - npm install
 
 script:
+  - docker run --name selenium-container -d --net host -v /dev/shm:/dev/shm selenium/standalone-chrome
+  - npm run lint
   - npm test
   - npm run cover
   - npm run build
@@ -22,16 +29,16 @@ script:
   - git config --global user.email "ci@smartcar.com"
   - git config --global user.name "Travis CI User"
   - export tag=$(grep 'version' package.json | sed 's/[", ]//g' | cut -d ':' -f 2)
-  - if [ "$TRAVIS_BRANCH" = "master" ]; then git tag -a v$tag -m "Travis Generated Tag"; fi
+  - git tag -a v$tag -m "Travis Generated Tag"
 
 deploy:
   - provider: script
     skip_cleanup: true
     script: npm run publish
     on:
-      branch: master
+      branch: staging
   - provider: script
     skip_cleanup: true
     script: echo -e "machine github.com\n  login $CI_USER_TOKEN" >> ~/.netrc && git push origin v$tag
     on:
-      branch: master
+      branch: staging

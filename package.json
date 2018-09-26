@@ -1,11 +1,11 @@
 {
   "name": "smartcar-javascript-sdk",
   "description": "javascript auth sdk for the smartcar",
-  "version": "1.0.2",
+  "version": "2.0.0-rc.1",
   "author": "Smartcar <hello@smartcar.com> (https://smartcar.com)",
-  "license" : "MIT",
+  "license": "MIT",
   "scripts": {
-    "test": "jest",
+    "test": "npm run build && jest",
     "posttest": "npm run lint -s",
     "lint": "eslint . --cache",
     "cover": "npm test -- --coverage",
@@ -13,6 +13,8 @@
     "publish": "gulp publish"
   },
   "jest": {
+    "testEnvironment": "jest-environment-jsdom-global",
+    "testURL": "http://localhost/",
     "moduleFileExtensions": [
       "js"
     ],
@@ -31,15 +33,19 @@
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-preset-env": "^1.6.1",
+    "convict": "^4.3.1",
     "eslint": "^4.1.1",
     "eslint-config-smartcar": "^2.0.0",
+    "express": "^4.16.3",
     "gulp": "^3.8.5",
     "gulp-awspublish": "^3.0.1",
     "gulp-babel": "^7.0.0",
-    "gulp-load-plugins": "^1.2.0",
     "gulp-rename": "^1.2.2",
+    "gulp-template": "^5.0.0",
     "gulp-uglify": "^3.0.0",
     "jest": "^22.4.3",
-    "lodash": "^4.17.5"
+    "jest-environment-jsdom": "^23.3.0",
+    "jest-environment-jsdom-global": "^1.1.0",
+    "nightwatch": "^0.9.21"
   }
 }

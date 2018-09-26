@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <meta charset='utf-8'>
+  <title>SDK SPA Test</title>
+  <script src='sdk.js'></script>
+  <script>
+    // this file tests a redirect scheme with a separate front end client & back
+    // end server. This is the same scheme that will be used if a developer
+    // chooses to host their redirect on Smartcar's CDN. For the purposes of
+    // this test we hit a local redirect server where we provide the
+    // `app_origin` param ensuring it will post back to that `app_origin`
+
+    const clientPort = 3000;
+    const redirectPort = 4000;
+    const clientUri = `http://localhost:${clientPort}`;
+    const redirectUri =
+      `http://localhost:${redirectPort}/redirect?app_origin=${clientUri}`;
+
+    const options = {
+      clientId: 'clientId', // required
+      redirectUri, // checked against event origin for security
+      // redirect page to arbitrary url for testing
+      onComplete: () => location.replace('on-post-message-url'),
+    };
+
+    // don't need reference, just bind to window
+    window.Smartcar(options);
+
+    // on page load, open redirect page which should immediately post back,
+    // causing onComplete to replace the page url.
+    window.open(redirectUri);
+  </script>
+</html>
