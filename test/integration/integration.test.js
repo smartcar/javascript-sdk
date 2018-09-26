@@ -28,10 +28,9 @@ describe('postMessage', () => {
       (file, ext) => `../../dist/${addVersion(file)}.${ext}`;
 
     // redirect hosted at /redirect
-    // file structure -> dist/redirect-${version}/index.js
-    const redirectIndexPath =
-      `../../dist/${addVersion('redirect')}/index.html`;
-    // built redirect-${version}.html references redirect-${version}.js
+    // file structure -> dist/redirect-${version}
+    const redirectHtmlPath = `../../dist/${addVersion('redirect')}`;
+    // built redirect-${version} references redirect-${version}.js
     const redirectJavascriptPath = `/${addVersion('redirect')}.js`;
 
     // client setup
@@ -44,7 +43,12 @@ describe('postMessage', () => {
         res.sendFile(path.join(__dirname, '/server-side.html')))
       // for server side
       .get('/redirect', (_, res) =>
-        res.sendFile(path.join(__dirname, redirectIndexPath)))
+        res.sendFile(
+          path.join(__dirname, redirectHtmlPath),
+          // force treating of extensionless file as html
+          {headers: {'content-type': 'text/html'}}
+        )
+      )
       .get(redirectJavascriptPath, (_, res) =>
         res.sendFile(path.join(__dirname, getVersionedPath('redirect', 'js'))))
       // for both single page and server side
@@ -55,7 +59,12 @@ describe('postMessage', () => {
     // mock out Smartcar Javascript SDK CDN
     redirect = express()
       .get('/redirect', (_, res) =>
-        res.sendFile(path.join(__dirname, redirectIndexPath)))
+        res.sendFile(
+          path.join(__dirname, redirectHtmlPath),
+          // force treating of extensionless file as html
+          {headers: {'content-type': 'text/html'}}
+        )
+      )
       .get(redirectJavascriptPath, (_, res) =>
         res.sendFile(path.join(__dirname, getVersionedPath('redirect', 'js'))))
       .listen(redirectPort);
