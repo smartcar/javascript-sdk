@@ -8,7 +8,7 @@
     // end server. This is the same scheme that will be used if a developer
     // chooses to host their redirect on Smartcar's CDN. For the purposes of
     // this test we hit a local redirect server where we provide the
-    // `app_origin` param ensuring it will post back to that `app_origin` param
+    // `app_origin` param ensuring it will post back to that `app_origin`
 
     const clientPort = 3000;
     const redirectPort = 4000;
@@ -27,9 +27,7 @@
     window.Smartcar(options);
 
     // on page load, open redirect page which should immediately post back,
-    // causing onComplete to replace the page url. Note that we are manually
-    // launching the redirect page with the expected `app_origin` to cause post
-    // back to port 3000
+    // causing onComplete to replace the page url.
     window.open(redirectUri);
   </script>
 </html>
