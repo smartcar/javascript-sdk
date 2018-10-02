@@ -77,8 +77,8 @@ window.Smartcar = (function(window) {
 
         /**
          * Call `onComplete` with parameters even if developer is not using
-         * a Smartcar hosted redirect. Regardless of if they are using a
-         * Smartcar hosted redirect they may still want `onComplete` to do
+         * a Smartcar-hosted redirect. Regardless of if they are using a
+         * Smartcar-hosted redirect they may still want `onComplete` to do
          * something with message.
          *
          * If empty onComplete is passed, parameters will be harmlessly ignored.
