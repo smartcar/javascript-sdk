@@ -63,7 +63,7 @@ Here's an example flow for the case that you host the redirect yourself (many of
 
 ## Next Steps
 
-This SDK facilitates OAuth link generation, click handler creation, and pop-up dialog creation. This SDK will not assist in exchanging authorization codes for an access token. If you choose to self-host the redirect, this SDK provdes a script you can source on the redirect that will assist you with extracting the authorization code query parameter.
+This SDK facilitates OAuth link generation, click handler creation, and pop-up dialog creation. This SDK will not assist in exchanging authorization codes for an access token. If you choose to self-host the redirect, this SDK provides a script, which you can source on the redirect. The script will assist in extracting the authorization code query parameter.
 
 See the links below to various SDKs that can help you exchange the authorization code for an access token. If the back end language you want to use isn't listed below, you can still use the Smartcar API. You will just have to make HTTP requests manually based on our [API specification](https://smartcar.com/docs#get-all-vehicles).
 
@@ -130,7 +130,7 @@ Once initialized there are three instance methods for setting up the OAuth flow:
 - `addClickHandler({id})` - to add a click handler to an HTML element that will open the Smartcar OAuth dialog
 - `generateLink()` - to generate the bare Smartcar OAuth URL
 
-See the [reference below](#configuration) for detailed signature information.
+See the [reference below](https#configuration) for detailed signature information.
 
 ## Installation
 
