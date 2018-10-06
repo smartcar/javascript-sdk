@@ -240,7 +240,7 @@ window.Smartcar = (function(window) {
   * On-click event calls openDialog when the specified element is clicked.
   *
   * @param {Object} options - clickHandler configuration object
-  * @param {String} [options.id] - id of the element to add click handler to
+  * @param {String} options.id - id of the element to add click handler to
   * @param {String} [options.state] - arbitrary parameter passed to redirect uri
   * @param {Boolean} [options.forcePrompt] - force permission approval screen to
   * show on every authentication, even if the user has previously consented
