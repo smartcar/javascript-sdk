@@ -49,8 +49,6 @@ Below, you will find example flows for each method.
     *Note:* Okay, so, about that automagically... Here's what happens behind the scenes: Let's say your website is `https://my-amazing-app.com`. Following the OAuth flow the user is redirected to a Smartcar-hosted redirect URI `https://javascript-sdk.smartcar.com/redirect-2.0.0?app_origin=https://my-amazing-app.com&code={authorization-code}`. This page sources `redirect.js` which uses `postMessage` to send a message with the authorization code or error to the origin specified by the `app_origin` query param `https://my-amazing-app.com`. The redirect page then closes itself out. On `https://my-amazing-app.com` the Smartcar instance you created receives the posted message and fires your `onComplete` method with the appropriate arguments. From your user's perspective, all they'll see is a brief flicker of the redirect page before it closes out, depending on their connection speed.
 5. Your application's back end server will need to accept the authorization code and exchange it for an access token.
 
-For a more detailed explanation of our Smartcar-hosted redirect scheme see our [blog post](TODO: LINK HERE) on the topic.
-
 #### Self-Hosted
 
 Here's an example flow for the case that you host the redirect yourself (many of the steps remain similar):
@@ -126,16 +124,13 @@ if (error) {
 }
 ```
 
-<!-- TODO: why show state and forcePrompt in this? just seems to add unnecessary disclaimers -->
-<!-- TODO: give examples of usage for each instance method -->
-
 Once initialized there are three instance methods for setting up the OAuth flow:
 
 - `openDialog()` - to open the Smartcar OAuth dialog directly
 - `addClickHandler({id})` - to add a click handler to an HTML element that will open the Smartcar OAuth dialog
 - `generateLink()` - to generate the bare Smartcar OAuth URL
 
-See the [reference below](TODO: link to appropriate section) for detailed signature information.
+See the [reference below](#configuration) for detailed signature information.
 
 ## Installation
 
