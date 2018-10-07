@@ -114,7 +114,7 @@ function(error, code) {
     // using the axios library
     // posting to a backend server to complete the OAuth flow
     axios
-      .post(`myserver.com/auth`, {code})
+      .post('myserver.com/auth', {code})
       .then((_) => {
         // take action now that authorization is complete
         // maybe pull odometer or location and display to your user?
