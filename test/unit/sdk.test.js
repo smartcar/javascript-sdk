@@ -66,55 +66,6 @@ describe('sdk', () => {
       }
     );
 
-    test('throws error if using Smartcar hosting w/o `app_origin`', () => {
-      expect(() => window.Smartcar({
-        redirectUri: CDN_ORIGIN,
-        clientId: 'my-id',
-        // eslint-disable-next-line no-unused-vars, no-empty-function
-        onComplete: (_, __) => {}, // stub function w/ >= 2 params
-      }))
-        .toThrow(
-          "When using Smartcar's CDN redirect an `app_origin` query parameter" +
-          ' is required to specify the origin the extracted `code` should be' +
-          ' sent to. This `app_origin` URI must be served over HTTPS'
-        );
-    });
-
-    test(
-      'throws error if using Smartcar hosting w/ invalid URL `app_origin`',
-      () => {
-        expect(() => window.Smartcar({
-          redirectUri: `${CDN_ORIGIN}/redirect?app_origin=not-a-valid-url`,
-          clientId: 'my-id',
-          // eslint-disable-next-line no-unused-vars, no-empty-function
-          onComplete: (_, __) => {}, // stub function w/ >= 2 params
-        }))
-          .toThrow(
-            "When using Smartcar's CDN redirect an `app_origin` query" +
-            ' parameter is required to specify the origin the extracted' +
-            ' `code` should be sent to. This `app_origin` URI must be served' +
-            ' over HTTPS'
-          );
-      }
-    );
-
-    test(
-      'throws error if using Smartcar hosting w/ non-HTTPS `app_origin`',
-      () => {
-        expect(() => window.Smartcar({
-          redirectUri: `${CDN_ORIGIN}/redirect?app_origin=http://not-https.com`,
-          clientId: 'my-id',
-          // eslint-disable-next-line no-unused-vars, no-empty-function
-          onComplete: (_, __) => {}, // stub function w/ >= 2 params
-        }))
-          .toThrow(
-            "When using Smartcar's CDN redirect an `app_origin` query parameter" +
-            ' is required to specify the origin the extracted `code` should be' +
-            ' sent to. This `app_origin` URI must be served over HTTPS'
-          );
-      }
-    );
-
     test('initializes correctly w/ self hosted redirect',
       () => {
         const options = {

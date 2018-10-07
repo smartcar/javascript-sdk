@@ -131,24 +131,6 @@ window.Smartcar = (function(window) {
           ' completion of authorization flow'
         );
       }
-
-      // require `app_origin` query parameter containing HTTPS served URI
-      try {
-        const searchParams = (new URL(options.redirectUri)).searchParams;
-        // `.get()` returns null if query parameter doesn't exist which will
-        // then error as null isn't a valid url
-        const appOriginUrl = new URL(searchParams.get('app_origin'));
-        if (appOriginUrl.protocol !== 'https:') {
-          throw new Error(); // throw to force descriptive error in catch
-        }
-      } catch (err) {
-        throw new Error(
-          "When using Smartcar's CDN redirect an `app_origin` query" +
-          ' parameter is required to specify the origin the extracted' +
-          ' `code` should be sent to. This `app_origin` URI must be served' +
-          ' over HTTPS'
-        );
-      }
     }
   };
 
