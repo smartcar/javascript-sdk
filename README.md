@@ -101,26 +101,25 @@ const smartcar = new Smartcar({
     // server to exchange for an access token
   },
   development: false, // optional, defaults to false
-  useSmartcarHostedRedirect: true, // optional, defaults to false
 });
 ```
 
 Here's an example `onComplete` function:
 
 ```javascript
-function(error, code
-if (error) {
-  // redirect user to error page
-} else {
-  // using the axios library
-  // posting to a domain specified by SERVER variable
-  axios
-    .post(`${SERVER}/auth`, {code})
-    .then((_) => {
-      // take action now that authorization is complete
-      // maybe pull odometer or location and display to your user?
-      // at this point the limit is your own creativity :)
-    });
+function(error, code) {
+  if (error) {
+    // redirect user to error page
+  } else {
+    // using the axios library
+    // posting to a backend server to complete the OAuth flow
+    axios
+      .post('myserver.com/auth', {code})
+      .then((_) => {
+        // take action now that authorization is complete
+        // maybe pull odometer or location and display to your user?
+        // at this point the limit is your own creativity :)
+      });
 }
 ```
 
@@ -139,7 +138,7 @@ You can import this SDK into your application from Smartcar's CDN:
 ### sdk.js
 
 ```html
-<script src="https://cdn.smartcar.com/javascript-sdk/sdk-1.0.0.js"></script>
+<script src="https://javascript-sdk.smartcar.com/sdk-2.0.0.js"></script>
 ```
 
 ### redirect.js
@@ -147,7 +146,7 @@ You can import this SDK into your application from Smartcar's CDN:
 Automatically sourced if you use a Smartcar-hosted redirect.
 
 ```html
-<script src="https://cdn.smartcar.com/javascript-sdk/callback-1.0.0.js"></script>
+<script src="https://javascript-sdk.smartcar.com/redirect-2.0.0.js"></script>
 ```
 
 ## Configuration
@@ -171,7 +170,7 @@ Automatically sourced if you use a Smartcar-hosted redirect.
 #### Example
 
 ```text
-'https://connect.smartcar.com/oauth/authorize?response_type=token...'
+'https://connect.smartcar.com/oauth/authorize?response_type=code...'
 ```
 
 #### Options
@@ -196,7 +195,7 @@ Automatically sourced if you use a Smartcar-hosted redirect.
 
 | Parameter       | Type | Description   |
 |:--------------- |:---|:------------- |
-| `id`         | String |**Optional** The id of the element for which to add the click handler (e.g. a "Connect your car" button). |
+| `id`         | String | The id of the element for which to add the click handler (e.g. a "Connect your car" button). |
 | `state`         | String |**Optional** OAuth state parameter passed to the redirect URI. This parameter may be used for identifying the user who initiated the request. |
 | `forcePrompt`   | Boolean |**Optional** Setting `forcePrompt` to `true` will show the permissions approval screen on every authentication attempt, even if the user has previously consented to the exact scope of permissions. |
 
