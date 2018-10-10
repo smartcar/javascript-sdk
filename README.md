@@ -36,9 +36,7 @@ npm install <PACKAGE>
 
 The SDK manages the frontend flow of the [OAuth authorization process](https://tools.ietf.org/html/rfc6749#section-4.1). The steps are as follows:
 
-<p align="center">
-  <img src="doc/architecture.svg"/>
-</p>
+<p align="center"><img src="doc/architecture.svg"/></p>
 
 1. User clicks "Connect your car" button (or similar button) on your application's frontend.
 2. User sees a pop-up dialog with the Smartcar authorization flow.
