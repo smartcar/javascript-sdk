@@ -9,12 +9,16 @@ The [Smartcar API](https://smartcar.com/docs) lets you read vehicle data
 
 To make requests to a vehicle from a web application, the end user must connect their vehicle using [Smartcar's authorization flow](https://smartcar.com/docs#authentication). The Smartcar JavaScript SDK provides an easy way to launch and handle the authorization flow to retrieve the resulting `code`.
 
+Before integrating with the JavaScript SDK, you'll need to register an application in the [Smartcar dashboard](https://dashboard.smartcar.com). Once you are registered, you will have a Client ID and Client Secret which will allow you to authorize users.
+
 ## SDK Reference
 
 For detailed documentation on parameters and available methods, please refer to
-the [SDK Reference](doc/README.md).
+the [SDK Reference](doc/).
 
 ## Installation
+
+You can install the JavaScript SDK using either npm or through our CDN.
 
 ### npm
 
@@ -30,9 +34,11 @@ npm install <PACKAGE>
 
 ## Quick Start
 
-Before integrating with the JavaScript SDK, you'll need to register an application in the [Smartcar dashboard](https://dashboard.smartcar.com). Once you are registered, you will have a Client ID and Client Secret which will allow you to authorize users.
-
 The SDK manages the frontend flow of the [OAuth authorization process](https://tools.ietf.org/html/rfc6749#section-4.1). The steps are as follows:
+
+<p align="center">
+  <img src="doc/architecture.svg"/>
+</p>
 
 1. User clicks "Connect your car" button (or similar button) on your application's frontend.
 2. User sees a pop-up dialog with the Smartcar authorization flow.
@@ -45,6 +51,8 @@ The SDK manages the frontend flow of the [OAuth authorization process](https://t
 5. Your application's backend server will need to accept the `code` and exchange it for an access token.
 
 The SDK facilitates generating OAuth links, creating pop-up dialogs, and recieving authorization codes. This SDK will not assist in exchanging authorization codes for an access token or making requests to vehicles. Please see our [Backend SDKs](https://smartcar.com/docs#backend-sdks) for more on handling the access tokens and vehicle requests.
+Before integrating with the JavaScript SDK, you'll need to register an application in the [Smartcar dashboard](https://dashboard.smartcar.com). Once you are registered, you will have a Client ID and Client Secret which will allow you to authorize users.
+
 
 ## Usage
 
@@ -83,7 +91,7 @@ const smartcar = new Smartcar({
 });
 ```
 
-> NOTE: See the full set of available scopes under "Required Permissions" for each endpoint in the [Smartcar API Reference](https://smartcar.com/docs#get-all-vehicles).
+> NOTE: See the full set of available scopes in the [Smartcar API Reference](https://smartcar.com/docs#get-all-vehicles) under "Required Permissions" for each endpoint.
 
 ### 3. Launch the authorization flow
 
@@ -93,7 +101,7 @@ Add a click handler to an HTML element:
 smartcar.addClickHandler({id: '#your-button-id'});
 ```
 
-Alternatively, you can launch the authorization fow directly:
+Alternatively, you can launch the authorization flow directly:
 
 ```javascript
 smartcar.openDialog();
