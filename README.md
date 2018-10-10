@@ -35,13 +35,14 @@ Before integrating with the JavaScript SDK, you'll need to register an applicati
 The SDK manages the frontend flow of the [OAuth authorization process](https://tools.ietf.org/html/rfc6749#section-4.1). The steps are as follows:
 
 1. User clicks "Connect your car" button (or similar button) on your application's frontend.
-2. User sees a pop-up dialog with the first page of the Smartcar authorization flow. The user will select the make of their vehicle.
-3. User will be prompted to login with their vehicle credentials.
-4. User will be presented with the set of requested permissions to grant your application.
-5. User will either "Allow" or "Deny" access to your application.
-6. The Smartcar authorization flow will redirect the user to the Smartcar JavaScript SDK redirect page along with the resulting `code`. The page will then send the `code` to your application's window and close the pop-up dialog.
-7. Your JavaScript frontend will recieve the `code` in a callback function.
-8. Your application's backend server will need to accept the `code` and exchange it for an access token. 
+2. User sees a pop-up dialog with the Smartcar authorization flow.
+   1. The user will select the make of their vehicle.
+   2. User will be prompted to login with their vehicle credentials.
+   3. User will be presented with the set of requested permissions to grant your application.
+   4. User will either "Allow" or "Deny" access to your application.
+3. The Smartcar authorization flow will redirect the user to the Smartcar JavaScript SDK redirect page along with the resulting `code`. The page will then send the `code` to your application's window and close the pop-up dialog.
+4. Your JavaScript frontend will recieve the `code` in a callback function.
+5. Your application's backend server will need to accept the `code` and exchange it for an access token.
 
 The SDK facilitates generating OAuth links, creating pop-up dialogs, and recieving authorization codes. This SDK will not assist in exchanging authorization codes for an access token or making requests to vehicles. Please see our [Backend SDKs](https://smartcar.com/docs#backend-sdks) for more on handling the access tokens and vehicle requests.
 
