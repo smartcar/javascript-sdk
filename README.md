@@ -102,6 +102,7 @@ smartcar.openDialog();
 
 TODO: WRITE STUFF HERE
 
+[ci-url]: https://travis-ci.com/smartcar/javascript-sdk
 [ci-image]: https://travis-ci.com/smartcar/javascript-sdk.svg?token=jMbuVtXPGeJMPdsn7RQ5&branch=master
 [tag-url]: https://github.com/smartcar/javascript-sdk/tags
 [tag-image]: https://img.shields.io/github/tag/smartcar/javascript-sdk.svg
