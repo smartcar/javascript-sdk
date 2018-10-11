@@ -11,11 +11,6 @@ To make requests to a vehicle from a web application, the end user must connect 
 
 Before integrating with the JavaScript SDK, you'll need to register an application in the [Smartcar dashboard](https://dashboard.smartcar.com). Once you are registered, you will have a Client ID and Client Secret which will allow you to authorize users.
 
-## SDK Reference
-
-For detailed documentation on parameters and available methods, please refer to
-the [SDK Reference](doc/).
-
 ## Installation
 
 You can install the JavaScript SDK using either npm or through our CDN.
@@ -31,6 +26,11 @@ npm install <PACKAGE>
 ```html
 <script src="https://javascript-sdk.smartcar.com/sdk-<VERSION>.js"></script>
 ```
+
+## SDK Reference
+
+For detailed documentation on parameters and available methods, please refer to
+the [SDK Reference](doc/).
 
 ## Quick Start
 
@@ -60,7 +60,7 @@ The JavaScript SDK uses a special redirect URI to provide a simpler flow to retr
 https://javascript-sdk.smartcar.com/redirect-<VERSION>?app_origin=<Your Application's Origin>
 ```
 
-The `app_origin` should be the location of where your website is located. The origin consists of just the protocol and hostname of your site without the resource path. Some example origins:
+The `app_origin` should be the location of where your website is located. The origin consists of just the protocol and host of your site without the resource path. Some example origins:
 
 #### Valid:
 + `https://example.com`
