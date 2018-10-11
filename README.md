@@ -32,7 +32,7 @@ npm install <PACKAGE>
 For detailed documentation on parameters and available methods, please refer to
 the [SDK Reference](doc/).
 
-## Quick Start
+## Flow
 
 The SDK manages the frontend flow of the [OAuth authorization process](https://tools.ietf.org/html/rfc6749#section-4.1). The steps are as follows:
 
@@ -50,7 +50,7 @@ The SDK manages the frontend flow of the [OAuth authorization process](https://t
 
 The SDK facilitates generating OAuth links, creating pop-up dialogs, and recieving authorization codes. This SDK will not assist in exchanging authorization codes for an access token or making requests to vehicles. Please see our [Backend SDKs](https://smartcar.com/docs#backend-sdks) for more on handling the access tokens and vehicle requests.
 
-## Usage
+## Quick Start
 
 ### 1. Register a JavaScript SDK Redirect URI
 
