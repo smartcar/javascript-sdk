@@ -5,6 +5,7 @@
         "chrome": 52,
         "browsers": ["last 2 major versions", ">5% in US"]
       },
+      "modules": false
     }]
   ]
 }
