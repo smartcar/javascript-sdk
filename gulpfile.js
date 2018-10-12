@@ -5,7 +5,6 @@
 const awspublish = require('gulp-awspublish');
 const babel = require('gulp-babel');
 const gulp = require('gulp');
-const gulpif = require('gulp-if');
 const path = require('path');
 const rename = require('gulp-rename');
 const template = require('gulp-template');
@@ -13,34 +12,38 @@ const uglify = require('gulp-uglify');
 const umd = require('gulp-umd');
 const {version} = require('./package');
 
-// Config for UMD file transformation of sdk.js
-const umdConfig = {
-  // CommonJS export name
-  exports: function() { return 'Smartcar'; },
-  // Global namespace for Web.
-  namespace: function() { return 'Smartcar'; },
-  // returnExports template with istanbul ignore
-  template: path.join(__dirname, 'lib/returnExports.js'),
-};
+/**
+ * UMD wrap sdk.js
+ */
+gulp.task('build:umd', function() {
+  return gulp.src('src/sdk.js')
+    .pipe(umd({
+      // CommonJS export name
+      exports: function() { return 'Smartcar'; },
+      // Global namespace for Web.
+      namespace: function() { return 'Smartcar'; },
+      // returnExports template with istanbul ignore
+      template: path.join(__dirname, 'build/returnExports.js'),
+    }))
+    .pipe(gulp.dest('dist/umd'));
+});
 
 /**
  * Build sdk.js for npm publishing.
  */
-gulp.task('build:npm', function() {
+gulp.task('build:npm', ['build:umd'], function() {
   return gulp.src('src/sdk.js')
-    .pipe(umd(umdConfig))
-    // .pipe(babel())
+    .pipe(babel())
     .pipe(gulp.dest('dist/npm'));
 });
 
 /**
  * Build JS for CDN publishing.
  */
-gulp.task('build:cdn:js', function() {
+gulp.task('build:cdn:js', ['build:umd'], function() {
   return gulp.src('src/*.js')
-    .pipe(gulpif('sdk.js', umd(umdConfig)))
-    // .pipe(babel())
-    // .pipe(uglify())
+    .pipe(babel())
+    .pipe(uglify())
     .pipe(rename({suffix: `-${version}`}))
     .pipe(gulp.dest('dist/cdn'));
 });

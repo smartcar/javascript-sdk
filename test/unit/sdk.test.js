@@ -5,7 +5,7 @@
 /* global require, expect, jest */
 
 // note that Jest ships with jsdom so window is loaded globally in Jest tests
-const Smartcar = require('../../dist/npm/sdk.js');
+const Smartcar = require('../../dist/umd/sdk.js');
 
 describe('sdk', () => {
   const CDN_ORIGIN = 'https://javascript-sdk.smartcar.com';
