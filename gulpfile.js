@@ -32,7 +32,7 @@ gulp.task('build:umd', function() {
  * Build sdk.js for npm publishing.
  */
 gulp.task('build:npm', ['build:umd'], function() {
-  return gulp.src('src/sdk.js')
+  return gulp.src('dst/umd/sdk.js')
     .pipe(babel())
     .pipe(gulp.dest('dist/npm'));
 });
@@ -41,7 +41,7 @@ gulp.task('build:npm', ['build:umd'], function() {
  * Build JS for CDN publishing.
  */
 gulp.task('build:cdn:js', ['build:umd'], function() {
-  return gulp.src('src/*.js')
+  return gulp.src(['src/redirect.js', 'dist/umd/sdk.js'])
     .pipe(babel())
     .pipe(uglify())
     .pipe(rename({suffix: `-${version}`}))
@@ -53,7 +53,7 @@ gulp.task('build:cdn:js', ['build:umd'], function() {
  */
 gulp.task('build:cdn:html', function() {
   return gulp.src('src/redirect.html')
-    .pipe(template({redirectJS: `'/redirect-${version}.js'`}))
+    .pipe(template({version}))
     .pipe(rename(`redirect-${version}`))
     .pipe(gulp.dest('dist/cdn'));
 });
