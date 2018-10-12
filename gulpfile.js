@@ -65,6 +65,16 @@ gulp.task('build:cdn', ['build:cdn:js', 'build:cdn:html']);
 
 /**
  * Build all tasks for CDN and npm publishing.
+ *
+ * dist
+ * |---- cdn
+ *   |---- sdk-2.0.0.js           // UMD wrapped, babel-ed, uglify-ed
+ *   |---- redirect-2.0.0.js      // babel-ed, uglify-ed
+ *   |---- redirect-2.0.0         // HTML file without extension
+ * |---- npm
+ *   |---- sdk.js                 // UMD wrapped, babel-ed
+ * |---- umd
+ *   |---- sdk.js                 // UMD wrapped
  */
 gulp.task('build', ['build:cdn', 'build:npm']);
 
