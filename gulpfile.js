@@ -6,6 +6,7 @@ const awspublish = require('gulp-awspublish');
 const babel = require('gulp-babel');
 const gulp = require('gulp');
 const gulpif = require('gulp-if');
+const path = require('path');
 const rename = require('gulp-rename');
 const template = require('gulp-template');
 const uglify = require('gulp-uglify');
@@ -18,6 +19,8 @@ const umdConfig = {
   exports: function() { return 'Smartcar'; },
   // Global namespace for Web.
   namespace: function() { return 'Smartcar'; },
+  // returnExports template with istanbul ignore
+  template: path.join(__dirname, 'lib/returnExports.js'),
 };
 
 /**
@@ -26,7 +29,7 @@ const umdConfig = {
 gulp.task('build:npm', function() {
   return gulp.src('src/sdk.js')
     .pipe(umd(umdConfig))
-    .pipe(babel())
+    // .pipe(babel())
     .pipe(gulp.dest('dist/npm'));
 });
 
@@ -36,8 +39,8 @@ gulp.task('build:npm', function() {
 gulp.task('build:cdn:js', function() {
   return gulp.src('src/*.js')
     .pipe(gulpif('sdk.js', umd(umdConfig)))
-    .pipe(babel())
-    .pipe(uglify())
+    // .pipe(babel())
+    // .pipe(uglify())
     .pipe(rename({suffix: `-${version}`}))
     .pipe(gulp.dest('dist/cdn'));
 });
