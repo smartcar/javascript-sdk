@@ -1,29 +1,29 @@
 'use strict';
 
-require('../../src/sdk.js');
+const Smartcar = require('../../src/sdk');
 
 describe('sdk', () => {
   const CDN_ORIGIN = 'https://javascript-sdk.smartcar.com';
 
-  beforeEach(() => { window.Smartcar._hasBeenInstantiated = false; });
+  beforeEach(() => { Smartcar._hasBeenInstantiated = false; });
 
   describe('constructor', () => {
     test('throws error if constructor called without redirectUri', () => {
-      expect(() => new window.Smartcar({clientId: 'uuid'}))
+      expect(() => new Smartcar({clientId: 'uuid'}))
         .toThrow('A redirect URI option must be provided');
     });
 
     test('throws error if constructor called without clientId', () => {
-      expect(() => new window.Smartcar({redirectUri: 'http://example.com'}))
+      expect(() => new Smartcar({redirectUri: 'http://example.com'}))
         .toThrow('A client ID option must be provided');
     });
 
     test('throws error if smartcar already instantiated', () => {
       // initial instantiation
       // eslint-disable-next-line no-new
-      new window.Smartcar({redirectUri: 'http://example.com', clientId: 'my-id'});
+      new Smartcar({redirectUri: 'http://example.com', clientId: 'my-id'});
       expect(() =>
-        new window.Smartcar({redirectUri: 'http://example.com', clientId: 'my-id'})
+        new Smartcar({redirectUri: 'http://example.com', clientId: 'my-id'})
       )
         .toThrow(
           'Smartcar has already been instantiated in the window. Only one' +
@@ -32,7 +32,7 @@ describe('sdk', () => {
     });
 
     test('throws error if using Smartcar hosting without onComplete', () => {
-      expect(() => new window.Smartcar({
+      expect(() => new Smartcar({
         redirectUri: CDN_ORIGIN,
         clientId: 'my-id',
       }))
@@ -47,7 +47,7 @@ describe('sdk', () => {
       // eslint-disable-next-line max-len
       'throws error if using Smartcar hosting & passing onComplete with less than 2 parameters',
       () => {
-        expect(() => window.Smartcar({
+        expect(() => new Smartcar({
           redirectUri: CDN_ORIGIN,
           clientId: 'my-id',
           // eslint-disable-next-line no-unused-vars, no-empty-function
@@ -70,7 +70,7 @@ describe('sdk', () => {
           onComplete: jest.fn(),
         };
 
-        const smartcar = new window.Smartcar(options);
+        const smartcar = new Smartcar(options);
 
         Object.entries(options).forEach(
           ([key, option]) => expect(smartcar[key]).toEqual(option)
@@ -95,7 +95,7 @@ describe('sdk', () => {
           onComplete: jest.fn((_, __) => {}), // stub function w/ >= 2 params
         };
 
-        const smartcar = new window.Smartcar(options);
+        const smartcar = new Smartcar(options);
 
         Object.entries(options).forEach(
           ([key, option]) => expect(smartcar[key]).toEqual(option)
@@ -117,7 +117,7 @@ describe('sdk', () => {
         scope: ['read_vehicle_info', 'read_odometer'],
       };
 
-      const smartcar = new window.Smartcar(options);
+      const smartcar = new Smartcar(options);
 
       expect(smartcar.onComplete).toBe(undefined);
     });
@@ -154,7 +154,7 @@ describe('sdk', () => {
         onComplete: jest.fn(() => {}),
       };
 
-      const smartcar = new window.Smartcar(options);
+      const smartcar = new Smartcar(options);
 
       const evnt = {
         data: {
@@ -182,7 +182,7 @@ describe('sdk', () => {
         onComplete: jest.fn(() => {}),
       };
 
-      const smartcar = new window.Smartcar(options);
+      const smartcar = new Smartcar(options);
 
       const evnt = {
         data: {
@@ -213,7 +213,7 @@ describe('sdk', () => {
           onComplete: jest.fn(() => {}),
         };
 
-        const smartcar = new window.Smartcar(options);
+        const smartcar = new Smartcar(options);
 
         const evnt = {
           origin: 'https://selfhosted.com',
@@ -238,7 +238,7 @@ describe('sdk', () => {
           onComplete: jest.fn(() => {}),
         };
 
-        const smartcar = new window.Smartcar(options);
+        const smartcar = new Smartcar(options);
 
         const evnt = {
           data: {
@@ -269,7 +269,7 @@ describe('sdk', () => {
           onComplete: jest.fn(() => {}),
         };
 
-        const smartcar = new window.Smartcar(options);
+        const smartcar = new Smartcar(options);
 
         const evnt = {
           data: {
@@ -302,7 +302,7 @@ describe('sdk', () => {
           onComplete: jest.fn((__, _) => {}),
         };
 
-        const smartcar = new window.Smartcar(options);
+        const smartcar = new Smartcar(options);
 
         const evnt = {
           data: {
@@ -332,7 +332,7 @@ describe('sdk', () => {
         onComplete: jest.fn((__, _) => {}),
       };
 
-      const smartcar = new window.Smartcar(options);
+      const smartcar = new Smartcar(options);
 
       const evnt = {
         data: {
@@ -360,7 +360,7 @@ describe('sdk', () => {
         onComplete: jest.fn((__, _) => {}),
       };
 
-      const smartcar = new window.Smartcar(options);
+      const smartcar = new Smartcar(options);
 
       const evnt = {
         data: {
@@ -391,7 +391,7 @@ describe('sdk', () => {
           onComplete: jest.fn((__, _) => {}),
         };
 
-        const smartcar = new window.Smartcar(options);
+        const smartcar = new Smartcar(options);
         const errorDescription = 'describes the error';
 
         const evnt = {
@@ -409,7 +409,7 @@ describe('sdk', () => {
         smartcar.messageHandler(evnt);
 
         expect(smartcar.onComplete)
-          .toBeCalledWith(new window.Smartcar.AccessDenied(errorDescription),
+          .toBeCalledWith(new Smartcar.AccessDenied(errorDescription),
             'super-secret-code', 'some-state');
       }
     );
@@ -426,7 +426,7 @@ describe('sdk', () => {
           onComplete: jest.fn((__, _) => {}),
         };
 
-        const smartcar = new window.Smartcar(options);
+        const smartcar = new Smartcar(options);
         const error = 'not_access_denied';
         const errorDescription = 'describes the error';
 
@@ -463,7 +463,7 @@ describe('sdk', () => {
         onComplete: jest.fn(),
       };
 
-      const smartcar = new window.Smartcar(options);
+      const smartcar = new Smartcar(options);
 
       const expectedLink = 'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=auto';
       const link = smartcar.getAuthUrl();
@@ -478,7 +478,7 @@ describe('sdk', () => {
         onComplete: jest.fn(),
       };
 
-      const smartcar = new window.Smartcar(options);
+      const smartcar = new Smartcar(options);
 
       const expectedLink = 'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&state=foobarbaz';
       const link = smartcar.getAuthUrl({
@@ -497,7 +497,7 @@ describe('sdk', () => {
         development: true,
       };
 
-      const smartcar = new window.Smartcar(options);
+      const smartcar = new Smartcar(options);
 
       const expectedLink = 'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&state=foobarbaz&mock=true';
       const link = smartcar.getAuthUrl({
@@ -516,7 +516,7 @@ describe('sdk', () => {
         development: false,
       };
 
-      const smartcar = new window.Smartcar(options);
+      const smartcar = new Smartcar(options);
 
       const expectedLink = 'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&state=foobarbaz';
       const link = smartcar.getAuthUrl({
@@ -540,7 +540,7 @@ describe('sdk', () => {
       // computed height: (768 - 500) / 8 = 134
       const expectedOptions = 'top=53.5,left=307,width=430,height=500,';
 
-      expect(window.Smartcar._getWindowOptions()).toBe(expectedOptions);
+      expect(Smartcar._getWindowOptions()).toBe(expectedOptions);
     });
 
   });
@@ -579,7 +579,7 @@ describe('sdk', () => {
       const mockOpen = jest.fn();
       window.open = mockOpen;
 
-      const smartcar = new window.Smartcar(options);
+      const smartcar = new Smartcar(options);
 
       smartcar.openDialog(dialogOptions);
 
@@ -599,7 +599,7 @@ describe('sdk', () => {
       const mockOpen = jest.fn();
       window.open = mockOpen;
 
-      const smartcar = new window.Smartcar(options);
+      const smartcar = new Smartcar(options);
       const clickHandlerOptions = {
         id: 'incorrect-id',
         state: dialogOptions.state,
@@ -624,7 +624,7 @@ describe('sdk', () => {
       const mockOpen = jest.fn();
       window.open = mockOpen;
 
-      const smartcar = new window.Smartcar(options);
+      const smartcar = new Smartcar(options);
       const clickHandlerOptions = {
         id,
         state: dialogOptions.state,
