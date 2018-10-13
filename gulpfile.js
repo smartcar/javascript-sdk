@@ -32,7 +32,7 @@ gulp.task('build:umd', function() {
  * Build sdk.js for npm publishing.
  */
 gulp.task('build:npm', ['build:umd'], function() {
-  return gulp.src('dst/umd/sdk.js')
+  return gulp.src('dist/umd/sdk.js')
     .pipe(babel())
     .pipe(gulp.dest('dist/npm'));
 });
@@ -66,15 +66,15 @@ gulp.task('build:cdn', ['build:cdn:js', 'build:cdn:html']);
 /**
  * Build all tasks for CDN and npm publishing.
  *
- * dist
- * |---- cdn
- *   |---- sdk-2.0.0.js           // UMD wrapped, babel-ed, uglify-ed
- *   |---- redirect-2.0.0.js      // babel-ed, uglify-ed
- *   |---- redirect-2.0.0         // HTML file without extension
- * |---- npm
- *   |---- sdk.js                 // UMD wrapped, babel-ed
- * |---- umd
- *   |---- sdk.js                 // UMD wrapped
+ * dist/
+ * ├── cdn
+ * │   ├── redirect-2.0.0       // HTML file without extension
+ * │   ├── redirect-2.0.0.js    // babel-ed, uglify-ed
+ * │   └── sdk-2.0.0.js         // UMD wrapped, babel-ed, uglify-ed
+ * ├── npm
+ * │   └── sdk.js               // UMD wrapped, babel-ed
+ * └── umd
+ *     └── sdk.js               // UMD wrapped
  */
 gulp.task('build', ['build:cdn', 'build:npm']);
 
