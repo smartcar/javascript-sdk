@@ -91,7 +91,7 @@ const smartcar = new Smartcar({
 });
 ```
 
-Reference: **TODO - LINK TO METHOD REFERENCE**
+Reference: [`new Smartcar(options)`](doc#new_Smartcar_new)
 
 > NOTE: See the full set of available scopes in the [Smartcar API Reference](https://smartcar.com/docs#get-all-vehicles) under "Required Permissions" for each endpoint.
 
@@ -103,7 +103,7 @@ Add a click handler to an HTML element:
 smartcar.addClickHandler({id: '#your-button-id'});
 ```
 
-Reference: **TODO - LINK TO METHOD REFERENCE**
+Reference: [`smartcar.addClickHandler(options)`](doc#Smartcar+addClickHandler)
 
 Alternatively, you can launch the authorization flow directly:
 
@@ -111,7 +111,7 @@ Alternatively, you can launch the authorization flow directly:
 smartcar.openDialog();
 ```
 
-Reference: **TODO - LINK TO METHOD REFERENCE**
+Reference: [`smartcar.openDialog(options)`](doc#Smartcar+openDialog)
 
 ## Advanced
 
@@ -119,15 +119,13 @@ The JavaScript SDK also can be used in alternative flows than the one described 
 
 ### Authorization URI Generation
 
-**TODO: LINK METHODS BELOW TO REFERENCE**
-
-Normally the `.addClickHandler` and `.openDialog` methods are used to launch the authorization flow. However, if you would like to generate the OAuth authorization URL directly you can do so with the `.getAuthUrl()` method.
+Normally the [`.addClickHandler()`](doc#Smartcar+addClickHandler) and [`.openDialog()`](doc#Smartcar+openDialog) methods are used to launch the authorization flow. However, if you would like to generate the OAuth authorization URL directly you can do so with the [`.getAuthUrl()`](doc#Smartcar+getAuthUrl) method.
 
 ```javascript
-const url = smartcar.getAuthURL();
+const url = smartcar.getAuthUrl();
 ```
 
-Reference: **TODO: LINK TO METHOD REFERENCE**
+Reference: [`smartcar.getAuthUrl(options)`](doc#Smartcar+getAuthUrl)
 
 ### Server side redirect handling
 
