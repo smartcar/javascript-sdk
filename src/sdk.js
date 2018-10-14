@@ -1,7 +1,14 @@
 /* eslint strict: ["error", "global"] */
 /* eslint-disable no-implicit-globals */
 'use strict';
-// access denied error class
+
+/**
+ * Access denied error returned by authorization flow.
+ *
+ * @extends Error
+ * @memberof Smartcar
+ * @param {String} message - detailed error description
+ */
 class AccessDenied extends Error { // eslint-disable-line no-restricted-syntax
   constructor(message) {
     super(message);
@@ -11,32 +18,27 @@ class AccessDenied extends Error { // eslint-disable-line no-restricted-syntax
 
 /**
  * @callback OnComplete
- * @param {?Error} error - should be only AccessDenied error but can be common
- * Error in case of unxpected issues. Indicates end user declined to provide
- * access to their vehicle
+ * @param {?Error} error - should be only AccessDenied error but can be
+ * common Error in case of unexpected issues. Indicates end user declined to
+ * provide access to their vehicle
  * @param {String} code - the authorization code to be exchanged from a
  * backend sever for an access token
- * @param {Object} state - user provided state for holding miscellaneous data
- * connected to authenticating user
- */
-
-/**
- * @typedef Options
- *
- * @property {String} clientId - the application's client id
- * @property {String} redirectUri - the registered redirect uri of the
- * application
- * @property {String[]} [scope] - requested permission scopes
- * @property {OnComplete} [onComplete] - called on completion of auth flow
- * @property {Boolean} [development=false] - launch Smartcar auth in
- * development mode to enable the mock vehicle brand
+ * @param {Object} [state] - contains state if it was set on the initial
+ * authorization request
  */
 
 /**
  * Initializes Smartcar class
  *
- * @param {Options} options - the SDK configuration object
  * @constructor
+ * @param {Object} options - the SDK configuration object
+ * @param {String} options.clientId - the application's client id
+ * @param {String} options.redirectUri - the registered redirect uri of the
+ * application
+ * @param {String[]} [options.scope] - requested permission scopes
+ * @param {OnComplete} [options.onComplete] - called on completion of auth flow
+ * @param {Boolean} [options.development=false] - launch Smartcar auth in
+ * development mode to enable the mock vehicle brand
  */
 function Smartcar(options) {
   // ensure options are well formed
@@ -100,8 +102,8 @@ function Smartcar(options) {
  * Validate options passed to Smartcar constructor. See constructor
  * documentation for enumeration of options properties.
  *
- * @param {Options} options - the SDK configuration object
  * @private
+ * @param {Object} options - the SDK configuration object
  */
 Smartcar._validateConstructorOptions = function(options) {
   // allow only one instance of Smartcar
@@ -138,12 +140,12 @@ Smartcar._validateConstructorOptions = function(options) {
 /**
  * Generates Smartcar OAuth URL
  *
- * @param  {Object} options - the link configuration object
+ * @param {Object} options - the link configuration object
  * @param {String} [options.state] - arbitrary parameter passed to redirect uri
  * @param {Boolean} [options.forcePrompt=false] - force permission approval
  * screen to show on every authentication, even if the user has previously
  * consented to the exact scope of permission
- * @return {String} - generated OAuth link
+ * @return {String} generated OAuth link
  */
 Smartcar.prototype.generateLink = function(options) {
   options = options || {};
@@ -178,6 +180,7 @@ Smartcar.prototype.generateLink = function(options) {
 /**
  * Calculate popup window size and position based on current window settings
  *
+ * @private
  * @return {String} a string of window settings
  */
 Smartcar._getWindowOptions = function() {
@@ -207,7 +210,7 @@ Smartcar._getWindowOptions = function() {
  * @param {Boolean} [options.forcePrompt=false] - force permission approval
  * screen to show on every authentication, even if the user has previously
  * consented to the exact scope of permission
- * @return {String} - generated OAuth link
+ * @return {String} generated OAuth link
  */
 Smartcar.prototype.openDialog = function(options) {
   const href = this.generateLink(options);
