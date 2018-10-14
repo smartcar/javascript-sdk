@@ -25,11 +25,11 @@ describe('postMessage', () => {
     const addVersion = (appendee) => `${appendee}-${version}`;
     // get path to built files
     const getVersionedPath =
-      (file, ext) => `../../dist/${addVersion(file)}.${ext}`;
+      (file, ext) => `../../dist/cdn/${addVersion(file)}.${ext}`;
 
     // redirect hosted at /redirect
     // file structure -> dist/redirect-${version}
-    const redirectHtmlPath = `../../dist/${addVersion('redirect')}`;
+    const redirectHtmlPath = `../../dist/cdn/${addVersion('redirect')}`;
     // built redirect-${version} references redirect-${version}.js
     const redirectJavascriptPath = `/${addVersion('redirect')}.js`;
 
