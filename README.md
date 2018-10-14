@@ -17,6 +17,8 @@ You can install the JavaScript SDK using either npm or through our CDN.
 
 ### npm
 
+**TODO:** Add package name when publishing to npm
+
 ```shell
 npm install <PACKAGE>
 ```
