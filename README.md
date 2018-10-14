@@ -91,7 +91,7 @@ const smartcar = new Smartcar({
 });
 ```
 
-Reference: [`new Smartcar(options)`](doc#new_Smartcar_new)
+**Reference:** [`new Smartcar(options)`](doc#new_Smartcar_new)
 
 > NOTE: See the full set of available scopes in the [Smartcar API Reference](https://smartcar.com/docs#get-all-vehicles) under "Required Permissions" for each endpoint.
 
@@ -103,7 +103,7 @@ Add a click handler to an HTML element:
 smartcar.addClickHandler({id: '#your-button-id'});
 ```
 
-Reference: [`smartcar.addClickHandler(options)`](doc#Smartcar+addClickHandler)
+**Reference:** [`smartcar.addClickHandler(options)`](doc#Smartcar+addClickHandler)
 
 Alternatively, you can launch the authorization flow directly:
 
@@ -111,7 +111,7 @@ Alternatively, you can launch the authorization flow directly:
 smartcar.openDialog();
 ```
 
-Reference: [`smartcar.openDialog(options)`](doc#Smartcar+openDialog)
+**Reference:** [`smartcar.openDialog(options)`](doc#Smartcar+openDialog)
 
 ## Advanced
 
@@ -125,7 +125,7 @@ Normally the [`.addClickHandler()`](doc#Smartcar+addClickHandler) and [`.openDia
 const url = smartcar.getAuthUrl();
 ```
 
-Reference: [`smartcar.getAuthUrl(options)`](doc#Smartcar+getAuthUrl)
+**Reference:** [`smartcar.getAuthUrl(options)`](doc#Smartcar+getAuthUrl)
 
 ### Server side redirect handling
 
