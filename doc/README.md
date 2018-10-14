@@ -25,7 +25,7 @@ Smartcar JavaScript SDK documentation.
 * [Smartcar](#Smartcar)
     * [new Smartcar(options)](#new_Smartcar_new)
     * _instance_
-        * [.generateLink(options)](#Smartcar+generateLink) ⇒ <code>String</code>
+        * [.getAuthUrl(options)](#Smartcar+getAuthUrl) ⇒ <code>String</code>
         * [.openDialog(options)](#Smartcar+openDialog) ⇒ <code>String</code>
         * [.addClickHandler(options)](#Smartcar+addClickHandler)
     * _static_
@@ -47,9 +47,9 @@ Initializes Smartcar class
 | [options.onComplete] | [<code>OnComplete</code>](#OnComplete) |  | called on completion of auth flow |
 | [options.development] | <code>Boolean</code> | <code>false</code> | launch Smartcar auth in development mode to enable the mock vehicle brand |
 
-<a name="Smartcar+generateLink"></a>
+<a name="Smartcar+getAuthUrl"></a>
 
-### smartcar.generateLink(options) ⇒ <code>String</code>
+### smartcar.getAuthUrl(options) ⇒ <code>String</code>
 Generates Smartcar OAuth URL
 
 **Kind**: instance method of [<code>Smartcar</code>](#Smartcar)

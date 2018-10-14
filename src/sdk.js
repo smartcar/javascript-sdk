@@ -147,7 +147,7 @@ Smartcar._validateConstructorOptions = function(options) {
  * consented to the exact scope of permission
  * @return {String} generated OAuth link
  */
-Smartcar.prototype.generateLink = function(options) {
+Smartcar.prototype.getAuthUrl = function(options) {
   options = options || {};
 
   let link = '';
@@ -213,7 +213,7 @@ Smartcar._getWindowOptions = function() {
  * @return {String} generated OAuth link
  */
 Smartcar.prototype.openDialog = function(options) {
-  const href = this.generateLink(options);
+  const href = this.getAuthUrl(options);
   const windowOptions = Smartcar._getWindowOptions();
   window.open(href, 'Connect your car', windowOptions);
 
