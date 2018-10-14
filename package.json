@@ -11,6 +11,7 @@
     "cover": "npm test -- --coverage",
     "build": "gulp build",
     "publish": "gulp publish",
+    "readme": "gulp template:readme",
     "docs": "jsdoc2md --example-lang js --template doc/.template.hbs --files src/sdk.js | sed 's/[ \t]*$//' > doc/README.md"
   },
   "jest": {

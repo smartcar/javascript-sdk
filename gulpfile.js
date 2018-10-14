@@ -13,6 +13,16 @@ const umd = require('gulp-umd');
 const {version} = require('./package');
 
 /**
+ * Add package version to README.
+ */
+gulp.task('template:readme', function() {
+  return gulp.src('README.mdt')
+    .pipe(template({version}))
+    .pipe(rename({extname: '.md'}))
+    .pipe(gulp.dest('.'));
+});
+
+/**
  * UMD wrap sdk.js
  */
 gulp.task('build:umd', function() {
