@@ -111,9 +111,6 @@ window.Smartcar = (function(window) {
     const href = this.getAuthUrl(options);
     const windowOptions = Smartcar._getWindowOptions();
     window.open(href, 'Connect your car', windowOptions);
-
-    // this is equivalent to calling event.preventDefault();
-    return false;
   };
 
   /**
@@ -140,7 +137,13 @@ window.Smartcar = (function(window) {
       throw new Error(`Could not add click handler: element with id '${id}' was not found.`);
     }
 
-    element.addEventListener('click', () => this.openDialog(dialogOptions));
+    element.addEventListener('click', () => {
+      this.openDialog(dialogOptions);
+      // this is equivalent to calling:
+      // event.preventDefault();
+      // event.stopPropogation();
+      return false;
+    });
   };
 
   return Smartcar;
