@@ -210,15 +210,11 @@ Smartcar._getWindowOptions = function() {
  * @param {Boolean} [options.forcePrompt=false] - force permission approval
  * screen to show on every authentication, even if the user has previously
  * consented to the exact scope of permission
- * @return {String} generated OAuth link
  */
 Smartcar.prototype.openDialog = function(options) {
   const href = this.getAuthUrl(options);
   const windowOptions = Smartcar._getWindowOptions();
   window.open(href, 'Connect your car', windowOptions);
-
-  // this is equivalent to calling event.preventDefault();
-  return false;
 };
 
 /**
@@ -246,7 +242,13 @@ Smartcar.prototype.addClickHandler = function(options) {
       ' was not found.');
   }
 
-  element.addEventListener('click', () => this.openDialog(dialogOptions));
+  element.addEventListener('click', () => {
+    this.openDialog(dialogOptions);
+    // this is equivalent to calling:
+    // event.preventDefault();
+    // event.stopPropogation();
+    return false;
+  });
 };
 
 // expose AccessDenied error class

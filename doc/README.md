@@ -26,7 +26,7 @@ Smartcar JavaScript SDK documentation.
     * [new Smartcar(options)](#new_Smartcar_new)
     * _instance_
         * [.getAuthUrl(options)](#Smartcar+getAuthUrl) ⇒ <code>String</code>
-        * [.openDialog(options)](#Smartcar+openDialog) ⇒ <code>String</code>
+        * [.openDialog(options)](#Smartcar+openDialog)
         * [.addClickHandler(options)](#Smartcar+addClickHandler)
     * _static_
         * [.AccessDenied](#Smartcar.AccessDenied) ⇐ <code>Error</code>
@@ -63,11 +63,10 @@ Generates Smartcar OAuth URL
 
 <a name="Smartcar+openDialog"></a>
 
-### smartcar.openDialog(options) ⇒ <code>String</code>
+### smartcar.openDialog(options)
 Launch the OAuth dialog flow
 
 **Kind**: instance method of [<code>Smartcar</code>](#Smartcar)
-**Returns**: <code>String</code> - generated OAuth link
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
