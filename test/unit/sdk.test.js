@@ -437,7 +437,7 @@ describe('sdk', () => {
     );
   });
 
-  describe('generateLink', () => {
+  describe('getAuthUrl', () => {
     test('generates basic link without optional params', () => {
       const options = {
         clientId: 'clientId',
@@ -448,7 +448,7 @@ describe('sdk', () => {
       const smartcar = new Smartcar(options);
 
       const expectedLink = 'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=auto';
-      const link = smartcar.generateLink();
+      const link = smartcar.getAuthUrl();
       expect(link).toEqual(expectedLink);
     });
 
@@ -463,7 +463,7 @@ describe('sdk', () => {
       const smartcar = new Smartcar(options);
 
       const expectedLink = 'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&state=foobarbaz';
-      const link = smartcar.generateLink({
+      const link = smartcar.getAuthUrl({
         state: 'foobarbaz',
         forcePrompt: true,
       });
@@ -482,7 +482,7 @@ describe('sdk', () => {
       const smartcar = new Smartcar(options);
 
       const expectedLink = 'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&state=foobarbaz&mock=true';
-      const link = smartcar.generateLink({
+      const link = smartcar.getAuthUrl({
         state: 'foobarbaz',
         forcePrompt: true,
       });
@@ -501,7 +501,7 @@ describe('sdk', () => {
       const smartcar = new Smartcar(options);
 
       const expectedLink = 'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&state=foobarbaz';
-      const link = smartcar.generateLink({
+      const link = smartcar.getAuthUrl({
         state: 'foobarbaz',
         forcePrompt: true,
       });
