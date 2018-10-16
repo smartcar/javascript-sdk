@@ -4,29 +4,24 @@ language:
   - node_js
 
 node_js:
-  - 8
+  - '10'
 
 services:
   - docker
 
-branches:
-  except:
-    - /^v\d+\.\d+\.\d+$/
-
-notifications:
-  slack: smartcar:PGJmjtKFPytU5E2FwsImdVp8
+if: tag IS blank # do not build tags
 
 before_install:
   - docker run --name selenium-container -d --net host -v /dev/shm:/dev/shm selenium/standalone-chrome
 
 install:
-  - npm install
+  - npm ci
 
 script:
   - npm test
   - npm run cover
-  - npm run build
 
+  - npm run build
   - git config --global user.email "ci@smartcar.com"
   - git config --global user.name "Travis CI User"
   - export tag=$(grep 'version' package.json | sed 's/[", ]//g' | cut -d ':' -f 2)
