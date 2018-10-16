@@ -64,7 +64,7 @@ Generates Smartcar OAuth URL
 <a name="Smartcar+openDialog"></a>
 
 ### smartcar.openDialog(options)
-Launch the OAuth dialog flow
+Launches the OAuth dialog flow.
 
 **Kind**: instance method of [<code>Smartcar</code>](#Smartcar)
 
@@ -77,8 +77,9 @@ Launch the OAuth dialog flow
 <a name="Smartcar+addClickHandler"></a>
 
 ### smartcar.addClickHandler(options)
-Add an on-click event listener to the element with the provided id.
-On-click event calls openDialog when the specified element is clicked.
+Adds an on-click event listener to the element with the provided id.
+
+On-click event calls openDialog when the specified element is clicked
 
 **Kind**: instance method of [<code>Smartcar</code>](#Smartcar)
 

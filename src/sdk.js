@@ -203,7 +203,7 @@ Smartcar._getWindowOptions = function() {
 };
 
 /**
- * Launch the OAuth dialog flow
+ * Launches the OAuth dialog flow.
  *
  * @param {Object} options - the link configuration object
  * @param {String} [options.state] - arbitrary parameter passed to redirect uri
@@ -218,8 +218,9 @@ Smartcar.prototype.openDialog = function(options) {
 };
 
 /**
-* Add an on-click event listener to the element with the provided id.
-* On-click event calls openDialog when the specified element is clicked.
+* Adds an on-click event listener to the element with the provided id.
+*
+* On-click event calls openDialog when the specified element is clicked
 *
 * @param {Object} options - clickHandler configuration object
 * @param {String} options.id - id of the element to add click handler to
