@@ -30,7 +30,7 @@ Smartcar JavaScript SDK documentation.
         * [.addClickHandler(options)](#Smartcar+addClickHandler)
     * _static_
         * [.AccessDenied](#Smartcar.AccessDenied) ⇐ <code>Error</code>
-            * [new AccessDenied(message)](#new_Smartcar.AccessDenied_new)
+            * [new Smartcar.AccessDenied(message)](#new_Smartcar.AccessDenied_new)
 
 <a name="new_Smartcar_new"></a>
 
@@ -99,7 +99,7 @@ Access denied error returned by authorization flow.
 **Extends**: <code>Error</code>
 <a name="new_Smartcar.AccessDenied_new"></a>
 
-#### new AccessDenied(message)
+#### new Smartcar.AccessDenied(message)
 
 | Param | Type | Description |
 | --- | --- | --- |

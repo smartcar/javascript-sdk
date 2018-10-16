@@ -2,20 +2,6 @@
 /* eslint-disable no-implicit-globals */
 'use strict';
 
-/**
- * Access denied error returned by authorization flow.
- *
- * @extends Error
- * @memberof Smartcar
- * @param {String} message - detailed error description
- */
-class AccessDenied extends Error {
-  constructor(message) {
-    super(message);
-    this.name = 'AccessDenied';
-  }
-}
-
 class Smartcar {
   /**
    * @callback OnComplete
@@ -78,7 +64,7 @@ class Smartcar {
           }
 
           return error === 'access_denied'
-            ? new AccessDenied(description)
+            ? new Smartcar.AccessDenied(description)
             : new Error(`Unexpected error: ${error} - ${description}`);
         };
         const err = generateError(message.error, message.errorDescription);
@@ -261,5 +247,18 @@ class Smartcar {
   }
 }
 
-// expose AccessDenied error class
-Smartcar.AccessDenied = AccessDenied;
+/**
+ * Access denied error returned by authorization flow.
+ *
+ * @extends Error
+ */
+Smartcar.AccessDenied = class extends Error {
+  /**
+   * @param {String} message - detailed error description
+   */
+  constructor(message) {
+    super(message);
+    this.name = 'AccessDenied';
+  }
+};
+
