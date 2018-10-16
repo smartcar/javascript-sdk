@@ -18,9 +18,9 @@ class AccessDenied extends Error { // eslint-disable-line no-restricted-syntax
 
 /**
  * @callback OnComplete
- * @param {?Error} error - should be only AccessDenied error but can be
- * common Error in case of unexpected issues. Indicates end user declined to
- * provide access to their vehicle
+ * @param {?Error} error - something went wrong in the authorization flow; this
+ * normally indicates that the user denied access to your application or does not
+ * have a connected vehicle
  * @param {String} code - the authorization code to be exchanged from a
  * backend sever for an access token
  * @param {Object} [state] - contains state if it was set on the initial
@@ -28,7 +28,7 @@ class AccessDenied extends Error { // eslint-disable-line no-restricted-syntax
  */
 
 /**
- * Initializes Smartcar class
+ * Initializes Smartcar class.
  *
  * @constructor
  * @param {Object} options - the SDK configuration object
@@ -99,8 +99,9 @@ function Smartcar(options) {
 }
 
 /**
- * Validate options passed to Smartcar constructor. See constructor
- * documentation for enumeration of options properties.
+ * Validate options passed to Smartcar constructor.
+ *
+ * See constructor documentation for enumeration of options properties.
  *
  * @private
  * @param {Object} options - the SDK configuration object
@@ -138,7 +139,7 @@ Smartcar._validateConstructorOptions = function(options) {
 };
 
 /**
- * Generates Smartcar OAuth URL
+ * Generates Smartcar OAuth URL.
  *
  * @param {Object} options - the link configuration object
  * @param {String} [options.state] - arbitrary parameter passed to redirect uri
@@ -178,7 +179,7 @@ Smartcar.prototype.getAuthUrl = function(options) {
 };
 
 /**
- * Calculate popup window size and position based on current window settings
+ * Calculate popup window size and position based on current window settings.
  *
  * @private
  * @return {String} a string of window settings
@@ -220,7 +221,7 @@ Smartcar.prototype.openDialog = function(options) {
 /**
 * Adds an on-click event listener to the element with the provided id.
 *
-* On-click event calls openDialog when the specified element is clicked
+* On-click event calls openDialog when the specified element is clicked.
 *
 * @param {Object} options - clickHandler configuration object
 * @param {String} options.id - id of the element to add click handler to

@@ -43,7 +43,7 @@ The SDK manages the front-end flow of the [OAuth authorization process](https://
 1. User clicks "Connect your car" button (or similar button) on your application's front end.
 2. User sees a pop-up dialog with the Smartcar authorization flow.
    1. User selects the make of their vehicle.
-   2. User is prompted to login with their vehicle credentials.
+   2. User is prompted to log in with their vehicle credentials.
    3. User is presented with a set of requested permissions to grant your application.
    4. User can either "Allow" or "Deny" your application's access to the set of permissions.
 3. The Smartcar authorization flow redirects the user to the Smartcar JavaScript SDK redirect page along with the resulting `code`. The page then sends the `code` to your application's window and closes the pop-up dialog.
@@ -131,7 +131,7 @@ const url = smartcar.getAuthUrl();
 
 ### Server-side redirect handling
 
-In a traditional OAuth implementation, the redirect URI is normally set to your application's back end, rather than Smartcar's special JavaScript SDK redirect page described in the flow above. In this traditional architecture you would recieve the authorization code on a back-end route instead of the client-side `onComplete` callback.
+In a traditional OAuth implementation, the redirect URI is normally set to your application's back end, rather than Smartcar's special JavaScript SDK redirect page described in the flow above. Instead of using the JavaScript SDK redirect page, you can still choose to use the traditional server-side architecture (described below). In this architecture you would receive the authorization code on a back-end route instead of the client-side `onComplete` callback.
 
 To use the JavaScript SDK for this flow, do the following:
 

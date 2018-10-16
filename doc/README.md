@@ -35,7 +35,7 @@ Smartcar JavaScript SDK documentation.
 <a name="new_Smartcar_new"></a>
 
 ### new Smartcar(options)
-Initializes Smartcar class
+Initializes Smartcar class.
 
 
 | Param | Type | Default | Description |
@@ -50,7 +50,7 @@ Initializes Smartcar class
 <a name="Smartcar+getAuthUrl"></a>
 
 ### smartcar.getAuthUrl(options) ⇒ <code>String</code>
-Generates Smartcar OAuth URL
+Generates Smartcar OAuth URL.
 
 **Kind**: instance method of [<code>Smartcar</code>](#Smartcar)
 **Returns**: <code>String</code> - generated OAuth link
@@ -79,7 +79,7 @@ Launches the OAuth dialog flow.
 ### smartcar.addClickHandler(options)
 Adds an on-click event listener to the element with the provided id.
 
-On-click event calls openDialog when the specified element is clicked
+On-click event calls openDialog when the specified element is clicked.
 
 **Kind**: instance method of [<code>Smartcar</code>](#Smartcar)
 
@@ -112,7 +112,7 @@ Access denied error returned by authorization flow.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| error | <code>Error</code> | should be only AccessDenied error but can be common Error in case of unexpected issues. Indicates end user declined to provide access to their vehicle |
+| error | <code>Error</code> | something went wrong in the authorization flow; this normally indicates that the user denied access to your application or does not have a connected vehicle |
 | code | <code>String</code> | the authorization code to be exchanged from a backend sever for an access token |
 | [state] | <code>Object</code> | contains state if it was set on the initial authorization request |
 
