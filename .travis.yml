@@ -11,30 +11,23 @@ services:
 
 if: tag IS blank # do not build tags
 
-before_install:
-  - docker run --name selenium-container -d --net host -v /dev/shm:/dev/shm selenium/standalone-chrome
-
 install:
   - npm ci
 
-script:
-  - npm test
-  - npm run cover
+stages:
+  - test
+  - publish
 
-  - npm run build
-  - git config --global user.email "ci@smartcar.com"
-  - git config --global user.name "Travis CI User"
-  - export tag=$(grep 'version' package.json | sed 's/[", ]//g' | cut -d ':' -f 2)
-  - if [ "$TRAVIS_BRANCH" = "master" ]; then git tag -a v$tag -m "Travis Generated Tag"; fi
-
-deploy:
-  - provider: script
-    skip_cleanup: true
-    script: npm run publish
-    on:
-      branch: master
-  - provider: script
-    skip_cleanup: true
-    script: echo -e "machine github.com\n  login $CI_USER_TOKEN" >> ~/.netrc && git push origin v$tag
-    on:
-      branch: master
+jobs:
+  include:
+    - stage: test
+      node_js: '10'
+      before_install:
+        - docker run --name selenium-container -d --net host -v /dev/shm:/dev/shm selenium/standalone-chrome
+      script:
+        - npm test
+        - npm run cover
+    - stage: publish
+      node_js: '10'
+      if: branch = master
+      script: npx semantic-release
