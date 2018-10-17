@@ -1,39 +1,30 @@
 {
   "name": "@smartcar/auth",
-  "description": "javascript auth sdk for the smartcar",
   "version": "0.0.0-semantic-release",
-  "author": "Smartcar <hello@smartcar.com> (https://smartcar.com)",
+  "description": "javascript auth sdk for the smartcar",
+  "main": "dist/npm/sdk.js",
   "license": "MIT",
+  "author": "Smartcar <hello@smartcar.com> (https://smartcar.com)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smartcar/javascript-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/smartcar/javascript-sdk/issues"
+  },
+  "homepage": "https://github.com/smartcar/javascript-sdk#readme",
+  "files": [
+    "dist/npm/**",
+    "doc/**"
+  ],
   "scripts": {
-    "test": "npm run build && jest",
+    "pretest": "gulp build",
+    "test": "jest",
     "posttest": "npm run lint -s",
     "lint": "eslint . --cache",
     "cover": "npm test -- --coverage",
-    "build": "gulp build",
-    "publish": "gulp publish",
     "readme": "gulp template:readme",
     "docs": "jsdoc2md --example-lang js --template doc/.template.hbs --files src/sdk.js | sed 's/[ \t]*$//' > doc/README.md"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "jest": {
-    "testEnvironment": "jest-environment-jsdom-global",
-    "testURL": "http://localhost/",
-    "moduleFileExtensions": [
-      "js"
-    ],
-    "moduleDirectories": [
-      "node_modules"
-    ],
-    "coverageThreshold": {
-      "global": {
-        "branches": 100,
-        "functions": 100,
-        "lines": 100,
-        "statements": 100
-      }
-    }
   },
   "devDependencies": {
     "@semantic-release/exec": "^3.1.3",
@@ -56,5 +47,26 @@
     "jsdoc-to-markdown": "^4.0.1",
     "nightwatch": "^0.9.21",
     "semantic-release": "^15.9.17"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "jest": {
+    "testEnvironment": "jest-environment-jsdom-global",
+    "testURL": "http://localhost/",
+    "moduleFileExtensions": [
+      "js"
+    ],
+    "moduleDirectories": [
+      "node_modules"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 100,
+        "functions": 100,
+        "lines": 100,
+        "statements": 100
+      }
+    }
   }
 }
