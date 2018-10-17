@@ -18,7 +18,7 @@ You can install the JavaScript SDK either using npm or through our CDN.
 ### npm
 
 ```shell
-npm install <PACKAGE>
+npm install @smartcar/auth
 ```
 
 ### Smartcar CDN

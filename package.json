@@ -1,5 +1,5 @@
 {
-  "name": "smartcar-javascript-sdk",
+  "name": "@smartcar/auth",
   "description": "javascript auth sdk for the smartcar",
   "version": "0.0.0-semantic-release",
   "author": "Smartcar <hello@smartcar.com> (https://smartcar.com)",
@@ -14,6 +14,9 @@
     "publish": "gulp publish",
     "readme": "gulp template:readme",
     "jsdoc": "jsdoc2md --example-lang js --template doc/.template.hbs --files src/sdk.js | sed 's/[ \t]*$//' > doc/README.md"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "jest": {
     "testEnvironment": "jest-environment-jsdom-global",
