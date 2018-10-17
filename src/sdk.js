@@ -24,8 +24,7 @@ class Smartcar {
    * application
    * @param {String[]} [options.scope] - requested permission scopes
    * @param {OnComplete} [options.onComplete] - called on completion of auth flow
-   * @param {Boolean} [options.development=false] - launch Smartcar auth in
-   * development mode to enable the mock vehicle brand
+   * @param {Boolean} [options.testMode=false] - launch the Smartcar auth flow in test mode
    */
   constructor(options) {
     // ensure options are well formed
@@ -35,7 +34,7 @@ class Smartcar {
     this.redirectUri = options.redirectUri;
     this.scope = options.scope;
     this.onComplete = options.onComplete;
-    this.development = options.development || false;
+    this.mode = options.testMode === true ? 'test' : 'live';
     this.responseType = 'code';
 
     // handler
@@ -182,12 +181,10 @@ class Smartcar {
       link += `&scope=${encodeURIComponent(this.scope.join(' '))}`;
     }
 
+    link += `&mode=${this.mode}`;
+
     if (options.state) {
       link += `&state=${options.state}`;
-    }
-
-    if (this.development) {
-      link += '&mock=true';
     }
 
     return link;
@@ -225,7 +222,6 @@ class Smartcar {
     const dialogOptions = {
       state: options.state,
       forcePrompt: options.forcePrompt,
-      development: this.development,
     };
 
     const element = document.getElementById(id);
