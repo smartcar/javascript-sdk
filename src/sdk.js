@@ -34,7 +34,7 @@ class Smartcar {
     this.redirectUri = options.redirectUri;
     this.scope = options.scope;
     this.onComplete = options.onComplete;
-    this.testMode = options.testMode || false;
+    this.mode = options.testMode === true ? 'test' : 'live';
     this.responseType = 'code';
 
     // handler
@@ -182,7 +182,7 @@ class Smartcar {
       link += `&scope=${encodeURIComponent(this.scope.join(' '))}`;
     }
 
-    link += `&mode=${this.testMode ? 'test' : 'live'}`;
+    link += `&mode=${this.mode}`;
 
     if (options.state) {
       link += `&state=${options.state}`;
@@ -257,4 +257,3 @@ Smartcar.AccessDenied = class extends Error {
     this.name = 'AccessDenied';
   }
 };
-

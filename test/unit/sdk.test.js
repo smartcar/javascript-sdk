@@ -84,7 +84,7 @@ describe('sdk', () => {
 
         // this is set within the constructor
         expect(smartcar.responseType).toEqual('code');
-        expect(smartcar.testMode).toEqual(false);
+        expect(smartcar.mode).toEqual('live');
 
         // make sure onComplete can be called
         smartcar.onComplete();
@@ -109,7 +109,7 @@ describe('sdk', () => {
 
         // this is set within the constructor
         expect(smartcar.responseType).toEqual('code');
-        expect(smartcar.testMode).toEqual(false);
+        expect(smartcar.mode).toEqual('live');
 
         // make sure onComplete can be called
         smartcar.onComplete();
