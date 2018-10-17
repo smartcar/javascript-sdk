@@ -1,0 +1,18 @@
+{
+  "repositoryUrl": "git@github.com:smartcar/javascript-sdk.git",
+  "prepare": [
+    "@semantic-release/npm",
+    {
+      "path": "@semantic-release/exec",
+      "cmd": "gulp build"
+    }
+  ],
+  "publish": [
+    "@semantic-release/npm",
+    "@semantic-release/github",
+    {
+      "path": "@semantic-release/exec",
+      "cmd": "gulp publish:cdn"
+    }
+  ]
+}
