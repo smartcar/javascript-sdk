@@ -128,3 +128,6 @@ The Smartcar API currently supports Tesla vehicles. We ship new brand support on
 [ci-image]: https://travis-ci.com/smartcar/javascript-sdk.svg?token=jMbuVtXPGeJMPdsn7RQ5&branch=master
 [tag-url]: https://github.com/smartcar/javascript-sdk/tags
 [tag-image]: https://img.shields.io/github/tag/smartcar/javascript-sdk.svg
+
+<!-- Please do not modify or remove this, it is used by the build process -->
+[version]: 0.0.0-semantic-release
