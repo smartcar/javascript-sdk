@@ -45,7 +45,7 @@ Initializes Smartcar class.
 | options.redirectUri | <code>String</code> |  | the registered redirect uri of the application |
 | [options.scope] | <code>Array.&lt;String&gt;</code> |  | requested permission scopes |
 | [options.onComplete] | [<code>OnComplete</code>](#OnComplete) |  | called on completion of auth flow |
-| [options.development] | <code>Boolean</code> | <code>false</code> | launch Smartcar auth in development mode to enable the mock vehicle brand |
+| [options.testMode] | <code>Boolean</code> | <code>false</code> | launch the Smartcar auth flow in test mode |
 
 <a name="Smartcar+getAuthUrl"></a>
 

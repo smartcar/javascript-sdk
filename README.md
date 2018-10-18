@@ -24,7 +24,7 @@ npm install @smartcar/auth
 ### Smartcar CDN
 
 ```html
-<script src="https://javascript-sdk.smartcar.com/sdk-0.0.0-semantic-release.js"></script>
+<script src="https://javascript-sdk.smartcar.com/sdk-2.0.0.js"></script>
 ```
 
 ## SDK reference
@@ -57,7 +57,7 @@ The SDK facilitates generating OAuth links, creating pop-up dialogs, and receivi
 The JavaScript SDK uses a special redirect URI to provide a simpler flow to retrieve authorization codes. The redirect URI takes the following form:
 
 ```
-https://javascript-sdk.smartcar.com/redirect-0.0.0-semantic-release?app_origin=<Your Application's Origin>
+https://javascript-sdk.smartcar.com/redirect-2.0.0?app_origin=<Your Application's Origin>
 ```
 
 The `app_origin` should be the location at which your website is located. The origin consists of the protocol and the host of your site only, without the resource path. Some example origins are:
@@ -163,7 +163,7 @@ https://application-backend.com/page?error=access_denied&error_description=User+
 3. On the redirect route, you can render a page with the JavaScript SDK's redirect helper script. The script will invoke the `onComplete` callback and close out the authorization pop-up dialog.
 
 ```html
-<script src="https://javascript-sdk.smartcar.com/redirect-0.0.0-semantic-release.js"></script>
+<script src="https://javascript-sdk.smartcar.com/redirect-2.0.0.js"></script>
 ```
 
 > NOTE: If the page serving the redirect script file does not have the original query parameters sent from the Smartcar authorization flow (`code`, `state`, `error`, `error_description`), then the `onComplete` callback will be invoked with no parameters.
@@ -175,4 +175,4 @@ https://application-backend.com/page?error=access_denied&error_description=User+
 [tag-image]: https://img.shields.io/github/tag/smartcar/javascript-sdk.svg
 
 <!-- Please do not modify or remove this, it is used by the build process -->
-[version]: 0.0.0-semantic-release
+[version]: 2.0.0
