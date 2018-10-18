@@ -24,7 +24,8 @@
     "lint": "eslint . --cache",
     "cover": "npm test -- --coverage",
     "readme": "gulp template:readme",
-    "docs": "jsdoc2md --example-lang js --template doc/.template.hbs --files src/sdk.js | sed 's/[ \t]*$//' > doc/README.md"
+    "jsdoc": "jsdoc2md --example-lang js --template doc/.template.hbs --files src/sdk.js | sed 's/[ \t]*$//' > doc/README.md",
+    "prepare-release": "semantic-release --branch \"$(git rev-parse --abbrev-ref HEAD)\" --extends ./build/sr-configs/local.js"
   },
   "devDependencies": {
     "@semantic-release/exec": "^3.1.3",
