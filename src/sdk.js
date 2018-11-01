@@ -2,16 +2,17 @@ window.Smartcar = (function(window) {
   'use strict';
 
   /**
-   * Initializes Smartcar class
+   * Initializes Smartcar class.
    *
+   * @constructor
    * @param {Object} options - the SDK configuration object
-   * @param {String} options.clientId - the applications' client id
-   * @param {String} options.redirectUri - the registered redirect uri of the application
+   * @param {String} options.clientId - the application's client id
+   * @param {String} options.redirectUri - the registered redirect uri of the
+   * application
    * @param {String[]} [options.scope] - requested permission scopes
-   * @param {Function} [options.onComplete] - called upon completion of the Auth flow
+   * @param {Function} [options.onComplete] - called on completion of auth flow
    * @param {Boolean} [options.development=false] - launch Smartcar auth in development mode
    * to enable the mock vehicle brand
-   * @constructor
    */
   function Smartcar(options) {
     this.clientId = options.clientId;
@@ -33,14 +34,14 @@ window.Smartcar = (function(window) {
   }
 
   /**
-   * Generates Smartcar OAuth URL
+   * Generates Smartcar OAuth URL.
    *
-   * @param  {Object} options - the link configuration object
-   * @param {String} [options.state] - arbitrary parameter passed to the redirect uri
-   * @param {Boolean} [options.forcePrompt=false] - force permission approval screen to show
-   * on every authentication, even if the user has previously consented to the
-   * exact scope of permission
-   * @return {String} - generated OAuth link
+   * @param {Object} options - the link configuration object
+   * @param {String} [options.state] - arbitrary parameter passed to redirect uri
+   * @param {Boolean} [options.forcePrompt=false] - force permission approval
+   * screen to show on every authentication, even if the user has previously
+   * consented to the exact scope of permission
+   * @return {String} generated OAuth link
    */
   Smartcar.prototype.getAuthUrl = function(options) {
     options = options || {};
@@ -51,7 +52,7 @@ window.Smartcar = (function(window) {
     link += `&client_id=${this.clientId}`;
     link += `&redirect_uri=${encodeURIComponent(this.redirectUri)}`;
 
-    // We map forcePrompt to approvalPrompt, which has two options: 'force' and 'auto'
+    // map forcePrompt to approvalPrompt, two options: 'force' and 'auto'
     const forcePrompt = options.forcePrompt || false;
     link += `&approval_prompt=${forcePrompt ? 'force' : 'auto'}`;
 
@@ -73,9 +74,9 @@ window.Smartcar = (function(window) {
   };
 
   /**
-   * Calculate the popup window size and position based on the current window
-   * settings.
+   * Calculate popup window size and position based on current window settings.
    *
+   * @private
    * @return {String} a string of window settings
    */
   Smartcar._getWindowOptions = function() {
@@ -98,14 +99,13 @@ window.Smartcar = (function(window) {
   };
 
   /**
-   * Launch the OAuth dialog flow
+   * Launches the OAuth dialog flow.
    *
    * @param {Object} options - the link configuration object
-   * @param {String} [options.state] - arbitrary parameter passed to the redirect uri
-   * @param {Boolean} [options.forcePrompt=false] - force permission approval screen to
-   * show on every authentication, even if the user has previously consented
-   * to the exact scope of permission
-   * @return {String} - generated OAuth link
+   * @param {String} [options.state] - arbitrary parameter passed to redirect uri
+   * @param {Boolean} [options.forcePrompt=false] - force permission approval
+   * screen to show on every authentication, even if the user has previously
+   * consented to the exact scope of permission
    */
   Smartcar.prototype.openDialog = function(options) {
     const href = this.getAuthUrl(options);
@@ -114,15 +114,16 @@ window.Smartcar = (function(window) {
   };
 
   /**
-  * Add an on-click event listener to the element with the provided id.
-  * On-click event calls openDialog when the specified element is clicked.
-  *
-  * @param {Object} options - clickHandler configuration object
-  * @param {String} [options.id] - id of the element for which to add the click handler
-  * @param {String} [options.state] - arbitrary parameter passed to the redirect uri
-  * @param {Boolean} [options.forcePrompt] - force permission approval screen to
-  * show on every authentication, even if the user has previously consented
-  * to the exact scope of permission
+   * Adds an on-click event listener to the element with the provided id.
+   *
+   * On-click event calls openDialog when the specified element is clicked.
+   *
+   * @param {Object} options - clickHandler configuration object
+   * @param {String} options.id - id of the element to add click handler to
+   * @param {String} [options.state] - arbitrary parameter passed to redirect uri
+   * @param {Boolean} [options.forcePrompt] - force permission approval screen to
+   * show on every authentication, even if the user has previously consented
+   * to the exact scope of permission
    */
   Smartcar.prototype.addClickHandler = function(options) {
     const id = options.id;
