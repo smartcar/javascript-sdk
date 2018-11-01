@@ -3,7 +3,7 @@
   "description": "javascript auth sdk for the smartcar",
   "version": "1.0.2",
   "author": "Smartcar <hello@smartcar.com> (https://smartcar.com)",
-  "license" : "MIT",
+  "license": "MIT",
   "scripts": {
     "test": "jest",
     "posttest": "npm run lint -s",
@@ -39,7 +39,6 @@
     "gulp-load-plugins": "^1.2.0",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^3.0.0",
-    "jest": "^22.4.3",
-    "lodash": "^4.17.5"
+    "jest": "^22.4.3"
   }
 }
