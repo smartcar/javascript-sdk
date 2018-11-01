@@ -1,12 +1,4 @@
-// We override Smartcar's browser lint rules for Jest tests.
-// Note that Jest ships with jsdom so window is loaded globally in Jest tests.
-
-/* eslint strict: ["error", "global"] */
-/* global require, expect, jest */
-
 'use strict';
-
-const _ = require('lodash');
 
 require('../src/sdk.js');
 
@@ -44,9 +36,9 @@ describe('sdk', () => {
 
       const smartcar = new window.Smartcar(options);
 
-      _.forEach(options, (option, key) => {
-        expect(smartcar[key]).toEqual(option);
-      });
+      Object.entries(options).forEach(
+        ([key, option]) => expect(smartcar[key]).toEqual(option)
+      );
 
       // this is set within the constructor
       expect(smartcar.responseType).toEqual('code');
