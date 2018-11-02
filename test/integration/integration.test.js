@@ -21,8 +21,8 @@ describe('postMessage', () => {
     // append version
     const addVersion = (appendee) => `${appendee}-${version}`;
     // get path to built files
-    const getVersionedPath =
-      (file, ext) => `../../dist/cdn/${addVersion(file)}.${ext}`;
+    const getVersionedPath = (file, ext) =>
+      `../../dist/cdn/${addVersion(file)}.${ext}`;
 
     // redirect hosted at /redirect
     // file structure -> dist/redirect-${version}
@@ -33,11 +33,11 @@ describe('postMessage', () => {
     // client setup
     client = express()
       // for single page
-      .get('/spa', (_, res) =>
-        res.sendFile(path.join(__dirname, '/spa.html')))
+      .get('/spa', (_, res) => res.sendFile(path.join(__dirname, '/spa.html')))
       // for server side
       .get('/server-side', (_, res) =>
-        res.sendFile(path.join(__dirname, '/server-side.html')))
+        res.sendFile(path.join(__dirname, '/server-side.html'))
+      )
       // for server side
       .get('/redirect', (_, res) =>
         res.sendFile(
@@ -47,10 +47,12 @@ describe('postMessage', () => {
         )
       )
       .get(redirectJavascriptPath, (_, res) =>
-        res.sendFile(path.join(__dirname, getVersionedPath('redirect', 'js'))))
+        res.sendFile(path.join(__dirname, getVersionedPath('redirect', 'js')))
+      )
       // for both single page and server side
       .get('/sdk.js', (_, res) =>
-        res.sendFile(path.join(__dirname, getVersionedPath('sdk', 'js'))))
+        res.sendFile(path.join(__dirname, getVersionedPath('sdk', 'js')))
+      )
       .listen(clientPort);
 
     // mock out Smartcar Javascript SDK CDN
@@ -63,7 +65,8 @@ describe('postMessage', () => {
         )
       )
       .get(redirectJavascriptPath, (_, res) =>
-        res.sendFile(path.join(__dirname, getVersionedPath('redirect', 'js'))))
+        res.sendFile(path.join(__dirname, getVersionedPath('redirect', 'js')))
+      )
       .listen(redirectPort);
   });
 
@@ -72,8 +75,7 @@ describe('postMessage', () => {
     redirect.close();
   });
 
-  test('using single page app variant, fires onComplete on postMessage from' +
-    ' expected origin specified by `app_origin` query param', (done) => {
+  test('single page app = fires onComplete on postMessage from expected origin', (done) => {
     // minimal test, does not go through OAuth flow, just tests that redirect
     // page hosted on separate server posts back to `app_origin` parameter which
     // is then handled as expected by client at `app_origin`
@@ -88,8 +90,7 @@ describe('postMessage', () => {
     shared.client.start(done);
   });
 
-  test('using server side rendered variant, fires onComplete on postMessage' +
-    ' from expected origin (same as redirect page origin)', (done) => {
+  test('single page app = fires onComplete on postMessage from expected origin', (done) => {
     // minimal test, does not go through OAuth flow, just tests that with
     // redirect and client hosted on same server, redirect page posts back
     // to the correct client origin (same origin as itself) which is then

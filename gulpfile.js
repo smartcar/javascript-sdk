@@ -16,7 +16,8 @@ const {version} = require('./package');
  * Add package version to README.
  */
 gulp.task('template:readme', function() {
-  return gulp.src('README.mdt')
+  return gulp
+    .src('README.mdt')
     .pipe(template({version}))
     .pipe(rename({extname: '.md'}))
     .pipe(gulp.dest('.'));
@@ -26,15 +27,22 @@ gulp.task('template:readme', function() {
  * UMD wrap sdk.js
  */
 gulp.task('build:umd', function() {
-  return gulp.src('src/sdk.js')
-    .pipe(umd({
-      // CommonJS export name
-      exports: function() { return 'Smartcar'; },
-      // Global namespace for Web.
-      namespace: function() { return 'Smartcar'; },
-      // returnExports template with istanbul ignore
-      template: path.join(__dirname, 'build/returnExports.js'),
-    }))
+  return gulp
+    .src('src/sdk.js')
+    .pipe(
+      umd({
+        // CommonJS export name
+        exports: function() {
+          return 'Smartcar';
+        },
+        // Global namespace for Web.
+        namespace: function() {
+          return 'Smartcar';
+        },
+        // returnExports template with istanbul ignore
+        template: path.join(__dirname, 'build/returnExports.js'),
+      })
+    )
     .pipe(gulp.dest('dist/umd'));
 });
 
@@ -42,7 +50,8 @@ gulp.task('build:umd', function() {
  * Build sdk.js for npm publishing.
  */
 gulp.task('build:npm', ['build:umd'], function() {
-  return gulp.src('dist/umd/sdk.js')
+  return gulp
+    .src('dist/umd/sdk.js')
     .pipe(babel())
     .pipe(gulp.dest('dist/npm'));
 });
@@ -51,7 +60,8 @@ gulp.task('build:npm', ['build:umd'], function() {
  * Build JS for CDN publishing.
  */
 gulp.task('build:cdn:js', ['build:umd'], function() {
-  return gulp.src(['src/redirect.js', 'dist/umd/sdk.js'])
+  return gulp
+    .src(['src/redirect.js', 'dist/umd/sdk.js'])
     .pipe(babel())
     .pipe(uglify())
     .pipe(rename({suffix: `-${version}`}))
@@ -62,7 +72,8 @@ gulp.task('build:cdn:js', ['build:umd'], function() {
  * Build HTML for CDN publishing
  */
 gulp.task('build:cdn:html', function() {
-  return gulp.src('src/redirect.html')
+  return gulp
+    .src('src/redirect.html')
     .pipe(template({version}))
     .pipe(rename(`redirect-${version}`))
     .pipe(gulp.dest('dist/cdn'));
@@ -101,7 +112,8 @@ const publisher = awspublish.create({
  * to identify the file as `text/html`.
  */
 gulp.task('publish:cdn:html', function() {
-  return gulp.src(`dist/cdn/redirect-${version}`)
+  return gulp
+    .src(`dist/cdn/redirect-${version}`)
     .pipe(publisher.publish({'content-type': 'text/html'}))
     .pipe(awspublish.reporter());
 });
@@ -110,7 +122,8 @@ gulp.task('publish:cdn:html', function() {
  * Publish JS to the CDN.
  */
 gulp.task('publish:cdn:js', function() {
-  return gulp.src('dist/cdn/**/*.js')
+  return gulp
+    .src('dist/cdn/**/*.js')
     .pipe(publisher.publish())
     .pipe(awspublish.reporter());
 });
