@@ -72,7 +72,7 @@ The `app_origin` should be the location at which your website is located. The or
 + `http://localhost:8000/some/path`
 + `http://localhost:8000?foo=bar#baz`
 
-Once you have constructed your redirect URI, make sure to register it on the [Smartcar dashboard](https://dashboard.smartcar.com).
+Once you have constructed your redirect URI, make sure to register the full redirect URI on the [Smartcar dashboard](https://dashboard.smartcar.com).
 
 ### 2. Initialize Smartcar
 
