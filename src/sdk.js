@@ -187,6 +187,19 @@ class Smartcar {
       link += `&state=${options.state}`;
     }
 
+    if (options.vehicleInfo) {
+      if (typeof options.vehicleInfo === 'string') {
+        options.vehicleInfo = {vin: options.vehicleInfo};
+      }
+
+      const availableParams = ['vin', 'year', 'make', 'model'];
+      for (const param of availableParams) {
+        if (param in options.vehicleInfo) {
+          link += `&${param}=${encodeURIComponent(options.vehicleInfo[param])}`;
+        }
+      }
+    }
+
     return link;
   }
 
