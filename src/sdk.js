@@ -156,11 +156,27 @@ class Smartcar {
    * Generates Smartcar OAuth URL.
    *
    * @param {Object} options - the link configuration object
-   * @param {String} [options.state] - arbitrary parameter passed to redirect uri
+   * @param {String} [options.state] - arbitrary state passed to redirect uri
    * @param {Boolean} [options.forcePrompt=false] - force permission approval
    * screen to show on every authentication, even if the user has previously
    * consented to the exact scope of permission
-   * @return {String} generated OAuth link
+   * @param {Object|string} [options.vehicleInfo] - `vehicleInfo` can be either
+   * a VIN string or an object with properties `vin`, `year`, `make`, and
+   * `model` (must include either VIN or make). Including this information will
+   * automatically bypass the first part of the login flow and send users to the
+   * correct login screen.
+   * @return {String} OAuth authorization URL to redirect user to.
+   * @example
+   * https://connect.smartcar.com/oauth/authorize?
+   * response_type=code
+   * &client_id=8229df9f-91a0-4ff0-a1ae-a1f38ee24d07
+   * &scope=read_odometer read_vehicle_info
+   * &redirect_uri=https://example.com/home
+   * &state=0facda3319
+   * &vin=5XYZU3LB8DG003996
+   * &year=2016
+   * &make=TESLA
+   * &model=Model S
    */
   getAuthUrl(options) {
     options = options || {};
