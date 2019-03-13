@@ -533,6 +533,55 @@ describe('sdk', () => {
       });
       expect(link).toEqual(expectedLink);
     });
+
+    test('generate link when vehicleInfo=vin included', () => {
+      const options = {
+        clientId: 'clientId',
+        redirectUri: 'https://smartcar.com',
+        scope: ['read_vehicle_info', 'read_odometer'],
+        onComplete: jest.fn(),
+        testMode: false,
+      };
+
+      const smartcar = new Smartcar(options);
+
+      const expectedLink =
+        'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&state=foobarbaz&vin=JTEZU5JR4F5091044';
+
+      const link = smartcar.getAuthUrl({
+        state: 'foobarbaz',
+        forcePrompt: true,
+        vehicleInfo: 'JTEZU5JR4F5091044',
+      });
+      expect(link).toEqual(expectedLink);
+    });
+
+    test('generate link when vehicleInfo={...} included', () => {
+      const options = {
+        clientId: 'clientId',
+        redirectUri: 'https://smartcar.com',
+        scope: ['read_vehicle_info', 'read_odometer'],
+        onComplete: jest.fn(),
+        testMode: false,
+      };
+
+      const smartcar = new Smartcar(options);
+
+      const expectedLink =
+        'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&state=foobarbaz&vin=JTEZU5JR4F5091044&year=2016&make=TESLA&model=Model%20S';
+
+      const link = smartcar.getAuthUrl({
+        state: 'foobarbaz',
+        forcePrompt: true,
+        vehicleInfo: {
+          vin: 'JTEZU5JR4F5091044',
+          year: 2016,
+          make: 'TESLA',
+          model: 'Model S',
+        },
+      });
+      expect(link).toEqual(expectedLink);
+    });
   });
 
   describe('getWindowOptions', () => {
