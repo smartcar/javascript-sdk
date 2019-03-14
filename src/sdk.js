@@ -160,11 +160,10 @@ class Smartcar {
    * @param {Boolean} [options.forcePrompt=false] - force permission approval
    * screen to show on every authentication, even if the user has previously
    * consented to the exact scope of permission
-   * @param {Object|string} [options.vehicleInfo] - `vehicleInfo` can be either
-   * a VIN string or an object with properties `vin`, `year`, `make`, and
-   * `model` (must include either VIN or make). Including this information will
+   * @param {Object|string} [options.vehicleInfo] - `vehicleInfo` is an object
+   * with an optional property `make`. Including this information will
    * automatically bypass the first part of the login flow and send users to the
-   * correct login screen.
+   * correct login screen for their vehicle's make.
    * @return {String} OAuth authorization URL to redirect user to.
    * @example
    * https://connect.smartcar.com/oauth/authorize?
@@ -173,10 +172,7 @@ class Smartcar {
    * &scope=read_odometer read_vehicle_info
    * &redirect_uri=https://example.com/home
    * &state=0facda3319
-   * &vin=5XYZU3LB8DG003996
-   * &year=2016
    * &make=TESLA
-   * &model=Model S
    */
   getAuthUrl(options) {
     options = options || {};
@@ -204,11 +200,7 @@ class Smartcar {
     }
 
     if (options.vehicleInfo) {
-      if (typeof options.vehicleInfo === 'string') {
-        options.vehicleInfo = {vin: options.vehicleInfo};
-      }
-
-      const availableParams = ['vin', 'year', 'make', 'model'];
+      const availableParams = ['make'];
       for (const param of availableParams) {
         if (param in options.vehicleInfo) {
           link += `&${param}=${encodeURIComponent(options.vehicleInfo[param])}`;
