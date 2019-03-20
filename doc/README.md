@@ -53,14 +53,25 @@ Initializes Smartcar class.
 Generates Smartcar OAuth URL.
 
 **Kind**: instance method of [<code>Smartcar</code>](#Smartcar)
-**Returns**: <code>String</code> - generated OAuth link
+**Returns**: <code>String</code> - OAuth authorization URL to redirect user to.
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | options | <code>Object</code> |  | the link configuration object |
-| [options.state] | <code>String</code> |  | arbitrary parameter passed to redirect uri |
+| [options.state] | <code>String</code> |  | arbitrary state passed to redirect uri |
 | [options.forcePrompt] | <code>Boolean</code> | <code>false</code> | force permission approval screen to show on every authentication, even if the user has previously consented to the exact scope of permission |
+| [options.vehicleInfo.make] | <code>Object</code> \| <code>string</code> |  | `vehicleInfo` is an object with an optional property `make`. When included, the OEM selector  screen is bypassed, allowing the user to go directly to the vehicle  login screen. The following are valid makes supported by the Smartcar API:  `[Audi, BMW, Buick, Cadillac, Cheverolet, Chrysler, Dodge, GMC, Jeep, Lexus, Ram, Tesla, Volkswagen]`. Makes are case-insensitive. |
 
+**Example**
+```js
+https://connect.smartcar.com/oauth/authorize?
+response_type=code
+&client_id=8229df9f-91a0-4ff0-a1ae-a1f38ee24d07
+&scope=read_odometer read_vehicle_info
+&redirect_uri=https://example.com/home
+&state=0facda3319
+&make=TESLA
+```
 <a name="Smartcar+openDialog"></a>
 
 ### smartcar.openDialog(options)
