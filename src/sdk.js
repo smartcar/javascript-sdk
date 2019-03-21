@@ -161,9 +161,9 @@ class Smartcar {
    * screen to show on every authentication, even if the user has previously
    * consented to the exact scope of permission
    * @param {Object|string} [options.vehicleInfo.make] - `vehicleInfo` is an
-   * object with an optional property `make`. When included, the OEM selector 
-   * screen is bypassed, allowing the user to go directly to the vehicle 
-   * login screen. The following are valid makes supported by the Smartcar API: 
+   * object with an optional property `make`. When included, the OEM selector
+   * screen is bypassed, allowing the user to go directly to the vehicle
+   * login screen. The following are valid makes supported by the Smartcar API:
    * `[Audi, BMW, Buick, Cadillac, Cheverolet, Chrysler, Dodge, GMC, Jeep,
    * Lexus, Ram, Tesla, Volkswagen]`. Makes are case-insensitive.
    * @return {String} OAuth authorization URL to redirect user to.

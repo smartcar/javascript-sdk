@@ -555,7 +555,30 @@ describe('sdk', () => {
           make: 'TESLA',
         },
       });
+
       expect(link).toEqual(expectedLink);
+    });
+
+    test('ignores erroneous vehicle info', () => {
+      const options = {
+        clientId: 'clientId',
+        redirectUri: 'https://smartcar.com',
+        scope: ['read_vehicle_info', 'read_odometer'],
+        onComplete: jest.fn(),
+        testMode: false,
+      };
+
+      const smartcar = new Smartcar(options);
+
+      const link = smartcar.getAuthUrl({
+        state: 'foobarbaz',
+        forcePrompt: true,
+        vehicleInfo: {
+          pizza: 'isGood',
+        },
+      });
+
+      expect(link.includes('&pizza=isGood')).toBe(false);
     });
   });
 
