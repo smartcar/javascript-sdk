@@ -60,7 +60,7 @@ Generates Smartcar OAuth URL.
 | options | <code>Object</code> |  | the link configuration object |
 | [options.state] | <code>String</code> |  | arbitrary state passed to redirect uri |
 | [options.forcePrompt] | <code>Boolean</code> | <code>false</code> | force permission approval screen to show on every authentication, even if the user has previously consented to the exact scope of permission |
-| [options.vehicleInfo.make] | <code>Object</code> \| <code>string</code> |  | `vehicleInfo` is an object with an optional property `make`. When included, the OEM selector  screen is bypassed, allowing the user to go directly to the vehicle  login screen. The following are valid makes supported by the Smartcar API:  `[Audi, BMW, Buick, Cadillac, Cheverolet, Chrysler, Dodge, GMC, Jeep, Lexus, Ram, Tesla, Volkswagen]`. Makes are case-insensitive. |
+| [options.vehicleInfo.make] | <code>Object</code> \| <code>string</code> |  | `vehicleInfo` is an object with an optional property `make`. When included, the OEM selector screen is bypassed, allowing the user to go directly to the vehicle login screen. For a complete list of supported makes, please see our [API Reference](https://smartcar.com/docs/api#authorization) documentation. |
 
 **Example**
 ```js
