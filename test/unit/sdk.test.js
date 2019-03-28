@@ -533,6 +533,53 @@ describe('sdk', () => {
       });
       expect(link).toEqual(expectedLink);
     });
+
+    test('generate link when vehicleInfo={...} included', () => {
+      const options = {
+        clientId: 'clientId',
+        redirectUri: 'https://smartcar.com',
+        scope: ['read_vehicle_info', 'read_odometer'],
+        onComplete: jest.fn(),
+        testMode: false,
+      };
+
+      const smartcar = new Smartcar(options);
+
+      const expectedLink =
+        'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&state=foobarbaz&make=TESLA';
+
+      const link = smartcar.getAuthUrl({
+        state: 'foobarbaz',
+        forcePrompt: true,
+        vehicleInfo: {
+          make: 'TESLA',
+        },
+      });
+
+      expect(link).toEqual(expectedLink);
+    });
+
+    test('ignores erroneous vehicle info', () => {
+      const options = {
+        clientId: 'clientId',
+        redirectUri: 'https://smartcar.com',
+        scope: ['read_vehicle_info', 'read_odometer'],
+        onComplete: jest.fn(),
+        testMode: false,
+      };
+
+      const smartcar = new Smartcar(options);
+
+      const link = smartcar.getAuthUrl({
+        state: 'foobarbaz',
+        forcePrompt: true,
+        vehicleInfo: {
+          pizza: 'isGood',
+        },
+      });
+
+      expect(link.includes('&pizza=isGood')).toBe(false);
+    });
   });
 
   describe('getWindowOptions', () => {
