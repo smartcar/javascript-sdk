@@ -1,6 +1,6 @@
 {
   "name": "@smartcar/auth",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "javascript auth sdk for the smartcar",
   "main": "dist/npm/sdk.js",
   "license": "MIT",
