@@ -61,10 +61,16 @@ class Smartcar {
             return null;
           }
 
-          return error === 'access_denied'
-            ? new Smartcar.AccessDenied(description)
-            : new Error(`Unexpected error: ${error} - ${description}`);
+          switch (error) {
+            case 'access_denied':
+              return new Smartcar.AccessDenied(description);
+            case 'vehicle_incompatible':
+              return new Smartcar.VehicleIncompatible(description);
+            default:
+              return new Error(`Unexpected error: ${error} - ${description}`);
+          }
         };
+
         const err = generateError(message.error, message.errorDescription);
 
         /**
@@ -100,7 +106,7 @@ class Smartcar {
     if (Smartcar._hasBeenInstantiated) {
       throw new Error(
         'Smartcar has already been instantiated in the window. Only one' +
-          ' instance of Smartcar can be defined.'
+          ' instance of Smartcar can be defined.',
       );
     } else {
       Smartcar._hasBeenInstantiated = true;
@@ -121,7 +127,7 @@ class Smartcar {
         throw new Error(
           "When using Smartcar's CDN redirect an onComplete function with at" +
             ' least 2 parameters (error & code) is required to handle' +
-            ' completion of authorization flow'
+            ' completion of authorization flow',
         );
       }
     }
@@ -250,9 +256,7 @@ class Smartcar {
 
     const element = document.getElementById(id);
     if (!element) {
-      throw new Error(
-        `Could not add click handler: element with id '${id}' was not found.`
-      );
+      throw new Error(`Could not add click handler: element with id '${id}' was not found.`);
     }
 
     element.addEventListener('click', () => {
@@ -277,5 +281,20 @@ Smartcar.AccessDenied = class extends Error {
   constructor(message) {
     super(message);
     this.name = 'AccessDenied';
+  }
+};
+
+/**
+ * Vehicle incompatible error returned by authorization flow.
+ *
+ * @extends Error
+ */
+Smartcar.VehicleIncompatible = class extends Error {
+  /**
+   * @param {String} message - detailed error description
+   */
+  constructor(message) {
+    super(message);
+    this.name = 'VehicleIncompatible';
   }
 };
