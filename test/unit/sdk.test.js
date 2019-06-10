@@ -127,7 +127,7 @@ describe('sdk', () => {
 
       const smartcar = new Smartcar(options);
 
-      const evnt = {
+      const event = {
         data: {
           name: 'SmartcarAuthMessage',
           isSmartcarHosted: false,
@@ -138,7 +138,7 @@ describe('sdk', () => {
         origin: 'https://selfhosted.com',
       };
 
-      smartcar.messageHandler(evnt);
+      smartcar.messageHandler(event);
     });
 
     test("doesn't fire onComplete w/o origin", () => {
@@ -152,7 +152,7 @@ describe('sdk', () => {
 
       const smartcar = new Smartcar(options);
 
-      const evnt = {
+      const event = {
         data: {
           name: 'SmartcarAuthMessage',
           isSmartcarHosted: false,
@@ -162,7 +162,7 @@ describe('sdk', () => {
         },
       };
 
-      smartcar.messageHandler(evnt);
+      smartcar.messageHandler(event);
 
       expect(smartcar.onComplete).not.toBeCalledWith(null, expect.anything(), expect.anything());
     });
@@ -178,7 +178,7 @@ describe('sdk', () => {
 
       const smartcar = new Smartcar(options);
 
-      const evnt = {
+      const event = {
         data: {
           name: 'SmartcarAuthMessage',
           isSmartcarHosted: false,
@@ -189,7 +189,7 @@ describe('sdk', () => {
         origin: 'https://some-other-url.com',
       };
 
-      smartcar.messageHandler(evnt);
+      smartcar.messageHandler(event);
 
       expect(smartcar.onComplete).not.toBeCalledWith(null, expect.anything(), expect.anything());
     });
@@ -205,11 +205,11 @@ describe('sdk', () => {
 
       const smartcar = new Smartcar(options);
 
-      const evnt = {
+      const event = {
         origin: 'https://selfhosted.com',
       };
 
-      smartcar.messageHandler(evnt);
+      smartcar.messageHandler(event);
 
       expect(smartcar.onComplete).not.toBeCalledWith(null, expect.anything(), expect.anything());
     });
@@ -225,7 +225,7 @@ describe('sdk', () => {
 
       const smartcar = new Smartcar(options);
 
-      const evnt = {
+      const event = {
         data: {
           isSmartcarHosted: false,
           code: 'super-secret-code',
@@ -235,7 +235,7 @@ describe('sdk', () => {
         origin: 'https://selfhosted.com',
       };
 
-      smartcar.messageHandler(evnt);
+      smartcar.messageHandler(event);
 
       expect(smartcar.onComplete).not.toBeCalledWith(null, expect.anything(), expect.anything());
     });
@@ -251,7 +251,7 @@ describe('sdk', () => {
 
       const smartcar = new Smartcar(options);
 
-      const evnt = {
+      const event = {
         data: {
           name: 'definitely not SmartcarAuthMessage',
           isSmartcarHosted: false,
@@ -262,7 +262,7 @@ describe('sdk', () => {
         origin: 'https://selfhosted.com',
       };
 
-      smartcar.messageHandler(evnt);
+      smartcar.messageHandler(event);
 
       expect(smartcar.onComplete).not.toBeCalledWith(null, expect.anything(), expect.anything());
     });
@@ -279,7 +279,7 @@ describe('sdk', () => {
 
         const smartcar = new Smartcar(options);
 
-        const evnt = {
+        const event = {
           data: {
             name: 'SmartcarAuthMessage',
             isSmartcarHosted: true,
@@ -291,7 +291,7 @@ describe('sdk', () => {
           origin: CDN_ORIGIN,
         };
 
-        smartcar.messageHandler(evnt);
+        smartcar.messageHandler(event);
 
         expect(smartcar.onComplete).toBeCalledWith(null, expect.anything(), expect.anything());
       });
@@ -307,7 +307,7 @@ describe('sdk', () => {
 
       const smartcar = new Smartcar(options);
 
-      const evnt = {
+      const event = {
         data: {
           name: 'SmartcarAuthMessage',
           isSmartcarHosted: true,
@@ -318,7 +318,7 @@ describe('sdk', () => {
         origin: CDN_ORIGIN,
       };
 
-      smartcar.messageHandler(evnt);
+      smartcar.messageHandler(event);
 
       expect(smartcar.onComplete).toBeCalledWith(null, 'super-secret-code', 'some-state');
     });
@@ -334,7 +334,7 @@ describe('sdk', () => {
 
       const smartcar = new Smartcar(options);
 
-      const evnt = {
+      const event = {
         data: {
           name: 'SmartcarAuthMessage',
           isSmartcarHosted: true,
@@ -345,7 +345,7 @@ describe('sdk', () => {
         origin: CDN_ORIGIN,
       };
 
-      smartcar.messageHandler(evnt);
+      smartcar.messageHandler(event);
 
       expect(smartcar.onComplete).toBeCalledWith(null, 'super-secret-code', 'some-state');
     });
@@ -363,7 +363,7 @@ describe('sdk', () => {
         const smartcar = new Smartcar(options);
         const errorDescription = 'describes the error';
 
-        const evnt = {
+        const event = {
           data: {
             name: 'SmartcarAuthMessage',
             isSmartcarHosted: true,
@@ -375,7 +375,7 @@ describe('sdk', () => {
           origin: CDN_ORIGIN,
         };
 
-        smartcar.messageHandler(evnt);
+        smartcar.messageHandler(event);
 
         expect(smartcar.onComplete).toBeCalledWith(
           new Smartcar.VehicleIncompatible(errorDescription),
@@ -397,7 +397,7 @@ describe('sdk', () => {
         const smartcar = new Smartcar(options);
         const errorDescription = 'describes the error';
 
-        const evnt = {
+        const event = {
           data: {
             name: 'SmartcarAuthMessage',
             isSmartcarHosted: true,
@@ -409,7 +409,7 @@ describe('sdk', () => {
           origin: CDN_ORIGIN,
         };
 
-        smartcar.messageHandler(evnt);
+        smartcar.messageHandler(event);
 
         expect(smartcar.onComplete).toBeCalledWith(
           new Smartcar.AccessDenied(errorDescription),
@@ -432,7 +432,7 @@ describe('sdk', () => {
         const error = 'not_access_denied';
         const errorDescription = 'describes the error';
 
-        const evnt = {
+        const event = {
           data: {
             name: 'SmartcarAuthMessage',
             isSmartcarHosted: true,
@@ -444,7 +444,7 @@ describe('sdk', () => {
           origin: CDN_ORIGIN,
         };
 
-        smartcar.messageHandler(evnt);
+        smartcar.messageHandler(event);
 
         expect(smartcar.onComplete).toBeCalledWith(
           Error(`Unexpected error: ${error} - ${errorDescription}`),
