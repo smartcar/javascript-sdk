@@ -363,6 +363,13 @@ describe('sdk', () => {
         const smartcar = new Smartcar(options);
         const errorDescription = 'describes the error';
 
+        const vehicleInfo = {
+          vin: 'some_vin',
+          year: 2017,
+          make: 'TESLA',
+          model: 'Model S',
+        };
+
         const event = {
           data: {
             name: 'SmartcarAuthMessage',
@@ -371,6 +378,7 @@ describe('sdk', () => {
             error: 'vehicle_incompatible',
             errorDescription,
             state: 'some-state',
+            ...vehicleInfo,
           },
           origin: CDN_ORIGIN,
         };
@@ -378,7 +386,7 @@ describe('sdk', () => {
         smartcar.messageHandler(event);
 
         expect(smartcar.onComplete).toBeCalledWith(
-          new Smartcar.VehicleIncompatible(errorDescription),
+          new Smartcar.VehicleIncompatible(errorDescription, vehicleInfo),
           'super-secret-code',
           'some-state',
         );
