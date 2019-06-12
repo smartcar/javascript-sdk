@@ -65,8 +65,20 @@ class Smartcar {
             case 'access_denied':
               return new Smartcar.AccessDenied(description);
             case 'vehicle_incompatible':
-              const {vin, year, make, model} = event.data;
-              const vehicleInfo = {vin, year, make, model};
+              const vehicleInfo = {};
+              const possibleKeys = ['vin', 'make', 'model', 'year'];
+
+              for (const key of possibleKeys) {
+                const item = event.data[key];
+                if (item) {
+                  vehicleInfo[key] = item;
+                }
+              }
+
+              if (vehicleInfo.year) {
+                vehicleInfo.year = Number(vehicleInfo.year);
+              }
+
               return new Smartcar.VehicleIncompatible(description, vehicleInfo);
             default:
               return new Error(`Unexpected error: ${error} - ${description}`);
@@ -296,6 +308,10 @@ Smartcar.VehicleIncompatible = class extends Error {
    * @param {String} message - detailed error description
    * @param {Object} vehicleInfo - If a vehicle is incompatible, the user has
    * the option to return vehicleInfo to the application.
+   * @param {String?} vehicleInfo.vin - optionally returned if user gives permission.
+   * @param {String?} vehicleInfo.make - optionally returned if user gives permission.
+   * @param {String?} vehicleInfo.model - optionally returned if user gives permission.
+   * @param {Number?} vehicleInfo.year - optionally returned if user gives permission.
    */
   constructor(message, vehicleInfo) {
     super(message);
