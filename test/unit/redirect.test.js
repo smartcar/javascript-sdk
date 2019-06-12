@@ -12,9 +12,7 @@ describe('redirect', () => {
   });
 
   test('throws error if window.opener undefined', () => {
-    expect(() => require('../../src/redirect')).toThrow(
-      'window.opener must be defined'
-    );
+    expect(() => require('../../src/redirect')).toThrow('window.opener must be defined');
   });
 
   test('calls close', () => {
@@ -90,8 +88,12 @@ describe('redirect', () => {
         isSmartcarHosted: false,
         name: 'SmartcarAuthMessage',
         state: null,
+        make: null,
+        model: null,
+        vin: null,
+        year: null,
       },
-      selfHostedOrigin
+      selfHostedOrigin,
     );
   });
 
@@ -115,8 +117,12 @@ describe('redirect', () => {
         isSmartcarHosted: true,
         name: 'SmartcarAuthMessage',
         state: null,
+        make: null,
+        model: null,
+        vin: null,
+        year: null,
       },
-      appOrigin
+      appOrigin,
     );
   });
 
@@ -151,8 +157,12 @@ describe('redirect', () => {
         isSmartcarHosted: true,
         name: 'SmartcarAuthMessage',
         state,
+        make: null,
+        model: null,
+        vin: null,
+        year: null,
       },
-      appOrigin
+      appOrigin,
     );
   });
 });
