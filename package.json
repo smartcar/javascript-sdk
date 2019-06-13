@@ -19,6 +19,7 @@
   ],
   "scripts": {
     "pretest": "gulp build",
+    "postinstall": "node postinstall",
     "test": "jest",
     "posttest": "npm run lint -s",
     "lint": "eslint . --cache",
@@ -51,5 +52,9 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "semver": "^6.1.1"
   }
 }
