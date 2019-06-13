@@ -12,6 +12,8 @@ const uglify = require('gulp-uglify');
 const umd = require('gulp-umd');
 const {version} = require('./package');
 
+const majorVersion = version.slice(0, version.indexOf('.'));
+
 /**
  * Add package version to README.
  */
@@ -41,7 +43,7 @@ gulp.task('build:umd', function() {
         },
         // returnExports template with istanbul ignore
         template: path.join(__dirname, 'build/returnExports.js'),
-      })
+      }),
     )
     .pipe(gulp.dest('dist/umd'));
 });
@@ -64,8 +66,7 @@ gulp.task('build:cdn:js', ['build:umd'], function() {
     .src(['src/redirect.js', 'dist/umd/sdk.js'])
     .pipe(babel())
     .pipe(uglify())
-    .pipe(rename({suffix: `-${version}`}))
-    .pipe(gulp.dest('dist/cdn'));
+    .pipe(gulp.dest(`dist/cdn/v${majorVersion}`));
 });
 
 /**
@@ -74,15 +75,43 @@ gulp.task('build:cdn:js', ['build:umd'], function() {
 gulp.task('build:cdn:html', function() {
   return gulp
     .src('src/redirect.html')
-    .pipe(template({version}))
-    .pipe(rename(`redirect-${version}`))
-    .pipe(gulp.dest('dist/cdn'));
+    .pipe(template({majorVersion}))
+    .pipe(rename('redirect')) // Removes .html extension
+    .pipe(gulp.dest(`dist/cdn/v${majorVersion}`));
+});
+
+/**
+ * Legacy support for accessing redirect via old URL scheme publishing.
+ *
+ * Previously, files would be `redirect-{semver}`. Now they are
+ * `v{majorVersion}/redirect`.
+ *
+ * Based on usage data, customers only use 2.0.0, 2.1.0, and 2.1.1 at the time
+ * of this change, so we chose to explicitly provide backwards compatibility for
+ * these version only.
+ *
+ */
+gulp.task('build:cdn:html:legacy', function(done) {
+  // We should only update old files while we're on major version 2
+  if (Number(majorVersion) > 2) {
+    return done();
+  }
+
+  return gulp
+    .src('src/redirect.html')
+    .pipe(template({majorVersion: '2'}))
+    .pipe(rename('redirect-2.0.0'))
+    .pipe(gulp.dest('dist/cdn/legacy'))
+    .pipe(rename('redirect-2.1.0'))
+    .pipe(gulp.dest('dist/cdn/legacy'))
+    .pipe(rename('redirect-2.1.1'))
+    .pipe(gulp.dest('dist/cdn/legacy'));
 });
 
 /**
  * Build all tasks for CDN publishing.
  */
-gulp.task('build:cdn', ['build:cdn:js', 'build:cdn:html']);
+gulp.task('build:cdn', ['build:cdn:js', 'build:cdn:html', 'build:cdn:html:legacy']);
 
 /**
  * Build all tasks for CDN and npm publishing.
