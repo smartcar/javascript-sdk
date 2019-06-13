@@ -20,7 +20,7 @@ const majorVersion = version.slice(0, version.indexOf('.'));
 gulp.task('template:readme', function() {
   return gulp
     .src('README.mdt')
-    .pipe(template({version}))
+    .pipe(template({version, majorVersion}))
     .pipe(rename({extname: '.md'}))
     .pipe(gulp.dest('.'));
 });
@@ -59,15 +59,31 @@ gulp.task('build:npm', ['build:umd'], function() {
 });
 
 /**
- * Build JS for CDN publishing.
+ * Build redirect for CDN publishing.
  */
-gulp.task('build:cdn:js', ['build:umd'], function() {
+gulp.task('build:cdn:redirect', function() {
   return gulp
-    .src(['src/redirect.js', 'dist/umd/sdk.js'])
+    .src('src/redirect.js')
     .pipe(babel())
     .pipe(uglify())
     .pipe(gulp.dest(`dist/cdn/v${majorVersion}`));
 });
+
+/**
+ * Build SDK for CDN publishing.
+ */
+gulp.task('build:cdn:sdk', ['build:umd'], function() {
+  return gulp
+    .src('dist/umd/sdk.js')
+    .pipe(babel())
+    .pipe(uglify())
+    .pipe(gulp.dest(`dist/cdn/${version}`));
+});
+
+/**
+ * Build all JS for CDN publishing.
+ */
+gulp.task('build:cdn:js', ['build:cdn:redirect', 'build:cdn:sdk']);
 
 /**
  * Build HTML for CDN publishing
@@ -165,13 +181,29 @@ gulp.task('publish:cdn:html', function() {
 /**
  * Publish JS to the CDN in the major version folder (e.g. /v2/redirect.js).
  */
-gulp.task('publish:cdn:js', function() {
+gulp.task('publish:cdn:redirect', function() {
   return gulp
     .src(`dist/cdn/v${majorVersion}/*.js`)
     .pipe(rename({prefix: `v${majorVersion}/`}))
     .pipe(publisher.publish())
     .pipe(awspublish.reporter());
 });
+
+/**
+ * Publish SDK to the CDN in the version folder (e.g. /2.2.0/sdk.js).
+ */
+gulp.task('publish:cdn:sdk', function() {
+  return gulp
+    .src(`dist/cdn/${version}/sdk.js`)
+    .pipe(rename({prefix: `${version}/`}))
+    .pipe(publisher.publish())
+    .pipe(awspublish.reporter());
+});
+
+/**
+ * Publish JS to the CDN.
+ */
+gulp.task('publish:cdn:js', ['publish:cdn:sdk', 'publish:cdn:redirect']);
 
 /**
  * Publish all files to the CDN.
