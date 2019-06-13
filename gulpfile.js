@@ -134,13 +134,19 @@ gulp.task('build:cdn', ['build:cdn:js', 'build:cdn:html', 'build:cdn:html:legacy
  *
  * dist/
  * ├── cdn
- * │   ├── redirect-2.0.0       // HTML file without extension
- * │   ├── redirect-2.0.0.js    // babel-ed, uglify-ed
- * │   └── sdk-2.0.0.js         // UMD wrapped, babel-ed, uglify-ed
+ * │   ├── legacy
+ * │   │   ├──  redirect-2.0.0  // Legacy HTML files proxy v2 files
+ * │   │   ├──  redirect-2.1.0
+ * │   │   └──  redirect-2.1.1
+ * │   ├── v2                  // Only major versions of redirect are exposed
+ * │   │   ├──  redirect       // HTML file
+ * │   │   └──  redirect.js    // Referenced by both the new and old HTML files
+ * │   └── 2.2.0               // Full semver versions are exposed for SDK releases
+ * │       └──  sdk.js
  * ├── npm
- * │   └── sdk.js               // UMD wrapped, babel-ed
+ * │   └── sdk.js
  * └── umd
- *     └── sdk.js               // UMD wrapped
+ *     └── sdk.js
  */
 gulp.task('build', ['build:cdn', 'build:npm']);
 
