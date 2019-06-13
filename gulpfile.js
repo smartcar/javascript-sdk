@@ -93,7 +93,7 @@ gulp.task('build:cdn:html', function() {
  */
 gulp.task('build:cdn:html:legacy', function(done) {
   // We should only update old files while we're on major version 2
-  if (Number(majorVersion) > 2) {
+  if (Number(majorVersion) !== 2) {
     return done();
   }
 
@@ -135,24 +135,40 @@ const publisher = awspublish.create({
 });
 
 /**
- * Publish redirect HTML to the CDN.
+ * Publish legacy HTML to the CDN. These files must be uploaded to the root of
+ * the bucket and depend on /v2/redirect.js existing.
+ *
+ * We strip the `.html` extension from our html file so add content-type header
+ * to identify the file as `text/html`.
+ */
+gulp.task('publish:cdn:html:legacy', function() {
+  return gulp
+    .src('dist/cdn/legacy/*')
+    .pipe(publisher.publish({'content-type': 'text/html'}))
+    .pipe(awspublish.reporter());
+});
+
+/**
+ * Publish HTML to the CDN in the major version folder (e.g. /v2/redirect).
  *
  * We strip the `.html` extension from our html file so add content-type header
  * to identify the file as `text/html`.
  */
 gulp.task('publish:cdn:html', function() {
   return gulp
-    .src(`dist/cdn/redirect-${version}`)
+    .src(`dist/cdn/v${majorVersion}/redirect`)
+    .pipe(rename({prefix: `v${majorVersion}/`}))
     .pipe(publisher.publish({'content-type': 'text/html'}))
     .pipe(awspublish.reporter());
 });
 
 /**
- * Publish JS to the CDN.
+ * Publish JS to the CDN in the major version folder (e.g. /v2/redirect.js).
  */
 gulp.task('publish:cdn:js', function() {
   return gulp
-    .src('dist/cdn/**/*.js')
+    .src(`dist/cdn/v${majorVersion}/*.js`)
+    .pipe(rename({prefix: `v${majorVersion}/`}))
     .pipe(publisher.publish())
     .pipe(awspublish.reporter());
 });
@@ -160,4 +176,4 @@ gulp.task('publish:cdn:js', function() {
 /**
  * Publish all files to the CDN.
  */
-gulp.task('publish:cdn', ['publish:cdn:html', 'publish:cdn:js']);
+gulp.task('publish:cdn', ['publish:cdn:js', 'publish:cdn:html', 'publish:cdn:html:legacy']);
