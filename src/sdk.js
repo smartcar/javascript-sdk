@@ -144,6 +144,15 @@ class Smartcar {
             ' completion of authorization flow',
         );
       }
+
+      const usesOldUriScheme = (/redirect-[0-9]+\.[0-9]+\.[0-9]+\?/).test(options.redirectUri);
+
+      if (usesOldUriScheme) {
+        // eslint-disable-next-line no-console
+        console.warn(
+          "\nThe Smartcar redirect URI you're using is outdated! To update it, please see:\nhttps://smartcar.com/docs/guides/new-redirect-uri\n",
+        );
+      }
     }
   }
 
