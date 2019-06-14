@@ -411,6 +411,110 @@ describe('sdk', () => {
       });
 
     test(// eslint-disable-next-line max-len
+      'VehicleIncompatible error does not add undefined properties to vehicleInfo', () => {
+        const options = {
+          clientId: 'clientId',
+          redirectUri: `${CDN_ORIGIN}?app_origin=https://app.com`,
+          scope: ['read_vehicle_info', 'read_odometer'],
+          // eslint-disable-next-line no-unused-vars, no-empty-function
+          onComplete(err, code, state) {
+            expect(Object.keys(err.vehicleInfo)).not.toContain('vin');
+          },
+        };
+
+        const smartcar = new Smartcar(options);
+        const errorDescription = 'describes the error';
+
+        const vehicleInfo = {
+          year: 2017,
+          make: 'TESLA',
+          model: 'Model S',
+        };
+
+        const event = {
+          data: {
+            name: 'SmartcarAuthMessage',
+            isSmartcarHosted: true,
+            code: 'super-secret-code',
+            error: 'vehicle_incompatible',
+            errorDescription,
+            state: 'some-state',
+            ...vehicleInfo,
+          },
+          origin: CDN_ORIGIN,
+        };
+
+        smartcar.messageHandler(event);
+      });
+
+    test(// eslint-disable-next-line max-len
+      'VehicleIncompatible returns a number for year', () => {
+        const options = {
+          clientId: 'clientId',
+          redirectUri: `${CDN_ORIGIN}?app_origin=https://app.com`,
+          scope: ['read_vehicle_info', 'read_odometer'],
+          // eslint-disable-next-line no-unused-vars, no-empty-function
+          onComplete(err, code, state) {
+            expect(typeof err.vehicleInfo.year).toBe('number');
+          },
+        };
+
+        const smartcar = new Smartcar(options);
+        const errorDescription = 'describes the error';
+
+        const vehicleInfo = {
+          year: '2017',
+          make: 'TESLA',
+          model: 'Model S',
+        };
+
+        const event = {
+          data: {
+            name: 'SmartcarAuthMessage',
+            isSmartcarHosted: true,
+            code: 'super-secret-code',
+            error: 'vehicle_incompatible',
+            errorDescription,
+            state: 'some-state',
+            ...vehicleInfo,
+          },
+          origin: CDN_ORIGIN,
+        };
+
+        smartcar.messageHandler(event);
+      });
+
+    test(// eslint-disable-next-line max-len
+      'VehicleIncompatible returns an empty object for vehicleInfo when no info', () => {
+        const options = {
+          clientId: 'clientId',
+          redirectUri: `${CDN_ORIGIN}?app_origin=https://app.com`,
+          scope: ['read_vehicle_info', 'read_odometer'],
+          // eslint-disable-next-line no-unused-vars, no-empty-function
+          onComplete(err, code, state) {
+            expect(err.vehicleInfo).toEqual({});
+          },
+        };
+
+        const smartcar = new Smartcar(options);
+        const errorDescription = 'describes the error';
+
+        const event = {
+          data: {
+            name: 'SmartcarAuthMessage',
+            isSmartcarHosted: true,
+            code: 'super-secret-code',
+            error: 'vehicle_incompatible',
+            errorDescription,
+            state: 'some-state',
+          },
+          origin: CDN_ORIGIN,
+        };
+
+        smartcar.messageHandler(event);
+      });
+
+    test(// eslint-disable-next-line max-len
       'fires onComplete w/ AccessDenied error when `error: access_denied` in postMessage', () => {
         const options = {
           clientId: 'clientId',
