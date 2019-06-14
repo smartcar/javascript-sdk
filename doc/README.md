@@ -31,6 +31,8 @@ Smartcar JavaScript SDK documentation.
     * _static_
         * [.AccessDenied](#Smartcar.AccessDenied) ⇐ <code>Error</code>
             * [new Smartcar.AccessDenied(message)](#new_Smartcar.AccessDenied_new)
+        * [.VehicleIncompatible](#Smartcar.VehicleIncompatible) ⇐ <code>Error</code>
+            * [new Smartcar.VehicleIncompatible(message, vehicleInfo)](#new_Smartcar.VehicleIncompatible_new)
 
 <a name="new_Smartcar_new"></a>
 
@@ -115,6 +117,26 @@ Access denied error returned by authorization flow.
 | Param | Type | Description |
 | --- | --- | --- |
 | message | <code>String</code> | detailed error description |
+
+<a name="Smartcar.VehicleIncompatible"></a>
+
+### Smartcar.VehicleIncompatible ⇐ <code>Error</code>
+Vehicle incompatible error returned by authorization flow.
+
+**Kind**: static class of [<code>Smartcar</code>](#Smartcar)
+**Extends**: <code>Error</code>
+<a name="new_Smartcar.VehicleIncompatible_new"></a>
+
+#### new Smartcar.VehicleIncompatible(message, vehicleInfo)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| message | <code>String</code> | detailed error description |
+| vehicleInfo | <code>Object</code> | If a vehicle is incompatible, the user has the option to return vehicleInfo to the application. |
+| vehicleInfo.vin | <code>String</code> | optionally returned if user gives permission. |
+| vehicleInfo.make | <code>String</code> | optionally returned if user gives permission. |
+| vehicleInfo.model | <code>String</code> | optionally returned if user gives permission. |
+| vehicleInfo.year | <code>Number</code> | optionally returned if user gives permission. |
 
 <a name="OnComplete"></a>
 
