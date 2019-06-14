@@ -7,6 +7,8 @@ const path = require('path');
 const config = require('./config');
 const {version} = require('../../package.json');
 
+const majorVersion = version.slice(0, version.indexOf('.'));
+
 describe('postMessage', () => {
   let client, redirect;
   const clientPort = 3000;
@@ -19,39 +21,41 @@ describe('postMessage', () => {
     shared.browser = shared.client.api();
 
     // append version
-    const addVersion = (appendee) => `${appendee}-${version}`;
+    const addMajorVersion = (appendee) => `v${majorVersion}/${appendee}`;
+    const addVersion = (appendee) => `${version}/${appendee}`;
+
     // get path to built files
-    const getVersionedPath = (file, ext) =>
-      `../../dist/cdn/${addVersion(file)}.${ext}`;
+    const getMajorVersionedPath = (file, ext) => `../../dist/cdn/${addMajorVersion(file)}.${ext}`;
+
+    // get path to built files
+    const getFullVersionedPath = (file, ext) => `../../dist/cdn/${addVersion(file)}.${ext}`;
 
     // redirect hosted at /redirect
     // file structure -> dist/redirect-${version}
-    const redirectHtmlPath = `../../dist/cdn/${addVersion('redirect')}`;
+    const redirectHtmlPath = `../../dist/cdn/${addMajorVersion('redirect')}`;
     // built redirect-${version} references redirect-${version}.js
-    const redirectJavascriptPath = `/${addVersion('redirect')}.js`;
+    const redirectJavascriptPath = `/${addMajorVersion('redirect')}.js`;
 
     // client setup
     client = express()
       // for single page
       .get('/spa', (_, res) => res.sendFile(path.join(__dirname, '/spa.html')))
       // for server side
-      .get('/server-side', (_, res) =>
-        res.sendFile(path.join(__dirname, '/server-side.html'))
-      )
+      .get('/server-side', (_, res) => res.sendFile(path.join(__dirname, '/server-side.html')))
       // for server side
       .get('/redirect', (_, res) =>
         res.sendFile(
           path.join(__dirname, redirectHtmlPath),
           // force treating of extensionless file as html
-          {headers: {'content-type': 'text/html'}}
-        )
+          {headers: {'content-type': 'text/html'}},
+        ),
       )
       .get(redirectJavascriptPath, (_, res) =>
-        res.sendFile(path.join(__dirname, getVersionedPath('redirect', 'js')))
+        res.sendFile(path.join(__dirname, getMajorVersionedPath('redirect', 'js'))),
       )
       // for both single page and server side
       .get('/sdk.js', (_, res) =>
-        res.sendFile(path.join(__dirname, getVersionedPath('sdk', 'js')))
+        res.sendFile(path.join(__dirname, getFullVersionedPath('sdk', 'js'))),
       )
       .listen(clientPort);
 
@@ -61,11 +65,11 @@ describe('postMessage', () => {
         res.sendFile(
           path.join(__dirname, redirectHtmlPath),
           // force treating of extensionless file as html
-          {headers: {'content-type': 'text/html'}}
-        )
+          {headers: {'content-type': 'text/html'}},
+        ),
       )
       .get(redirectJavascriptPath, (_, res) =>
-        res.sendFile(path.join(__dirname, getVersionedPath('redirect', 'js')))
+        res.sendFile(path.join(__dirname, getMajorVersionedPath('redirect', 'js'))),
       )
       .listen(redirectPort);
   });

@@ -63,6 +63,24 @@ describe('sdk', () => {
         );
       });
 
+    /* eslint-disable no-console, no-empty-function */
+    test('warns when using a redirect uri with old scheme', () => {
+      const spy = jest.spyOn(global.console, 'warn').mockImplementation(() => {});
+
+      // eslint-disable-next-line no-new
+      new Smartcar({
+        redirectUri: `${CDN_ORIGIN}/redirect-2.0.0?foo=bar`,
+        clientId: 'my-id',
+        // eslint-disable-next-line no-unused-vars
+        onComplete: jest.fn((__, _) => {}),
+      });
+
+      expect(spy).toHaveBeenCalled();
+
+      spy.mockRestore();
+      /* eslint-enable */
+    });
+
     test('initializes correctly w/ self hosted redirect', () => {
       const options = {
         clientId: 'clientId',
