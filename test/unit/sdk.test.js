@@ -418,7 +418,7 @@ describe('sdk', () => {
           scope: ['read_vehicle_info', 'read_odometer'],
           // eslint-disable-next-line no-unused-vars, no-empty-function
           onComplete(err, code, state) {
-            expect(Object.keys(err.vehicleInfo)).not.toContain('vin');
+            expect(Object.keys(err.vehicleInfo)).not.toContain('model');
           },
         };
 
@@ -428,7 +428,7 @@ describe('sdk', () => {
         const vehicleInfo = {
           year: 2017,
           make: 'TESLA',
-          model: 'Model S',
+          vin: 'some_vin',
         };
 
         const event = {
@@ -463,6 +463,7 @@ describe('sdk', () => {
         const errorDescription = 'describes the error';
 
         const vehicleInfo = {
+          vin: 'some_vin',
           year: '2017',
           make: 'TESLA',
           model: 'Model S',
@@ -485,14 +486,14 @@ describe('sdk', () => {
       });
 
     test(// eslint-disable-next-line max-len
-      'VehicleIncompatible returns an empty object for vehicleInfo when no info', () => {
+      'VehicleIncompatible returns null for vehicleInfo when no info', () => {
         const options = {
           clientId: 'clientId',
           redirectUri: `${CDN_ORIGIN}?app_origin=https://app.com`,
           scope: ['read_vehicle_info', 'read_odometer'],
           // eslint-disable-next-line no-unused-vars, no-empty-function
           onComplete(err, code, state) {
-            expect(err.vehicleInfo).toEqual({});
+            expect(err.vehicleInfo).toEqual(null);
           },
         };
 

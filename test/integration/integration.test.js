@@ -24,16 +24,16 @@ describe('postMessage', () => {
     const addMajorVersion = (appendee) => `v${majorVersion}/${appendee}`;
     const addVersion = (appendee) => `${version}/${appendee}`;
 
-    // get path to built files
+    // get path to files released under major version (redirect, redirect.js)
     const getMajorVersionedPath = (file, ext) => `../../dist/cdn/${addMajorVersion(file)}.${ext}`;
 
-    // get path to built files
+    // get path to files released under full semver (sdk.js)
     const getFullVersionedPath = (file, ext) => `../../dist/cdn/${addVersion(file)}.${ext}`;
 
     // redirect hosted at /redirect
-    // file structure -> dist/redirect-${version}
+    // file structure -> dist/v${majorVersion}/redirect
     const redirectHtmlPath = `../../dist/cdn/${addMajorVersion('redirect')}`;
-    // built redirect-${version} references redirect-${version}.js
+    // built redirect references /v${majorVersion}/redirect.js
     const redirectJavascriptPath = `/${addMajorVersion('redirect')}.js`;
 
     // client setup
@@ -80,7 +80,7 @@ describe('postMessage', () => {
   });
 
   test('single page app = fires onComplete on postMessage from expected origin', (done) => {
-    // minimal test, does not go through OAuth flow, just tests that redirect
+    // minimal test, does not go through Connect, just tests that redirect
     // page hosted on separate server posts back to `app_origin` parameter which
     // is then handled as expected by client at `app_origin`
 
@@ -95,7 +95,7 @@ describe('postMessage', () => {
   });
 
   test('single page app = fires onComplete on postMessage from expected origin', (done) => {
-    // minimal test, does not go through OAuth flow, just tests that with
+    // minimal test, does not go through Connect, just tests that with
     // redirect and client hosted on same server, redirect page posts back
     // to the correct client origin (same origin as itself) which is then
     // handled as expected by client at origin

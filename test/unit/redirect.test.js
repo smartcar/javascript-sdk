@@ -131,15 +131,23 @@ describe('redirect', () => {
 
     const appOrigin = 'https://www.the-next-awesome-car-app.com';
     const code = 'super-secret-code';
-    const error = 'access_denied';
+    const error = 'vehicle_incompatible';
     const errorDescription = 'this-is-an-error-description';
     const state = 'some-random-state';
+    const vin = 'some-vin';
+    const make = 'BMW';
+    const model = 'M3';
+    const year = '2013';
 
     const params = new URLSearchParams();
     params.set('code', code);
     params.set('error', error);
     params.set('error_description', errorDescription);
     params.set('state', state);
+    params.set('vin', vin);
+    params.set('make', make);
+    params.set('model', model);
+    params.set('year', year);
 
     const cdnOrigin = `${CDN_ORIGIN}/redirect?app_origin=${appOrigin}&${params.toString()}`;
 
@@ -157,10 +165,10 @@ describe('redirect', () => {
         isSmartcarHosted: true,
         name: 'SmartcarAuthMessage',
         state,
-        make: null,
-        model: null,
-        vin: null,
-        year: null,
+        make,
+        model,
+        vin,
+        year,
       },
       appOrigin,
     );
