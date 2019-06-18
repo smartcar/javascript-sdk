@@ -32,7 +32,7 @@ Smartcar JavaScript SDK documentation.
         * [.AccessDenied](#Smartcar.AccessDenied) ⇐ <code>Error</code>
             * [new Smartcar.AccessDenied(message)](#new_Smartcar.AccessDenied_new)
         * [.VehicleIncompatible](#Smartcar.VehicleIncompatible) ⇐ <code>Error</code>
-            * [new Smartcar.VehicleIncompatible(message, [vehicleInfo])](#new_Smartcar.VehicleIncompatible_new)
+            * [new Smartcar.VehicleIncompatible(message, vehicleInfo)](#new_Smartcar.VehicleIncompatible_new)
 
 <a name="new_Smartcar_new"></a>
 
@@ -130,12 +130,12 @@ for more details.
 **Extends**: <code>Error</code>
 <a name="new_Smartcar.VehicleIncompatible_new"></a>
 
-#### new Smartcar.VehicleIncompatible(message, [vehicleInfo])
+#### new Smartcar.VehicleIncompatible(message, vehicleInfo)
 
 | Param | Type | Description |
 | --- | --- | --- |
 | message | <code>String</code> | detailed error description |
-| [vehicleInfo] | <code>Object</code> | If a vehicle is incompatible, the user has the option to return vehicleInfo to the application. |
+| vehicleInfo | <code>Object</code> | If a vehicle is incompatible, the user has the option to return vehicleInfo to the application. |
 | vehicleInfo.vin | <code>String</code> | returned if user gives permission. |
 | vehicleInfo.make | <code>String</code> | returned if user gives permission. |
 | vehicleInfo.year | <code>Number</code> | returned if user gives permission. |
@@ -148,7 +148,7 @@ for more details.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| [error] | <code>Error</code> | something went wrong in Connect; this normally indicates that the user denied access to your application or does not have a connected vehicle |
+| error | <code>Error</code> | something went wrong in Connect; this normally indicates that the user denied access to your application or does not have a connected vehicle |
 | code | <code>String</code> | the authorization code to be exchanged from a backend sever for an access token |
 | [state] | <code>Object</code> | contains state if it was set on the initial authorization request |
 
