@@ -123,7 +123,7 @@ Access denied error returned by Connect.
 ### Smartcar.VehicleIncompatible ⇐ <code>Error</code>
 Vehicle incompatible error returned by Connect. Will optionally
 have a vehicleInfo object if the user chooses to give permissions to provide
-that information. See our Connect [documentation](https://smartcar.com/docs/api#smartcar-connect)
+that information. See our [Connect documentation](https://smartcar.com/docs/api#smartcar-connect)
 for more details.
 
 **Kind**: static class of [<code>Smartcar</code>](#Smartcar)
