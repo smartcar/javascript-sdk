@@ -42,7 +42,7 @@ describe('sdk', () => {
       ).toThrow(
         "When using Smartcar's CDN redirect an onComplete function with at" +
           ' least 2 parameters (error & code) is required to handle' +
-          ' completion of authorization flow',
+          ' completion of Connect',
       );
     });
 
@@ -59,7 +59,7 @@ describe('sdk', () => {
         ).toThrow(
           "When using Smartcar's CDN redirect an onComplete function with at" +
           ' least 2 parameters (error & code) is required to handle' +
-          ' completion of authorization flow',
+          ' completion of Connect',
         );
       });
 

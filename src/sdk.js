@@ -5,7 +5,7 @@
 class Smartcar {
   /**
    * @callback OnComplete
-   * @param {?Error} error - something went wrong in the authorization flow; this
+   * @param {Error} [error] - something went wrong in Connect; this
    * normally indicates that the user denied access to your application or does not
    * have a connected vehicle
    * @param {String} code - the authorization code to be exchanged from a
@@ -65,18 +65,23 @@ class Smartcar {
             case 'access_denied':
               return new Smartcar.AccessDenied(description);
             case 'vehicle_incompatible':
-              const vehicleInfo = {};
-              const possibleKeys = ['vin', 'make', 'model', 'year'];
+              const params = event.data;
 
-              for (const key of possibleKeys) {
-                const item = event.data[key];
-                if (item) {
-                  vehicleInfo[key] = item;
-                }
+              // This field will always exist if vehicleInfo is returned
+              if (!params.vin) {
+                return new Smartcar.VehicleIncompatible(description, null);
               }
 
-              if (vehicleInfo.year) {
-                vehicleInfo.year = Number(vehicleInfo.year);
+              // These fields are required when vehicleInfo is returned
+              const vehicleInfo = {
+                vin: params.vin,
+                make: params.make,
+                year: Number(params.year),
+              };
+
+              // This field is optional
+              if (params.model) {
+                vehicleInfo.model = params.model;
               }
 
               return new Smartcar.VehicleIncompatible(description, vehicleInfo);
@@ -141,7 +146,7 @@ class Smartcar {
         throw new Error(
           "When using Smartcar's CDN redirect an onComplete function with at" +
             ' least 2 parameters (error & code) is required to handle' +
-            ' completion of authorization flow',
+            ' completion of Connect',
         );
       }
 
@@ -293,7 +298,7 @@ class Smartcar {
 }
 
 /**
- * Access denied error returned by authorization flow.
+ * Access denied error returned by Connect.
  *
  * @extends Error
  */
@@ -308,19 +313,22 @@ Smartcar.AccessDenied = class extends Error {
 };
 
 /**
- * Vehicle incompatible error returned by authorization flow.
+ * Vehicle incompatible error returned by Connect. Will optionally
+ * have a vehicleInfo object if the user chooses to give permissions to provide
+ * that information. See our Connect [documentation](https://smartcar.com/docs/api#smartcar-connect)
+ * for more details.
  *
  * @extends Error
  */
 Smartcar.VehicleIncompatible = class extends Error {
   /**
    * @param {String} message - detailed error description
-   * @param {Object} vehicleInfo - If a vehicle is incompatible, the user has
+   * @param {Object} [vehicleInfo] - If a vehicle is incompatible, the user has
    * the option to return vehicleInfo to the application.
-   * @param {String?} vehicleInfo.vin - optionally returned if user gives permission.
-   * @param {String?} vehicleInfo.make - optionally returned if user gives permission.
-   * @param {String?} vehicleInfo.model - optionally returned if user gives permission.
-   * @param {Number?} vehicleInfo.year - optionally returned if user gives permission.
+   * @param {String} vehicleInfo.vin - returned if user gives permission.
+   * @param {String} vehicleInfo.make - returned if user gives permission.
+   * @param {Number} vehicleInfo.year - returned if user gives permission.
+   * @param {String} [vehicleInfo.model] - optionally returned if user gives permission.
    */
   constructor(message, vehicleInfo) {
     super(message);

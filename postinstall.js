@@ -8,8 +8,8 @@ const semver = require('semver');
 
 const {version} = require('./package');
 
-const primaryColor = (text) => chalk.redBright(text);
-const highlight = (text) => chalk.white.bgRed(text);
+const primaryColor = (text) => chalk.yellow(text);
+const highlight = (text) => chalk.cyan.bold(text);
 
 request.get('https://registry.npmjs.org/@smartcar/auth', function(err, res, body) {
   if (err) {
@@ -22,8 +22,8 @@ request.get('https://registry.npmjs.org/@smartcar/auth', function(err, res, body
 
   if (semver.gt(latest, version)) {
     console.warn(
-      primaryColor('Your Smartcar JavaScript SDK is outdated! Please update by running:\n'),
-      highlight('npm i @smartcar/auth@latest\n'),
+      primaryColor('\nYour Smartcar JavaScript SDK is outdated! Please update by running:\n'),
+      highlight('> npm i @smartcar/auth@latest\n'),
     );
   }
 });

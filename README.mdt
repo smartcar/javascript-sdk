@@ -7,7 +7,7 @@ The official Smartcar JavaScript SDK.
 The [Smartcar API](https://smartcar.com/docs) lets you read vehicle data
 (location, odometer) and send commands to vehicles (lock, unlock) using HTTP requests.
 
-To make requests to a vehicle from a web application, the end user must connect their vehicle using [Smartcar's authorization flow](https://smartcar.com/docs#authentication). The Smartcar JavaScript SDK provides an easy way to launch and handle the authorization flow to retrieve the resulting `code`.
+To make requests to a vehicle from a web application, the end user must connect their vehicle using [Smartcar Connect](https://smartcar.com/docs#authentication). The Smartcar JavaScript SDK provides an easy way to launch and handle Connect to retrieve the resulting `code`.
 
 Before integrating with the JavaScript SDK, you'll need to register an application in the [Smartcar dashboard](https://dashboard.smartcar.com). Once you have registered an application, you will have a Client ID and Client Secret, which will allow you to authorize users.
 
@@ -23,14 +23,13 @@ npm install @smartcar/auth
 
 ### Smartcar CDN
 
-Starting with v2.2.0, the SDK is available at:
 ```html
 <script src="https://javascript-sdk.smartcar.com/${version}/sdk.js"></script>
 ```
 
-Before v2.2.0, the SDK was available using the following format:
+Before v2.2.0, the SDK was available at the following location:
 ```html
-,<!-- Deprecated -->
+<!-- Deprecated -->
 <script src="https://javascript-sdk.smartcar.com/sdk-<version>.js"></script>
 ```
 
@@ -45,14 +44,14 @@ The SDK manages the front-end flow of the [OAuth authorization process](https://
 
 <p align="center"><img src="doc/architecture.svg"/></p>
 
-1. User clicks "Connect your car" button (or similar button) on your application's front end.
-2. User sees a pop-up dialog with the Smartcar authorization flow.
+1. User clicks "Connect your car" button (or similar button) which creates a pop-up dialog with Connect.
    1. User selects the make of their vehicle.
    2. User is prompted to log in with their vehicle credentials.
    3. User is presented with a set of requested permissions to grant your application.
    4. User can either "Allow" or "Deny" your application's access to the set of permissions.
-3. The Smartcar authorization flow redirects the user to the Smartcar JavaScript SDK redirect page along with the resulting `code`. The page then sends the `code` to your application's window and closes the pop-up dialog.
-4. Your JavaScript front end receives the `code` in a callback function.
+2. Connect redirects the user to the Smartcar JavaScript SDK redirect page along with the resulting `code`. 
+3. The redirect page sends the `code` to your application's window and closes the pop-up dialog.
+4. Your JavaScript front end receives the `code` in the onComplete function registered in the SDK constructor. This function needs to communicate with your backend to exchange the code for access and refresh tokens.
 5. Your application's back end server needs to accept the `code` and exchange it for an access token.
 
 The SDK facilitates generating OAuth links, creating pop-up dialogs, and receiving authorization codes. This SDK will not assist you with exchanging authorization codes for an access token or making requests to vehicles. Please see our [back-end SDKs](https://smartcar.com/docs#backend-sdks) for more information on handling the access tokens and vehicle requests.
@@ -61,7 +60,7 @@ The SDK facilitates generating OAuth links, creating pop-up dialogs, and receivi
 
 ### 1. Register a JavaScript SDK redirect URI
 
-The JavaScript SDK uses a special redirect URI to provide a simpler flow to retrieve authorization codes. Beginning with v2.2.0, the redirect URI takes the following form:
+The JavaScript SDK uses a special redirect URI to provide a simpler flow to retrieve authorization codes. The redirect URI takes the following form:
 
 ```
 https://javascript-sdk.smartcar.com/v${majorVersion}/redirect?app_origin=<Your Application's Origin>
@@ -70,11 +69,13 @@ Note that the version number refers to the major version of the SDK you are usin
 
 The `app_origin` should be the location at which your website is located. The origin consists of the protocol and the host of your site only, without the resource path.
 
-Previously, redirect URIs had the following form:
+Before v2.2.0, redirect URIs were available at the following location:
 
 ```
+// Deprecated
 https://javascript-sdk.smartcar.com/redirect-<version>?app_origin=<Your Application's Origin>
 ```
+For more information on this deprecation, [see our documentation](https://smartcar.com/docs/guides/new-redirect-uri/).
 
 Some example origins are:
 
@@ -99,7 +100,7 @@ const smartcar = new Smartcar({
   scope: ['read_vehicle_info', 'read_odometer'],
   onComplete: function(err, code) {
     if (err) {
-      // handle errors from the authorization flow (i.e. user denies access)
+      // handle errors from Connect (i.e. user denies access)
     }
     // handle the returned code by sending it to your back-end server
     sendToBackend(code);
@@ -111,7 +112,7 @@ const smartcar = new Smartcar({
 
 > NOTE: See the full set of available scopes for each endpoint in the [Smartcar API reference](https://smartcar.com/docs#get-all-vehicles) under "Required Permissions".
 
-### 3. Launch the authorization flow
+### 3. Launch Connect
 
 Add a click handler to an HTML element:
 
@@ -121,7 +122,7 @@ smartcar.addClickHandler({id: '#your-button-id'});
 
 **Reference:** [`smartcar.addClickHandler(options)`](doc#Smartcar+addClickHandler)
 
-Alternatively, you can launch the authorization flow directly:
+Alternatively, you can launch Connect directly:
 
 ```javascript
 smartcar.openDialog();
@@ -135,7 +136,7 @@ In addition to the flow described above, you can use the JavaScript SDK in other
 
 ### Authorization URL generation
 
-Normally the [`.addClickHandler()`](doc#Smartcar+addClickHandler) and [`.openDialog()`](doc#Smartcar+openDialog) methods are used to launch the authorization flow. However, if you would like to generate the OAuth authorization URL directly, you can do so with the [`.getAuthUrl()`](doc#Smartcar+getAuthUrl) method.
+Normally the [`.addClickHandler()`](doc#Smartcar+addClickHandler) and [`.openDialog()`](doc#Smartcar+openDialog) methods are used to launch Connect. However, if you would like to generate the OAuth authorization URL directly, you can do so with the [`.getAuthUrl()`](doc#Smartcar+getAuthUrl) method.
 
 ```javascript
 const url = smartcar.getAuthUrl();
@@ -176,13 +177,13 @@ Or in case of an error:
 https://application-backend.com/page?error=access_denied&error_description=User+denied+access+to+application.
 ```
 
-3. On the redirect route, you can render a page with the JavaScript SDK's redirect helper script. The script will invoke the `onComplete` callback and close out the authorization pop-up dialog.
+3. On the redirect route, you can render a page with the JavaScript SDK's redirect helper script. The script will invoke the `onComplete` callback and close out the Connect pop-up dialog.
 
 ```html
 <script src="https://javascript-sdk.smartcar.com/v${majorVersion}/redirect.js"></script>
 ```
 
-> NOTE: If the page serving the redirect script file does not have the original query parameters sent from the Smartcar authorization flow (`code`, `state`, `error`, `error_description`), then the `onComplete` callback will be invoked with no parameters.
+> NOTE: If the page serving the redirect script file does not have the original query parameters sent from Connect (`code`, `state`, `error`, `error_description`), then the `onComplete` callback will be invoked with no parameters.
 
 
 [ci-url]: https://travis-ci.com/smartcar/javascript-sdk
