@@ -27,7 +27,7 @@ npm install @smartcar/auth
 <script src="https://javascript-sdk.smartcar.com/${version}/sdk.js"></script>
 ```
 
-Before v2.2.0, the SDK was available at the following location:
+Before v2.2.0, the SDK was versioned as follows:
 ```html
 <!-- Deprecated -->
 <script src="https://javascript-sdk.smartcar.com/sdk-<version>.js"></script>
@@ -69,7 +69,7 @@ Note that the version number refers to the major version of the SDK you are usin
 
 The `app_origin` should be the location at which your website is located. The origin consists of the protocol and the host of your site only, without the resource path.
 
-Before v2.2.0, redirect URIs were available at the following location:
+Before v2.2.0, redirect URIs were formatted as follows:
 
 ```
 // Deprecated

@@ -5,7 +5,7 @@
 class Smartcar {
   /**
    * @callback OnComplete
-   * @param {Error} [error] - something went wrong in Connect; this
+   * @param {?Error} error - something went wrong in Connect; this
    * normally indicates that the user denied access to your application or does not
    * have a connected vehicle
    * @param {String} code - the authorization code to be exchanged from a
@@ -323,7 +323,7 @@ Smartcar.AccessDenied = class extends Error {
 Smartcar.VehicleIncompatible = class extends Error {
   /**
    * @param {String} message - detailed error description
-   * @param {Object} [vehicleInfo] - If a vehicle is incompatible, the user has
+   * @param {?Object} vehicleInfo - If a vehicle is incompatible, the user has
    * the option to return vehicleInfo to the application.
    * @param {String} vehicleInfo.vin - returned if user gives permission.
    * @param {String} vehicleInfo.make - returned if user gives permission.
