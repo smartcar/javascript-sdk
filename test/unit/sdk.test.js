@@ -383,7 +383,7 @@ describe('sdk', () => {
 
         const vehicleInfo = {
           vin: 'some_vin',
-          year: 2017,
+          year: '2017',
           make: 'TESLA',
           model: 'Model S',
         };
@@ -417,16 +417,14 @@ describe('sdk', () => {
           redirectUri: `${CDN_ORIGIN}?app_origin=https://app.com`,
           scope: ['read_vehicle_info', 'read_odometer'],
           // eslint-disable-next-line no-unused-vars, no-empty-function
-          onComplete(err, code, state) {
-            expect(Object.keys(err.vehicleInfo)).not.toContain('model');
-          },
+          onComplete: jest.fn((__, _) => {}),
         };
 
         const smartcar = new Smartcar(options);
         const errorDescription = 'describes the error';
 
         const vehicleInfo = {
-          year: 2017,
+          year: '2017',
           make: 'TESLA',
           vin: 'some_vin',
         };
@@ -444,6 +442,10 @@ describe('sdk', () => {
           origin: CDN_ORIGIN,
         };
 
+        options.onComplete.mockImplementation(function(err) {
+          expect(Object.keys(err.vehicleInfo)).not.toContain('model');
+        });
+
         smartcar.messageHandler(event);
       });
 
@@ -454,9 +456,7 @@ describe('sdk', () => {
           redirectUri: `${CDN_ORIGIN}?app_origin=https://app.com`,
           scope: ['read_vehicle_info', 'read_odometer'],
           // eslint-disable-next-line no-unused-vars, no-empty-function
-          onComplete(err, code, state) {
-            expect(typeof err.vehicleInfo.year).toBe('number');
-          },
+          onComplete: jest.fn((__, _) => {}),
         };
 
         const smartcar = new Smartcar(options);
@@ -482,6 +482,10 @@ describe('sdk', () => {
           origin: CDN_ORIGIN,
         };
 
+        options.onComplete.mockImplementation(function(err) {
+          expect(typeof err.vehicleInfo.year).toBe('number');
+        });
+
         smartcar.messageHandler(event);
       });
 
@@ -492,9 +496,7 @@ describe('sdk', () => {
           redirectUri: `${CDN_ORIGIN}?app_origin=https://app.com`,
           scope: ['read_vehicle_info', 'read_odometer'],
           // eslint-disable-next-line no-unused-vars, no-empty-function
-          onComplete(err, code, state) {
-            expect(err.vehicleInfo).toEqual(null);
-          },
+          onComplete: jest.fn((__, _) => {}),
         };
 
         const smartcar = new Smartcar(options);
@@ -511,6 +513,10 @@ describe('sdk', () => {
           },
           origin: CDN_ORIGIN,
         };
+
+        options.onComplete.mockImplementation(function(err) {
+          expect(err.vehicleInfo).toEqual(null);
+        });
 
         smartcar.messageHandler(event);
       });
