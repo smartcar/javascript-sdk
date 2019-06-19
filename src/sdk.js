@@ -23,8 +23,8 @@ class Smartcar {
    * @param {String} options.redirectUri - the registered redirect uri of the
    * application
    * @param {String[]} [options.scope] - requested permission scopes
-   * @param {OnComplete} [options.onComplete] - called on completion of auth flow
-   * @param {Boolean} [options.testMode=false] - launch the Smartcar auth flow in test mode
+   * @param {OnComplete} [options.onComplete] - called on completion of Smartcar Connect
+   * @param {Boolean} [options.testMode=false] - launch Smartcar Connect in test mode
    */
   constructor(options) {
     // ensure options are well formed
@@ -108,7 +108,7 @@ class Smartcar {
       }
     };
 
-    // add handler for postMessage event on completion of auth flow
+    // add handler for postMessage event on completion of Smartcar Connect
     window.addEventListener('message', this.messageHandler);
   }
 
@@ -200,7 +200,7 @@ class Smartcar {
    * see our [API Reference](https://smartcar.com/docs/api#authorization)
    * documentation.
    *
-   * @return {String} OAuth authorization URL to redirect user to.
+   * @return {String} Connect URL to redirect user to.
    *
    * @example
    * https://connect.smartcar.com/oauth/authorize?

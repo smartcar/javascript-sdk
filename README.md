@@ -49,7 +49,7 @@ The SDK manages the front-end flow of the [OAuth authorization process](https://
    2. User is prompted to log in with their vehicle credentials.
    3. User is presented with a set of requested permissions to grant your application.
    4. User can either "Allow" or "Deny" your application's access to the set of permissions.
-2. Connect redirects the user to the Smartcar JavaScript SDK redirect page along with the resulting `code`. 
+2. Connect redirects the user to the Smartcar JavaScript SDK redirect page along with the resulting `code`.
 3. The redirect page sends the `code` to your application's window and closes the pop-up dialog.
 4. Your JavaScript front end receives the `code` in the onComplete function registered in the SDK constructor. This function needs to communicate with your backend to exchange the code for access and refresh tokens.
 5. Your application's back end server needs to accept the `code` and exchange it for an access token.
@@ -134,9 +134,9 @@ smartcar.openDialog();
 
 In addition to the flow described above, you can use the JavaScript SDK in other ways too. The following section will cover some of these cases.
 
-### Authorization URL generation
+### Smartcar Connect URL generation
 
-Normally the [`.addClickHandler()`](doc#Smartcar+addClickHandler) and [`.openDialog()`](doc#Smartcar+openDialog) methods are used to launch Connect. However, if you would like to generate the OAuth authorization URL directly, you can do so with the [`.getAuthUrl()`](doc#Smartcar+getAuthUrl) method.
+Normally the [`.addClickHandler()`](doc#Smartcar+addClickHandler) and [`.openDialog()`](doc#Smartcar+openDialog) methods are used to launch Connect. However, if you would like to generate the Connect URL directly, you can do so with the [`.getAuthUrl()`](doc#Smartcar+getAuthUrl) method.
 
 ```javascript
 const url = smartcar.getAuthUrl();
