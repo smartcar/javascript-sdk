@@ -47,7 +47,7 @@ Initializes Smartcar class.
 | options.redirectUri | <code>String</code> |  | the registered redirect uri of the application |
 | [options.scope] | <code>Array.&lt;String&gt;</code> |  | requested permission scopes |
 | [options.onComplete] | [<code>OnComplete</code>](#OnComplete) |  | called on completion of Smartcar Connect |
-| [options.testMode] | <code>Boolean</code> | <code>false</code> | launch the Smartcar Connect in test mode |
+| [options.testMode] | <code>Boolean</code> | <code>false</code> | launch Smartcar Connect in test mode |
 
 <a name="Smartcar+getAuthUrl"></a>
 
@@ -55,7 +55,7 @@ Initializes Smartcar class.
 Generates Smartcar OAuth URL.
 
 **Kind**: instance method of [<code>Smartcar</code>](#Smartcar)
-**Returns**: <code>String</code> - Smartcar Connect URL to redirect user to.
+**Returns**: <code>String</code> - Connect URL to redirect user to.
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -151,3 +151,4 @@ for more details.
 | error | <code>Error</code> | something went wrong in Connect; this normally indicates that the user denied access to your application or does not have a connected vehicle |
 | code | <code>String</code> | the authorization code to be exchanged from a backend sever for an access token |
 | [state] | <code>Object</code> | contains state if it was set on the initial authorization request |
+
