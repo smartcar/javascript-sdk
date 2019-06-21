@@ -40,9 +40,6 @@ try "package-lock.json" test "$(jq --raw-output .version package.json)" = "$NEXT
 # Ensure that readme was regenerated
 try "README.md" grep --fixed-strings "[version]: $NEXT_RELEASE" README.md
 
-# Ensure readme does not have the previous version anywhere
-try "README.md" grep --fixed-strings --invert-match "$LAST_RELEASE" README.md
-
 # run jsdoc and fail if any files in the doc folder have changed
 npm run jsdoc
 try "jsdoc" test -z "$(git diff --name-only | grep 'doc/')"

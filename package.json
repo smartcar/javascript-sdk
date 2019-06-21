@@ -1,6 +1,6 @@
 {
   "name": "@smartcar/auth",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "description": "javascript auth sdk for the smartcar",
   "main": "dist/npm/sdk.js",
   "license": "MIT",
@@ -19,6 +19,7 @@
   ],
   "scripts": {
     "pretest": "gulp build",
+    "postinstall": "node postinstall",
     "test": "jest",
     "posttest": "npm run lint -s",
     "lint": "eslint . --cache",
@@ -51,5 +52,10 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "request": "^2.88.0",
+    "semver": "^6.1.1"
   }
 }

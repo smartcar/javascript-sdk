@@ -12,13 +12,13 @@ describe('sdk', () => {
   describe('constructor', () => {
     test('throws error if constructor called without redirectUri', () => {
       expect(() => new Smartcar({clientId: 'uuid'})).toThrow(
-        'A redirect URI option must be provided'
+        'A redirect URI option must be provided',
       );
     });
 
     test('throws error if constructor called without clientId', () => {
       expect(() => new Smartcar({redirectUri: 'http://example.com'})).toThrow(
-        'A client ID option must be provided'
+        'A client ID option must be provided',
       );
     });
 
@@ -26,12 +26,9 @@ describe('sdk', () => {
       // initial instantiation
       // eslint-disable-next-line no-new
       new Smartcar({redirectUri: 'http://example.com', clientId: 'my-id'});
-      expect(
-        () =>
-          new Smartcar({redirectUri: 'http://example.com', clientId: 'my-id'})
-      ).toThrow(
+      expect(() => new Smartcar({redirectUri: 'http://example.com', clientId: 'my-id'})).toThrow(
         'Smartcar has already been instantiated in the window. Only one' +
-          ' instance of Smartcar can be defined.'
+          ' instance of Smartcar can be defined.',
       );
     });
 
@@ -41,11 +38,11 @@ describe('sdk', () => {
           new Smartcar({
             redirectUri: CDN_ORIGIN,
             clientId: 'my-id',
-          })
+          }),
       ).toThrow(
         "When using Smartcar's CDN redirect an onComplete function with at" +
           ' least 2 parameters (error & code) is required to handle' +
-          ' completion of authorization flow'
+          ' completion of Connect',
       );
     });
 
@@ -58,13 +55,31 @@ describe('sdk', () => {
               clientId: 'my-id',
               // eslint-disable-next-line no-unused-vars, no-empty-function
               onComplete: (_) => {}, // stub function w/ < 2 params
-            })
+            }),
         ).toThrow(
           "When using Smartcar's CDN redirect an onComplete function with at" +
           ' least 2 parameters (error & code) is required to handle' +
-          ' completion of authorization flow'
+          ' completion of Connect',
         );
       });
+
+    /* eslint-disable no-console, no-empty-function */
+    test('warns when using a redirect uri with old scheme', () => {
+      const spy = jest.spyOn(global.console, 'warn').mockImplementation(() => {});
+
+      // eslint-disable-next-line no-new
+      new Smartcar({
+        redirectUri: `${CDN_ORIGIN}/redirect-2.0.0?foo=bar`,
+        clientId: 'my-id',
+        // eslint-disable-next-line no-unused-vars
+        onComplete: jest.fn((__, _) => {}),
+      });
+
+      expect(spy).toHaveBeenCalled();
+
+      spy.mockRestore();
+      /* eslint-enable */
+    });
 
     test('initializes correctly w/ self hosted redirect', () => {
       const options = {
@@ -76,9 +91,7 @@ describe('sdk', () => {
 
       const smartcar = new Smartcar(options);
 
-      Object.entries(options).forEach(([key, option]) =>
-        expect(smartcar[key]).toEqual(option)
-      );
+      Object.entries(options).forEach(([key, option]) => expect(smartcar[key]).toEqual(option));
 
       // this is set within the constructor
       expect(smartcar.responseType).toEqual('code');
@@ -100,9 +113,7 @@ describe('sdk', () => {
 
       const smartcar = new Smartcar(options);
 
-      Object.entries(options).forEach(([key, option]) =>
-        expect(smartcar[key]).toEqual(option)
-      );
+      Object.entries(options).forEach(([key, option]) => expect(smartcar[key]).toEqual(option));
 
       // this is set within the constructor
       expect(smartcar.responseType).toEqual('code');
@@ -134,7 +145,7 @@ describe('sdk', () => {
 
       const smartcar = new Smartcar(options);
 
-      const evnt = {
+      const event = {
         data: {
           name: 'SmartcarAuthMessage',
           isSmartcarHosted: false,
@@ -145,7 +156,7 @@ describe('sdk', () => {
         origin: 'https://selfhosted.com',
       };
 
-      smartcar.messageHandler(evnt);
+      smartcar.messageHandler(event);
     });
 
     test("doesn't fire onComplete w/o origin", () => {
@@ -159,7 +170,7 @@ describe('sdk', () => {
 
       const smartcar = new Smartcar(options);
 
-      const evnt = {
+      const event = {
         data: {
           name: 'SmartcarAuthMessage',
           isSmartcarHosted: false,
@@ -169,13 +180,9 @@ describe('sdk', () => {
         },
       };
 
-      smartcar.messageHandler(evnt);
+      smartcar.messageHandler(event);
 
-      expect(smartcar.onComplete).not.toBeCalledWith(
-        null,
-        expect.anything(),
-        expect.anything()
-      );
+      expect(smartcar.onComplete).not.toBeCalledWith(null, expect.anything(), expect.anything());
     });
 
     test("doesn't fire onComplete when redirectUri & origin disagree", () => {
@@ -189,7 +196,7 @@ describe('sdk', () => {
 
       const smartcar = new Smartcar(options);
 
-      const evnt = {
+      const event = {
         data: {
           name: 'SmartcarAuthMessage',
           isSmartcarHosted: false,
@@ -200,13 +207,9 @@ describe('sdk', () => {
         origin: 'https://some-other-url.com',
       };
 
-      smartcar.messageHandler(evnt);
+      smartcar.messageHandler(event);
 
-      expect(smartcar.onComplete).not.toBeCalledWith(
-        null,
-        expect.anything(),
-        expect.anything()
-      );
+      expect(smartcar.onComplete).not.toBeCalledWith(null, expect.anything(), expect.anything());
     });
 
     test("doesn't fire onComplete or error when event.data is undefined", () => {
@@ -220,17 +223,13 @@ describe('sdk', () => {
 
       const smartcar = new Smartcar(options);
 
-      const evnt = {
+      const event = {
         origin: 'https://selfhosted.com',
       };
 
-      smartcar.messageHandler(evnt);
+      smartcar.messageHandler(event);
 
-      expect(smartcar.onComplete).not.toBeCalledWith(
-        null,
-        expect.anything(),
-        expect.anything()
-      );
+      expect(smartcar.onComplete).not.toBeCalledWith(null, expect.anything(), expect.anything());
     });
 
     test("doesn't fire onComplete when message has no name field", () => {
@@ -244,7 +243,7 @@ describe('sdk', () => {
 
       const smartcar = new Smartcar(options);
 
-      const evnt = {
+      const event = {
         data: {
           isSmartcarHosted: false,
           code: 'super-secret-code',
@@ -254,13 +253,9 @@ describe('sdk', () => {
         origin: 'https://selfhosted.com',
       };
 
-      smartcar.messageHandler(evnt);
+      smartcar.messageHandler(event);
 
-      expect(smartcar.onComplete).not.toBeCalledWith(
-        null,
-        expect.anything(),
-        expect.anything()
-      );
+      expect(smartcar.onComplete).not.toBeCalledWith(null, expect.anything(), expect.anything());
     });
 
     test("doesn't fire onComplete when message.name is not 'SmartcarAuthMessage'", () => {
@@ -274,7 +269,7 @@ describe('sdk', () => {
 
       const smartcar = new Smartcar(options);
 
-      const evnt = {
+      const event = {
         data: {
           name: 'definitely not SmartcarAuthMessage',
           isSmartcarHosted: false,
@@ -285,13 +280,9 @@ describe('sdk', () => {
         origin: 'https://selfhosted.com',
       };
 
-      smartcar.messageHandler(evnt);
+      smartcar.messageHandler(event);
 
-      expect(smartcar.onComplete).not.toBeCalledWith(
-        null,
-        expect.anything(),
-        expect.anything()
-      );
+      expect(smartcar.onComplete).not.toBeCalledWith(null, expect.anything(), expect.anything());
     });
 
     test(// eslint-disable-next-line max-len
@@ -306,7 +297,7 @@ describe('sdk', () => {
 
         const smartcar = new Smartcar(options);
 
-        const evnt = {
+        const event = {
           data: {
             name: 'SmartcarAuthMessage',
             isSmartcarHosted: true,
@@ -318,13 +309,9 @@ describe('sdk', () => {
           origin: CDN_ORIGIN,
         };
 
-        smartcar.messageHandler(evnt);
+        smartcar.messageHandler(event);
 
-        expect(smartcar.onComplete).toBeCalledWith(
-          null,
-          expect.anything(),
-          expect.anything()
-        );
+        expect(smartcar.onComplete).toBeCalledWith(null, expect.anything(), expect.anything());
       });
 
     test('fires onComplete w/o error when error: null in postMessage', () => {
@@ -338,7 +325,7 @@ describe('sdk', () => {
 
       const smartcar = new Smartcar(options);
 
-      const evnt = {
+      const event = {
         data: {
           name: 'SmartcarAuthMessage',
           isSmartcarHosted: true,
@@ -349,13 +336,9 @@ describe('sdk', () => {
         origin: CDN_ORIGIN,
       };
 
-      smartcar.messageHandler(evnt);
+      smartcar.messageHandler(event);
 
-      expect(smartcar.onComplete).toBeCalledWith(
-        null,
-        'super-secret-code',
-        'some-state'
-      );
+      expect(smartcar.onComplete).toBeCalledWith(null, 'super-secret-code', 'some-state');
     });
 
     test('fires onComplete w/o error when error key not in postMessage', () => {
@@ -369,7 +352,7 @@ describe('sdk', () => {
 
       const smartcar = new Smartcar(options);
 
-      const evnt = {
+      const event = {
         data: {
           name: 'SmartcarAuthMessage',
           isSmartcarHosted: true,
@@ -380,14 +363,163 @@ describe('sdk', () => {
         origin: CDN_ORIGIN,
       };
 
-      smartcar.messageHandler(evnt);
+      smartcar.messageHandler(event);
 
-      expect(smartcar.onComplete).toBeCalledWith(
-        null,
-        'super-secret-code',
-        'some-state'
-      );
+      expect(smartcar.onComplete).toBeCalledWith(null, 'super-secret-code', 'some-state');
     });
+
+    test(// eslint-disable-next-line max-len
+      'fires onComplete w/ VehicleIncompatible error when `error: vehicle_incompatible` in postMessage', () => {
+        const options = {
+          clientId: 'clientId',
+          redirectUri: `${CDN_ORIGIN}?app_origin=https://app.com`,
+          scope: ['read_vehicle_info', 'read_odometer'],
+          // eslint-disable-next-line no-unused-vars, no-empty-function
+          onComplete: jest.fn((__, _) => {}),
+        };
+
+        const smartcar = new Smartcar(options);
+        const errorDescription = 'describes the error';
+
+        const vehicleInfo = {
+          vin: 'some_vin',
+          year: '2017',
+          make: 'TESLA',
+          model: 'Model S',
+        };
+
+        const event = {
+          data: {
+            name: 'SmartcarAuthMessage',
+            isSmartcarHosted: true,
+            code: 'super-secret-code',
+            error: 'vehicle_incompatible',
+            errorDescription,
+            state: 'some-state',
+            ...vehicleInfo,
+          },
+          origin: CDN_ORIGIN,
+        };
+
+        smartcar.messageHandler(event);
+
+        expect(smartcar.onComplete).toBeCalledWith(
+          new Smartcar.VehicleIncompatible(errorDescription, vehicleInfo),
+          'super-secret-code',
+          'some-state',
+        );
+      });
+
+    test(// eslint-disable-next-line max-len
+      'VehicleIncompatible error does not add undefined properties to vehicleInfo', () => {
+        const options = {
+          clientId: 'clientId',
+          redirectUri: `${CDN_ORIGIN}?app_origin=https://app.com`,
+          scope: ['read_vehicle_info', 'read_odometer'],
+          // eslint-disable-next-line no-unused-vars, no-empty-function
+          onComplete: jest.fn((__, _) => {}),
+        };
+
+        const smartcar = new Smartcar(options);
+        const errorDescription = 'describes the error';
+
+        const vehicleInfo = {
+          year: '2017',
+          make: 'TESLA',
+          vin: 'some_vin',
+        };
+
+        const event = {
+          data: {
+            name: 'SmartcarAuthMessage',
+            isSmartcarHosted: true,
+            code: 'super-secret-code',
+            error: 'vehicle_incompatible',
+            errorDescription,
+            state: 'some-state',
+            ...vehicleInfo,
+          },
+          origin: CDN_ORIGIN,
+        };
+
+        options.onComplete.mockImplementation(function(err) {
+          expect(Object.keys(err.vehicleInfo)).not.toContain('model');
+        });
+
+        smartcar.messageHandler(event);
+      });
+
+    test(// eslint-disable-next-line max-len
+      'VehicleIncompatible returns a number for year', () => {
+        const options = {
+          clientId: 'clientId',
+          redirectUri: `${CDN_ORIGIN}?app_origin=https://app.com`,
+          scope: ['read_vehicle_info', 'read_odometer'],
+          // eslint-disable-next-line no-unused-vars, no-empty-function
+          onComplete: jest.fn((__, _) => {}),
+        };
+
+        const smartcar = new Smartcar(options);
+        const errorDescription = 'describes the error';
+
+        const vehicleInfo = {
+          vin: 'some_vin',
+          year: '2017',
+          make: 'TESLA',
+          model: 'Model S',
+        };
+
+        const event = {
+          data: {
+            name: 'SmartcarAuthMessage',
+            isSmartcarHosted: true,
+            code: 'super-secret-code',
+            error: 'vehicle_incompatible',
+            errorDescription,
+            state: 'some-state',
+            ...vehicleInfo,
+          },
+          origin: CDN_ORIGIN,
+        };
+
+        options.onComplete.mockImplementation(function(err) {
+          expect(typeof err.vehicleInfo.year).toBe('number');
+        });
+
+        smartcar.messageHandler(event);
+      });
+
+    test(// eslint-disable-next-line max-len
+      'VehicleIncompatible returns null for vehicleInfo when no info', () => {
+        const options = {
+          clientId: 'clientId',
+          redirectUri: `${CDN_ORIGIN}?app_origin=https://app.com`,
+          scope: ['read_vehicle_info', 'read_odometer'],
+          // eslint-disable-next-line no-unused-vars, no-empty-function
+          onComplete: jest.fn((__, _) => {}),
+        };
+
+        const smartcar = new Smartcar(options);
+        const errorDescription = 'describes the error';
+
+        const event = {
+          data: {
+            name: 'SmartcarAuthMessage',
+            isSmartcarHosted: true,
+            code: 'super-secret-code',
+            error: 'vehicle_incompatible',
+            errorDescription,
+            state: 'some-state',
+          },
+          origin: CDN_ORIGIN,
+        };
+
+        options.onComplete.mockImplementation(function(err) {
+          expect(err.vehicleInfo).toEqual(null);
+        });
+
+        smartcar.messageHandler(event);
+      });
 
     test(// eslint-disable-next-line max-len
       'fires onComplete w/ AccessDenied error when `error: access_denied` in postMessage', () => {
@@ -402,7 +534,7 @@ describe('sdk', () => {
         const smartcar = new Smartcar(options);
         const errorDescription = 'describes the error';
 
-        const evnt = {
+        const event = {
           data: {
             name: 'SmartcarAuthMessage',
             isSmartcarHosted: true,
@@ -414,17 +546,17 @@ describe('sdk', () => {
           origin: CDN_ORIGIN,
         };
 
-        smartcar.messageHandler(evnt);
+        smartcar.messageHandler(event);
 
         expect(smartcar.onComplete).toBeCalledWith(
           new Smartcar.AccessDenied(errorDescription),
           'super-secret-code',
-          'some-state'
+          'some-state',
         );
       });
 
     test(// eslint-disable-next-line max-len
-      'fires onComplete w/ "Unexpected error" error when `error` key has value other than `access_denied`', () => {
+      'fires onComplete w/ "Unexpected error" error when `error` key has unsupported value', () => {
         const options = {
           clientId: 'clientId',
           redirectUri: `${CDN_ORIGIN}?app_origin=https://app.com`,
@@ -437,7 +569,7 @@ describe('sdk', () => {
         const error = 'not_access_denied';
         const errorDescription = 'describes the error';
 
-        const evnt = {
+        const event = {
           data: {
             name: 'SmartcarAuthMessage',
             isSmartcarHosted: true,
@@ -449,12 +581,12 @@ describe('sdk', () => {
           origin: CDN_ORIGIN,
         };
 
-        smartcar.messageHandler(evnt);
+        smartcar.messageHandler(event);
 
         expect(smartcar.onComplete).toBeCalledWith(
           Error(`Unexpected error: ${error} - ${errorDescription}`),
           'super-secret-code',
-          'some-state'
+          'some-state',
         );
       });
   });
@@ -635,11 +767,7 @@ describe('sdk', () => {
 
       smartcar.openDialog(dialogOptions);
 
-      expect(mockOpen).toHaveBeenCalledWith(
-        expectedLink,
-        'Connect your car',
-        expectedOptions
-      );
+      expect(mockOpen).toHaveBeenCalledWith(expectedLink, 'Connect your car', expectedOptions);
     });
 
     test('addClickHandler throws error if id does not exist', () => {
@@ -662,7 +790,7 @@ describe('sdk', () => {
       };
 
       expect(() => smartcar.addClickHandler(clickHandlerOptions)).toThrow(
-        "Could not add click handler: element with id 'incorrect-id' was not found."
+        "Could not add click handler: element with id 'incorrect-id' was not found.",
       );
     });
 
@@ -691,11 +819,7 @@ describe('sdk', () => {
 
       document.getElementById(id).click();
 
-      expect(mockOpen).toHaveBeenCalledWith(
-        expectedLink,
-        'Connect your car',
-        expectedOptions
-      );
+      expect(mockOpen).toHaveBeenCalledWith(expectedLink, 'Connect your car', expectedOptions);
     });
   });
 });

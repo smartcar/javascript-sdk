@@ -29,6 +29,10 @@
     error: params.get('error'),
     errorDescription: params.get('error_description'),
     state: params.get('state'),
+    vin: params.get('vin'),
+    make: params.get('make'),
+    model: params.get('model'),
+    year: params.get('year'),
   };
 
   // if no `app_origin` given, post to same origin as redirect page (assuming

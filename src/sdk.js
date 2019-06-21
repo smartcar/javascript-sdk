@@ -5,7 +5,7 @@
 class Smartcar {
   /**
    * @callback OnComplete
-   * @param {?Error} error - something went wrong in the authorization flow; this
+   * @param {?Error} error - something went wrong in Connect; this
    * normally indicates that the user denied access to your application or does not
    * have a connected vehicle
    * @param {String} code - the authorization code to be exchanged from a
@@ -23,8 +23,8 @@ class Smartcar {
    * @param {String} options.redirectUri - the registered redirect uri of the
    * application
    * @param {String[]} [options.scope] - requested permission scopes
-   * @param {OnComplete} [options.onComplete] - called on completion of auth flow
-   * @param {Boolean} [options.testMode=false] - launch the Smartcar auth flow in test mode
+   * @param {OnComplete} [options.onComplete] - called on completion of Smartcar Connect
+   * @param {Boolean} [options.testMode=false] - launch Smartcar Connect in test mode
    */
   constructor(options) {
     // ensure options are well formed
@@ -61,10 +61,35 @@ class Smartcar {
             return null;
           }
 
-          return error === 'access_denied'
-            ? new Smartcar.AccessDenied(description)
-            : new Error(`Unexpected error: ${error} - ${description}`);
+          switch (error) {
+            case 'access_denied':
+              return new Smartcar.AccessDenied(description);
+            case 'vehicle_incompatible':
+              const params = event.data;
+
+              // This field will always exist if vehicleInfo is returned
+              if (!params.vin) {
+                return new Smartcar.VehicleIncompatible(description, null);
+              }
+
+              // These fields are required when vehicleInfo is returned
+              const vehicleInfo = {
+                vin: params.vin,
+                make: params.make,
+                year: Number(params.year),
+              };
+
+              // This field is optional
+              if (params.model) {
+                vehicleInfo.model = params.model;
+              }
+
+              return new Smartcar.VehicleIncompatible(description, vehicleInfo);
+            default:
+              return new Error(`Unexpected error: ${error} - ${description}`);
+          }
         };
+
         const err = generateError(message.error, message.errorDescription);
 
         /**
@@ -83,7 +108,7 @@ class Smartcar {
       }
     };
 
-    // add handler for postMessage event on completion of auth flow
+    // add handler for postMessage event on completion of Smartcar Connect
     window.addEventListener('message', this.messageHandler);
   }
 
@@ -100,7 +125,7 @@ class Smartcar {
     if (Smartcar._hasBeenInstantiated) {
       throw new Error(
         'Smartcar has already been instantiated in the window. Only one' +
-          ' instance of Smartcar can be defined.'
+          ' instance of Smartcar can be defined.',
       );
     } else {
       Smartcar._hasBeenInstantiated = true;
@@ -121,7 +146,16 @@ class Smartcar {
         throw new Error(
           "When using Smartcar's CDN redirect an onComplete function with at" +
             ' least 2 parameters (error & code) is required to handle' +
-            ' completion of authorization flow'
+            ' completion of Connect',
+        );
+      }
+
+      const usesOldUriScheme = (/redirect-[0-9]+\.[0-9]+\.[0-9]+\?/).test(options.redirectUri);
+
+      if (usesOldUriScheme) {
+        // eslint-disable-next-line no-console
+        console.warn(
+          "\nThe Smartcar redirect URI you're using is outdated! To update it, please see:\nhttps://smartcar.com/docs/guides/new-redirect-uri\n",
         );
       }
     }
@@ -166,7 +200,7 @@ class Smartcar {
    * see our [API Reference](https://smartcar.com/docs/api#authorization)
    * documentation.
    *
-   * @return {String} OAuth authorization URL to redirect user to.
+   * @return {String} Connect URL to redirect user to.
    *
    * @example
    * https://connect.smartcar.com/oauth/authorize?
@@ -250,9 +284,7 @@ class Smartcar {
 
     const element = document.getElementById(id);
     if (!element) {
-      throw new Error(
-        `Could not add click handler: element with id '${id}' was not found.`
-      );
+      throw new Error(`Could not add click handler: element with id '${id}' was not found.`);
     }
 
     element.addEventListener('click', () => {
@@ -266,7 +298,7 @@ class Smartcar {
 }
 
 /**
- * Access denied error returned by authorization flow.
+ * Access denied error returned by Connect.
  *
  * @extends Error
  */
@@ -277,5 +309,30 @@ Smartcar.AccessDenied = class extends Error {
   constructor(message) {
     super(message);
     this.name = 'AccessDenied';
+  }
+};
+
+/**
+ * Vehicle incompatible error returned by Connect. Will optionally
+ * have a vehicleInfo object if the user chooses to give permissions to provide
+ * that information. See our [Connect documentation](https://smartcar.com/docs/api#smartcar-connect)
+ * for more details.
+ *
+ * @extends Error
+ */
+Smartcar.VehicleIncompatible = class extends Error {
+  /**
+   * @param {String} message - detailed error description
+   * @param {?Object} vehicleInfo - If a vehicle is incompatible, the user has
+   * the option to return vehicleInfo to the application.
+   * @param {String} vehicleInfo.vin - returned if user gives permission.
+   * @param {String} vehicleInfo.make - returned if user gives permission.
+   * @param {Number} vehicleInfo.year - returned if user gives permission.
+   * @param {String} [vehicleInfo.model] - optionally returned if user gives permission.
+   */
+  constructor(message, vehicleInfo) {
+    super(message);
+    this.name = 'VehicleIncompatible';
+    this.vehicleInfo = vehicleInfo;
   }
 };
