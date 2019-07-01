@@ -207,9 +207,12 @@ class Smartcar {
    * consented to the exact scope of permission
    * @param {String} [options.vehicleInfo.make] - `vehicleInfo` is an
    * object with an optional property `make`, which allows users to bypass the
-   * car brand selection screen. For a complete list of supported makes, please
+   * car brand selection screen. For a complete list of supported brands, please
    * see our [API Reference](https://smartcar.com/docs/api#authorization)
    * documentation.
+   * @param {Boolean} [options.singleSelect=false] - only allows users to select
+   * a single vehicle. Please refer to the
+   * [Single Select Guide](https://smartcar.com/docs/guides/single-select/).
    *
    * @return {String} Connect URL to redirect user to.
    *
@@ -221,6 +224,7 @@ class Smartcar {
    * &redirect_uri=https://example.com/home
    * &state=0facda3319
    * &make=TESLA
+   * &single_select=true
    */
   getAuthUrl(options) {
     options = options || {};
@@ -242,6 +246,8 @@ class Smartcar {
     }
 
     link += `&mode=${this.mode}`;
+
+    link += `&single_select=${options.singleSelect || false}`;
 
     if (options.state) {
       link += `&state=${options.state}`;
