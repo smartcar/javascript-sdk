@@ -177,10 +177,11 @@ class Smartcar {
    * @return {String} a string of window settings
    */
   static _getWindowOptions() {
-    // Sets default popup window size
+    // Sets default popup window size as percentage of screen size
+    // Note that this only applies to desktop browsers
     const windowSettings = {
-      width: 430,
-      height: 500,
+      width: window.screen.width * 0.3,
+      height: window.screen.height * 0.75,
     };
 
     const width = (window.outerWidth - windowSettings.width) / 2;
