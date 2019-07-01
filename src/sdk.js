@@ -27,6 +27,15 @@ class Smartcar {
    * @param {Boolean} [options.testMode=false] - launch Smartcar Connect in test mode
    */
   constructor(options) {
+    // polyfill String.prototype.startsWith for IE11 support
+    if (!String.prototype.startsWith) {
+      // eslint-disable-next-line no-extend-native
+      String.prototype.startsWith = function(searchString, position) {
+        position = position || 0;
+        return this.substr(position, searchString.length) === searchString;
+      };
+    }
+
     // ensure options are well formed
     Smartcar._validateConstructorOptions(options);
 
