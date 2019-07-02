@@ -714,26 +714,7 @@ describe('sdk', () => {
     });
   });
 
-  describe('getWindowOptions', () => {
-    test('correctly computes size of popup window', () => {
-      window.outerWidth = 1024;
-      window.outerHeight = 768;
-      window.screenX = 10;
-      window.screenY = 20;
-
-      // computed width: (1024 - 430) / 2 = 297
-      // computed height: (768 - 500) / 8 = 134
-      const expectedOptions = 'top=53.5,left=307,width=430,height=500,';
-
-      expect(Smartcar._getWindowOptions()).toBe(expectedOptions);
-    });
-  });
-
   describe('openDialog and addClickHandler', () => {
-    // computed width: (1024 - 430) / 2 = 297
-    // computed height: (768 - 500) / 8 = 134
-    const expectedOptions = 'top=53.5,left=307,width=430,height=500,';
-
     const options = {
       clientId: 'clientId',
       redirectUri: 'https://smartcar.com',
@@ -750,24 +731,16 @@ describe('sdk', () => {
     const expectedLink =
       'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&state=foobarbaz';
 
-    beforeEach(() => {
-      // set window options
-      window.outerWidth = 1024;
-      window.outerHeight = 768;
-      window.screenX = 10;
-      window.screenY = 20;
-    });
-
-    test('openDialog calls window.open with correct args', () => {
+    test('openDialog calls window.open', () => {
       // mock window.open
       const mockOpen = jest.fn();
       window.open = mockOpen;
 
       const smartcar = new Smartcar(options);
 
+      expect(window.open).toHaveBeenCalledTimes(0);
       smartcar.openDialog(dialogOptions);
-
-      expect(mockOpen).toHaveBeenCalledWith(expectedLink, 'Connect your car', expectedOptions);
+      expect(window.open).toHaveBeenCalled();
     });
 
     test('addClickHandler throws error if id does not exist', () => {
@@ -819,7 +792,7 @@ describe('sdk', () => {
 
       document.getElementById(id).click();
 
-      expect(mockOpen).toHaveBeenCalledWith(expectedLink, 'Connect your car', expectedOptions);
+      expect(mockOpen).toHaveBeenCalled();
     });
   });
 });
