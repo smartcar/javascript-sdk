@@ -205,7 +205,7 @@ class Smartcar {
    * @param {Boolean} [options.forcePrompt=false] - force permission approval
    * screen to show on every authentication, even if the user has previously
    * consented to the exact scope of permission
-   * @param {Object} [options.vehicleInfo.make] - `vehicleInfo` is an
+   * @param {String} [options.vehicleInfo.make] - `vehicleInfo` is an
    * object with an optional property `make`, which allows users to bypass the
    * car brand selection screen. For a complete list of supported makes, please
    * see our [API Reference](https://smartcar.com/docs/api#authorization)
@@ -267,7 +267,7 @@ class Smartcar {
    * @param {Boolean} [options.forcePrompt=false] - force permission approval
    * screen to show on every authentication, even if the user has previously
    * consented to the exact scope of permission
-   * @param {Object} [options.vehicleInfo.make] - `vehicleInfo` is an
+   * @param {String} [options.vehicleInfo.make] - `vehicleInfo` is an
    * object with an optional property `make`, which allows users to bypass the
    * car brand selection screen. For a complete list of supported makes, please
    * see our [API Reference](https://smartcar.com/docs/api#authorization)
@@ -290,7 +290,7 @@ class Smartcar {
    * @param {Boolean} [options.forcePrompt=false] - force permission approval
    * screen to show on every authentication, even if the user has previously
    * consented to the exact scope of permission
-   * @param {Object} [options.vehicleInfo.make] - `vehicleInfo` is an
+   * @param {String} [options.vehicleInfo.make] - `vehicleInfo` is an
    * object with an optional property `make`, which allows users to bypass the
    * car brand selection screen. For a complete list of supported makes, please
    * see our [API Reference](https://smartcar.com/docs/api#authorization)
