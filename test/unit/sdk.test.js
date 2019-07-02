@@ -728,9 +728,6 @@ describe('sdk', () => {
     };
 
     // expected OAuth link
-    const expectedLink =
-      'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&state=foobarbaz';
-
     test('openDialog calls window.open', () => {
       // mock window.open
       const mockOpen = jest.fn();

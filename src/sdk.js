@@ -28,6 +28,7 @@ class Smartcar {
    */
   constructor(options) {
     // polyfill String.prototype.startsWith for IE11 support
+    // istanbul ignore next
     if (!String.prototype.startsWith) {
       // eslint-disable-next-line no-extend-native
       String.prototype.startsWith = function(searchString, position) {
