@@ -236,7 +236,7 @@ class Smartcar {
     link += `&redirect_uri=${encodeURIComponent(this.redirectUri)}`;
 
     // map forcePrompt to approvalPrompt, two options: 'force' and 'auto'
-    const forcePrompt = options.forcePrompt || false;
+    const forcePrompt = options.forcePrompt === true;
     link += `&approval_prompt=${forcePrompt ? 'force' : 'auto'}`;
 
     // If scope is not specified, Smartcar will default to requesting all scopes
@@ -247,7 +247,9 @@ class Smartcar {
 
     link += `&mode=${this.mode}`;
 
-    link += `&single_select=${options.singleSelect || false}`;
+    if (options.singleSelect) {
+      link += `&single_select=${options.singleSelect === true}`;
+    }
 
     if (options.state) {
       link += `&state=${options.state}`;
@@ -278,6 +280,9 @@ class Smartcar {
    * car brand selection screen. For a complete list of supported makes, please
    * see our [API Reference](https://smartcar.com/docs/api#authorization)
    * documentation.
+   * @param {Boolean} [options.singleSelect=false] - only allows users to select
+   * a single vehicle. Please refer to the
+   * [Single Select Guide](https://smartcar.com/docs/guides/single-select/).
    */
   openDialog(options) {
     const href = this.getAuthUrl(options);
@@ -301,6 +306,9 @@ class Smartcar {
    * car brand selection screen. For a complete list of supported makes, please
    * see our [API Reference](https://smartcar.com/docs/api#authorization)
    * documentation.
+   * @param {Boolean} [options.singleSelect=false] - only allows users to select
+   * a single vehicle. Please refer to the
+   * [Single Select Guide](https://smartcar.com/docs/guides/single-select/).
    */
   addClickHandler(options) {
     const id = options.id;

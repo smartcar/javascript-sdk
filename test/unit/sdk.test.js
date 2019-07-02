@@ -605,7 +605,7 @@ describe('sdk', () => {
       const smartcar = new Smartcar(options);
 
       const expectedLink =
-        'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=auto&mode=live&single_select=false';
+        'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=auto&mode=live';
       const link = smartcar.getAuthUrl();
       expect(link).toEqual(expectedLink);
     });
@@ -621,7 +621,7 @@ describe('sdk', () => {
       const smartcar = new Smartcar(options);
 
       const expectedLink =
-        'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&single_select=false&state=foobarbaz';
+        'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&state=foobarbaz';
       const link = smartcar.getAuthUrl({
         state: 'foobarbaz',
         forcePrompt: true,
@@ -641,7 +641,7 @@ describe('sdk', () => {
       const smartcar = new Smartcar(options);
 
       const expectedLink =
-        'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=test&single_select=false&state=foobarbaz';
+        'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=test&state=foobarbaz';
       const link = smartcar.getAuthUrl({
         state: 'foobarbaz',
         forcePrompt: true,
@@ -661,7 +661,7 @@ describe('sdk', () => {
       const smartcar = new Smartcar(options);
 
       const expectedLink =
-        'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&single_select=false&state=foobarbaz';
+        'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&state=foobarbaz';
       const link = smartcar.getAuthUrl({
         state: 'foobarbaz',
         forcePrompt: true,
@@ -681,7 +681,7 @@ describe('sdk', () => {
       const smartcar = new Smartcar(options);
 
       const expectedLink =
-        'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&single_select=false&state=foobarbaz&make=TESLA';
+        'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&state=foobarbaz&make=TESLA';
 
       const link = smartcar.getAuthUrl({
         state: 'foobarbaz',
