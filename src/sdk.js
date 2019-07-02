@@ -205,7 +205,7 @@ class Smartcar {
    * @param {Boolean} [options.forcePrompt=false] - force permission approval
    * screen to show on every authentication, even if the user has previously
    * consented to the exact scope of permission
-   * @param {Object|string} [options.vehicleInfo.make] - `vehicleInfo` is an
+   * @param {Object} [options.vehicleInfo.make] - `vehicleInfo` is an
    * object with an optional property `make`, which allows users to bypass the
    * car brand selection screen. For a complete list of supported makes, please
    * see our [API Reference](https://smartcar.com/docs/api#authorization)
@@ -260,13 +260,18 @@ class Smartcar {
   }
 
   /**
-   * Launches the OAuth dialog flow.
+   * Launches Smartcar Connect in a new window.
    *
    * @param {Object} options - the link configuration object
-   * @param {String} [options.state] - arbitrary parameter passed to redirect uri
+   * @param {String} [options.state] - arbitrary state passed to redirect uri
    * @param {Boolean} [options.forcePrompt=false] - force permission approval
    * screen to show on every authentication, even if the user has previously
    * consented to the exact scope of permission
+   * @param {Object} [options.vehicleInfo.make] - `vehicleInfo` is an
+   * object with an optional property `make`, which allows users to bypass the
+   * car brand selection screen. For a complete list of supported makes, please
+   * see our [API Reference](https://smartcar.com/docs/api#authorization)
+   * documentation.
    */
   openDialog(options) {
     const href = this.getAuthUrl(options);
@@ -281,25 +286,28 @@ class Smartcar {
    *
    * @param {Object} options - clickHandler configuration object
    * @param {String} options.id - id of the element to add click handler to
-   * @param {String} [options.state] - arbitrary parameter passed to redirect uri
-   * @param {Boolean} [options.forcePrompt] - force permission approval screen to
-   * show on every authentication, even if the user has previously consented
-   * to the exact scope of permission
+   * @param {String} [options.state] - arbitrary state passed to redirect uri
+   * @param {Boolean} [options.forcePrompt=false] - force permission approval
+   * screen to show on every authentication, even if the user has previously
+   * consented to the exact scope of permission
+   * @param {Object} [options.vehicleInfo.make] - `vehicleInfo` is an
+   * object with an optional property `make`, which allows users to bypass the
+   * car brand selection screen. For a complete list of supported makes, please
+   * see our [API Reference](https://smartcar.com/docs/api#authorization)
+   * documentation.
    */
   addClickHandler(options) {
     const id = options.id;
-    const dialogOptions = {
-      state: options.state,
-      forcePrompt: options.forcePrompt,
-    };
 
     const element = document.getElementById(id);
     if (!element) {
       throw new Error(`Could not add click handler: element with id '${id}' was not found.`);
     }
 
+    delete options.id;
+
     element.addEventListener('click', () => {
-      this.openDialog(dialogOptions);
+      this.openDialog(options);
       // this is equivalent to calling:
       // event.preventDefault();
       // event.stopPropogation();
