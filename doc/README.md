@@ -62,7 +62,7 @@ Generates Smartcar OAuth URL.
 | options | <code>Object</code> |  | the link configuration object |
 | [options.state] | <code>String</code> |  | arbitrary state passed to redirect uri |
 | [options.forcePrompt] | <code>Boolean</code> | <code>false</code> | force permission approval screen to show on every authentication, even if the user has previously consented to the exact scope of permission |
-| [options.vehicleInfo.make] | <code>Object</code> |  | `vehicleInfo` is an object with an optional property `make`, which allows users to bypass the car brand selection screen. For a complete list of supported makes, please see our [API Reference](https://smartcar.com/docs/api#authorization) documentation. |
+| [options.vehicleInfo.make] | <code>String</code> |  | `vehicleInfo` is an object with an optional property `make`, which allows users to bypass the car brand selection screen. For a complete list of supported makes, please see our [API Reference](https://smartcar.com/docs/api#authorization) documentation. |
 
 **Example**
 ```js
@@ -86,7 +86,7 @@ Launches Smartcar Connect in a new window.
 | options | <code>Object</code> |  | the link configuration object |
 | [options.state] | <code>String</code> |  | arbitrary state passed to redirect uri |
 | [options.forcePrompt] | <code>Boolean</code> | <code>false</code> | force permission approval screen to show on every authentication, even if the user has previously consented to the exact scope of permission |
-| [options.vehicleInfo.make] | <code>Object</code> |  | `vehicleInfo` is an object with an optional property `make`, which allows users to bypass the car brand selection screen. For a complete list of supported makes, please see our [API Reference](https://smartcar.com/docs/api#authorization) documentation. |
+| [options.vehicleInfo.make] | <code>String</code> |  | `vehicleInfo` is an object with an optional property `make`, which allows users to bypass the car brand selection screen. For a complete list of supported makes, please see our [API Reference](https://smartcar.com/docs/api#authorization) documentation. |
 
 <a name="Smartcar+addClickHandler"></a>
 
@@ -103,7 +103,7 @@ On-click event calls openDialog when the specified element is clicked.
 | options.id | <code>String</code> |  | id of the element to add click handler to |
 | [options.state] | <code>String</code> |  | arbitrary state passed to redirect uri |
 | [options.forcePrompt] | <code>Boolean</code> | <code>false</code> | force permission approval screen to show on every authentication, even if the user has previously consented to the exact scope of permission |
-| [options.vehicleInfo.make] | <code>Object</code> |  | `vehicleInfo` is an object with an optional property `make`, which allows users to bypass the car brand selection screen. For a complete list of supported makes, please see our [API Reference](https://smartcar.com/docs/api#authorization) documentation. |
+| [options.vehicleInfo.make] | <code>String</code> |  | `vehicleInfo` is an object with an optional property `make`, which allows users to bypass the car brand selection screen. For a complete list of supported makes, please see our [API Reference](https://smartcar.com/docs/api#authorization) documentation. |
 
 <a name="Smartcar.AccessDenied"></a>
 
