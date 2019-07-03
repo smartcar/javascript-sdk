@@ -27,6 +27,16 @@ class Smartcar {
    * @param {Boolean} [options.testMode=false] - launch Smartcar Connect in test mode
    */
   constructor(options) {
+    // polyfill String.prototype.startsWith for IE11 support
+    // istanbul ignore next
+    if (!String.prototype.startsWith) {
+      // eslint-disable-next-line no-extend-native
+      String.prototype.startsWith = function(searchString, position) {
+        position = position || 0;
+        return this.substr(position, searchString.length) === searchString;
+      };
+    }
+
     // ensure options are well formed
     Smartcar._validateConstructorOptions(options);
 
@@ -168,10 +178,11 @@ class Smartcar {
    * @return {String} a string of window settings
    */
   static _getWindowOptions() {
-    // Sets default popup window size
+    // Sets default popup window size as percentage of screen size
+    // Note that this only applies to desktop browsers
     const windowSettings = {
-      width: 430,
-      height: 500,
+      width: window.screen.width * 0.3,
+      height: window.screen.height * 0.75,
     };
 
     const width = (window.outerWidth - windowSettings.width) / 2;
@@ -194,7 +205,7 @@ class Smartcar {
    * @param {Boolean} [options.forcePrompt=false] - force permission approval
    * screen to show on every authentication, even if the user has previously
    * consented to the exact scope of permission
-   * @param {Object|string} [options.vehicleInfo.make] - `vehicleInfo` is an
+   * @param {String} [options.vehicleInfo.make] - `vehicleInfo` is an
    * object with an optional property `make`, which allows users to bypass the
    * car brand selection screen. For a complete list of supported makes, please
    * see our [API Reference](https://smartcar.com/docs/api#authorization)
@@ -249,13 +260,18 @@ class Smartcar {
   }
 
   /**
-   * Launches the OAuth dialog flow.
+   * Launches Smartcar Connect in a new window.
    *
    * @param {Object} options - the link configuration object
-   * @param {String} [options.state] - arbitrary parameter passed to redirect uri
+   * @param {String} [options.state] - arbitrary state passed to redirect uri
    * @param {Boolean} [options.forcePrompt=false] - force permission approval
    * screen to show on every authentication, even if the user has previously
    * consented to the exact scope of permission
+   * @param {String} [options.vehicleInfo.make] - `vehicleInfo` is an
+   * object with an optional property `make`, which allows users to bypass the
+   * car brand selection screen. For a complete list of supported makes, please
+   * see our [API Reference](https://smartcar.com/docs/api#authorization)
+   * documentation.
    */
   openDialog(options) {
     const href = this.getAuthUrl(options);
@@ -270,25 +286,28 @@ class Smartcar {
    *
    * @param {Object} options - clickHandler configuration object
    * @param {String} options.id - id of the element to add click handler to
-   * @param {String} [options.state] - arbitrary parameter passed to redirect uri
-   * @param {Boolean} [options.forcePrompt] - force permission approval screen to
-   * show on every authentication, even if the user has previously consented
-   * to the exact scope of permission
+   * @param {String} [options.state] - arbitrary state passed to redirect uri
+   * @param {Boolean} [options.forcePrompt=false] - force permission approval
+   * screen to show on every authentication, even if the user has previously
+   * consented to the exact scope of permission
+   * @param {String} [options.vehicleInfo.make] - `vehicleInfo` is an
+   * object with an optional property `make`, which allows users to bypass the
+   * car brand selection screen. For a complete list of supported makes, please
+   * see our [API Reference](https://smartcar.com/docs/api#authorization)
+   * documentation.
    */
   addClickHandler(options) {
     const id = options.id;
-    const dialogOptions = {
-      state: options.state,
-      forcePrompt: options.forcePrompt,
-    };
 
     const element = document.getElementById(id);
     if (!element) {
       throw new Error(`Could not add click handler: element with id '${id}' was not found.`);
     }
 
+    delete options.id;
+
     element.addEventListener('click', () => {
-      this.openDialog(dialogOptions);
+      this.openDialog(options);
       // this is equivalent to calling:
       // event.preventDefault();
       // event.stopPropogation();

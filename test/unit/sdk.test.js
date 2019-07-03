@@ -2,6 +2,9 @@
 
 const Smartcar = require('../../dist/umd/sdk.js');
 
+const isValidWindowOptions = (str) =>
+  (/^top=[0-9.]+,left=[0-9.]+,width=[0-9.]+,height=[0-9.]+,$/).test(str);
+
 describe('sdk', () => {
   const CDN_ORIGIN = 'https://javascript-sdk.smartcar.com';
 
@@ -714,26 +717,7 @@ describe('sdk', () => {
     });
   });
 
-  describe('getWindowOptions', () => {
-    test('correctly computes size of popup window', () => {
-      window.outerWidth = 1024;
-      window.outerHeight = 768;
-      window.screenX = 10;
-      window.screenY = 20;
-
-      // computed width: (1024 - 430) / 2 = 297
-      // computed height: (768 - 500) / 8 = 134
-      const expectedOptions = 'top=53.5,left=307,width=430,height=500,';
-
-      expect(Smartcar._getWindowOptions()).toBe(expectedOptions);
-    });
-  });
-
   describe('openDialog and addClickHandler', () => {
-    // computed width: (1024 - 430) / 2 = 297
-    // computed height: (768 - 500) / 8 = 134
-    const expectedOptions = 'top=53.5,left=307,width=430,height=500,';
-
     const options = {
       clientId: 'clientId',
       redirectUri: 'https://smartcar.com',
@@ -748,26 +732,26 @@ describe('sdk', () => {
 
     // expected OAuth link
     const expectedLink =
-      'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&state=foobarbaz';
+    'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&state=foobarbaz';
 
-    beforeEach(() => {
-      // set window options
-      window.outerWidth = 1024;
-      window.outerHeight = 768;
-      window.screenX = 10;
-      window.screenY = 20;
-    });
-
-    test('openDialog calls window.open with correct args', () => {
+    test('openDialog calls window.open', () => {
       // mock window.open
       const mockOpen = jest.fn();
       window.open = mockOpen;
 
       const smartcar = new Smartcar(options);
 
-      smartcar.openDialog(dialogOptions);
+      expect(window.open).toHaveBeenCalledTimes(0);
 
-      expect(mockOpen).toHaveBeenCalledWith(expectedLink, 'Connect your car', expectedOptions);
+      mockOpen.mockImplementation((href, description, windowOptions) => {
+        expect(href).toEqual(expectedLink);
+        expect(description).toEqual('Connect your car');
+        expect(isValidWindowOptions(windowOptions))
+          .toBe(true, 'correctly formatted windowOptions');
+      });
+
+      smartcar.openDialog(dialogOptions);
+      expect(window.open).toHaveBeenCalled();
     });
 
     test('addClickHandler throws error if id does not exist', () => {
@@ -817,9 +801,15 @@ describe('sdk', () => {
 
       expect(mockOpen).toHaveBeenCalledTimes(0);
 
-      document.getElementById(id).click();
+      mockOpen.mockImplementation((href, description, windowOptions) => {
+        expect(href).toEqual(expectedLink);
+        expect(description).toEqual('Connect your car');
+        expect(isValidWindowOptions(windowOptions))
+          .toBe(true, 'correctly formatted windowOptions');
+      });
 
-      expect(mockOpen).toHaveBeenCalledWith(expectedLink, 'Connect your car', expectedOptions);
+      document.getElementById(id).click();
+      expect(mockOpen).toHaveBeenCalled();
     });
   });
 });
