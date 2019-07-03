@@ -2,6 +2,9 @@
 
 const Smartcar = require('../../dist/umd/sdk.js');
 
+const isValidWindowOptions = (str) =>
+  (/^top=[0-9.]+,left=[0-9.]+,width=[0-9.]+,height=[0-9.]+,$/).test(str);
+
 describe('sdk', () => {
   const CDN_ORIGIN = 'https://javascript-sdk.smartcar.com';
 
@@ -728,6 +731,9 @@ describe('sdk', () => {
     };
 
     // expected OAuth link
+    const expectedLink =
+    'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&state=foobarbaz';
+
     test('openDialog calls window.open', () => {
       // mock window.open
       const mockOpen = jest.fn();
@@ -736,6 +742,14 @@ describe('sdk', () => {
       const smartcar = new Smartcar(options);
 
       expect(window.open).toHaveBeenCalledTimes(0);
+
+      mockOpen.mockImplementation((href, description, windowOptions) => {
+        expect(href).toEqual(expectedLink);
+        expect(description).toEqual('Connect your car');
+        expect(isValidWindowOptions(windowOptions))
+          .toBe(true, 'correctly formatted windowOptions');
+      });
+
       smartcar.openDialog(dialogOptions);
       expect(window.open).toHaveBeenCalled();
     });
@@ -787,8 +801,14 @@ describe('sdk', () => {
 
       expect(mockOpen).toHaveBeenCalledTimes(0);
 
-      document.getElementById(id).click();
+      mockOpen.mockImplementation((href, description, windowOptions) => {
+        expect(href).toEqual(expectedLink);
+        expect(description).toEqual('Connect your car');
+        expect(isValidWindowOptions(windowOptions))
+          .toBe(true, 'correctly formatted windowOptions');
+      });
 
+      document.getElementById(id).click();
       expect(mockOpen).toHaveBeenCalled();
     });
   });
