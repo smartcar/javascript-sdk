@@ -24,7 +24,7 @@ npm install @smartcar/auth
 ### Smartcar CDN
 
 ```html
-<script src="https://javascript-sdk.smartcar.com/2.2.1/sdk.js"></script>
+<script src="https://javascript-sdk.smartcar.com/2.3.0/sdk.js"></script>
 ```
 
 Before v2.2.0, the SDK was versioned as follows:
@@ -192,4 +192,4 @@ https://application-backend.com/page?error=access_denied&error_description=User+
 [tag-image]: https://img.shields.io/github/tag/smartcar/javascript-sdk.svg
 
 <!-- Please do not modify or remove this, it is used by the build process -->
-[version]: 2.2.1
+[version]: 2.3.0
