@@ -210,7 +210,7 @@ class Smartcar {
    * car brand selection screen. For a complete list of supported brands, please
    * see our [API Reference](https://smartcar.com/docs/api#authorization)
    * documentation.
-   * @param {Boolean} [options.singleSelect=false] - only allows users to select
+   * @param {Boolean} [options.singleSelect] - only allows users to select
    * a single vehicle. Please refer to the
    * [Single Select Guide](https://smartcar.com/docs/guides/single-select/).
    *
@@ -280,7 +280,7 @@ class Smartcar {
    * car brand selection screen. For a complete list of supported makes, please
    * see our [API Reference](https://smartcar.com/docs/api#authorization)
    * documentation.
-   * @param {Boolean} [options.singleSelect=false] - only allows users to select
+   * @param {Boolean} [options.singleSelect] - only allows users to select
    * a single vehicle. Please refer to the
    * [Single Select Guide](https://smartcar.com/docs/guides/single-select/).
    */
@@ -306,7 +306,7 @@ class Smartcar {
    * car brand selection screen. For a complete list of supported makes, please
    * see our [API Reference](https://smartcar.com/docs/api#authorization)
    * documentation.
-   * @param {Boolean} [options.singleSelect=false] - only allows users to select
+   * @param {Boolean} [options.singleSelect] - only allows users to select
    * a single vehicle. Please refer to the
    * [Single Select Guide](https://smartcar.com/docs/guides/single-select/).
    */
