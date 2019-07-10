@@ -1,6 +1,6 @@
 {
   "name": "@smartcar/auth",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "javascript auth sdk for the smartcar",
   "main": "dist/npm/sdk.js",
   "license": "MIT",
@@ -15,7 +15,8 @@
   "homepage": "https://github.com/smartcar/javascript-sdk#readme",
   "files": [
     "dist/npm/**",
-    "doc/**"
+    "doc/**",
+    "postinstall.js"
   ],
   "scripts": {
     "pretest": "gulp build",
