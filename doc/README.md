@@ -63,7 +63,7 @@ Generates Smartcar OAuth URL.
 | [options.state] | <code>String</code> |  | arbitrary state passed to redirect uri |
 | [options.forcePrompt] | <code>Boolean</code> | <code>false</code> | force permission approval screen to show on every authentication, even if the user has previously consented to the exact scope of permission |
 | [options.vehicleInfo.make] | <code>String</code> |  | `vehicleInfo` is an object with an optional property `make`, which allows users to bypass the car brand selection screen. For a complete list of supported brands, please see our [API Reference](https://smartcar.com/docs/api#authorization) documentation. |
-| [options.singleSelect] | <code>Boolean</code> | <code>false</code> | only allows users to select a single vehicle. Please refer to the [Single Select Guide](https://smartcar.com/docs/guides/single-select/). |
+| [options.singleSelect] | <code>Boolean</code> |  | only allows users to select a single vehicle. Please refer to the [Single Select Guide](https://smartcar.com/docs/guides/single-select/). |
 
 **Example**
 ```js
@@ -89,7 +89,7 @@ Launches Smartcar Connect in a new window.
 | [options.state] | <code>String</code> |  | arbitrary state passed to redirect uri |
 | [options.forcePrompt] | <code>Boolean</code> | <code>false</code> | force permission approval screen to show on every authentication, even if the user has previously consented to the exact scope of permission |
 | [options.vehicleInfo.make] | <code>String</code> |  | `vehicleInfo` is an object with an optional property `make`, which allows users to bypass the car brand selection screen. For a complete list of supported makes, please see our [API Reference](https://smartcar.com/docs/api#authorization) documentation. |
-| [options.singleSelect] | <code>Boolean</code> | <code>false</code> | only allows users to select a single vehicle. Please refer to the [Single Select Guide](https://smartcar.com/docs/guides/single-select/). |
+| [options.singleSelect] | <code>Boolean</code> |  | only allows users to select a single vehicle. Please refer to the [Single Select Guide](https://smartcar.com/docs/guides/single-select/). |
 
 <a name="Smartcar+addClickHandler"></a>
 
@@ -107,7 +107,7 @@ On-click event calls openDialog when the specified element is clicked.
 | [options.state] | <code>String</code> |  | arbitrary state passed to redirect uri |
 | [options.forcePrompt] | <code>Boolean</code> | <code>false</code> | force permission approval screen to show on every authentication, even if the user has previously consented to the exact scope of permission |
 | [options.vehicleInfo.make] | <code>String</code> |  | `vehicleInfo` is an object with an optional property `make`, which allows users to bypass the car brand selection screen. For a complete list of supported makes, please see our [API Reference](https://smartcar.com/docs/api#authorization) documentation. |
-| [options.singleSelect] | <code>Boolean</code> | <code>false</code> | only allows users to select a single vehicle. Please refer to the [Single Select Guide](https://smartcar.com/docs/guides/single-select/). |
+| [options.singleSelect] | <code>Boolean</code> |  | only allows users to select a single vehicle. Please refer to the [Single Select Guide](https://smartcar.com/docs/guides/single-select/). |
 
 <a name="Smartcar.AccessDenied"></a>
 

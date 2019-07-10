@@ -767,6 +767,28 @@ describe('sdk', () => {
 
       expect(link).toEqual(expectedLink);
     });
+
+    test('Excludes single_select with no value passed to singleSelect', () => {
+      const options = {
+        clientId: 'clientId',
+        redirectUri: 'https://smartcar.com',
+        scope: ['read_vehicle_info', 'read_odometer'],
+        onComplete: jest.fn(),
+        testMode: false,
+      };
+
+      const smartcar = new Smartcar(options);
+
+      const link = smartcar.getAuthUrl({
+        state: 'foobarbaz',
+        forcePrompt: true,
+        vehicleInfo: {
+          make: 'TESLA',
+        },
+      });
+
+      expect(link.includes('single_select')).toBe(false);
+    });
   });
 
   describe('openDialog and addClickHandler', () => {
