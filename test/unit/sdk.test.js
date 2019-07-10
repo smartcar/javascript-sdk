@@ -768,7 +768,7 @@ describe('sdk', () => {
       expect(link).toEqual(expectedLink);
     });
 
-    test('Excludes single_select with no value passed to singleSelect', () => {
+    test('Excludes single_select from url when not passed to getAuthUrl', () => {
       const options = {
         clientId: 'clientId',
         redirectUri: 'https://smartcar.com',
