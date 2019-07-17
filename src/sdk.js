@@ -249,7 +249,7 @@ class Smartcar {
 
     link += `&mode=${this.mode}`;
 
-    if (options.singleSelect) {
+    if (options.singleSelect !== undefined) {
       link += `&single_select=${options.singleSelect === true}`;
     }
 
