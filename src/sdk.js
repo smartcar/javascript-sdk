@@ -251,22 +251,22 @@ class Smartcar {
 
     link += `&mode=${this.mode}`;
 
-<<<<<<< HEAD
     if (options.singleSelect !== undefined) {
-      link += `&single_select=${options.singleSelect === true}`;
-=======
-    if (options.singleSelect) {
+      let singleSelectParamAdded = false;
       if (typeof options.singleSelect === 'object' && options.singleSelect !== null) {
         const availableParams = ['vin'];
         for (const param of availableParams) {
           if (param in options.singleSelect) {
             link += `&single_select_${param}=${options.singleSelect[param]}`;
+            singleSelectParamAdded = true;
           }
+        }
+        if (!singleSelectParamAdded) {
+          link += '&single_select=false';
         }
       } else {
         link += `&single_select=${options.singleSelect === true}`;
       }
->>>>>>> chore: add params for single select v1.2
     }
 
     if (options.state) {

@@ -782,7 +782,7 @@ describe('sdk', () => {
       const smartcar = new Smartcar(options);
 
       const expectedLink =
-        'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&state=foobarbaz&make=TESLA';
+        'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&single_select=false&state=foobarbaz&make=TESLA';
 
       const link = smartcar.getAuthUrl({
         state: 'foobarbaz',
