@@ -207,9 +207,14 @@ class Smartcar {
    * consented to the exact scope of permission
    * @param {String} [options.vehicleInfo.make] - `vehicleInfo` is an
    * object with an optional property `make`, which allows users to bypass the
-   * car brand selection screen. For a complete list of supported makes, please
+   * car brand selection screen. For a complete list of supported brands, please
    * see our [API Reference](https://smartcar.com/docs/api#authorization)
    * documentation.
+   * @param {Boolean} [options.singleSelect] - An optional value that sets the
+   * behavior of the grant dialog displayed to the user. If set to `true`,
+   * `single_select` limits the user to selecting only one vehicle. Defaults to
+   * `false`. See the [Single Select guide](https://smartcar.com/docs/guides/single-select/)
+   * for more information.
    *
    * @return {String} Connect URL to redirect user to.
    *
@@ -221,6 +226,7 @@ class Smartcar {
    * &redirect_uri=https://example.com/home
    * &state=0facda3319
    * &make=TESLA
+   * &single_select=true
    */
   getAuthUrl(options) {
     options = options || {};
@@ -232,7 +238,7 @@ class Smartcar {
     link += `&redirect_uri=${encodeURIComponent(this.redirectUri)}`;
 
     // map forcePrompt to approvalPrompt, two options: 'force' and 'auto'
-    const forcePrompt = options.forcePrompt || false;
+    const forcePrompt = options.forcePrompt === true;
     link += `&approval_prompt=${forcePrompt ? 'force' : 'auto'}`;
 
     // If scope is not specified, Smartcar will default to requesting all scopes
@@ -242,6 +248,10 @@ class Smartcar {
     }
 
     link += `&mode=${this.mode}`;
+
+    if (options.singleSelect !== undefined) {
+      link += `&single_select=${options.singleSelect === true}`;
+    }
 
     if (options.state) {
       link += `&state=${options.state}`;
@@ -272,6 +282,11 @@ class Smartcar {
    * car brand selection screen. For a complete list of supported makes, please
    * see our [API Reference](https://smartcar.com/docs/api#authorization)
    * documentation.
+   * @param {Boolean} [options.singleSelect] - An optional value that sets the
+   * behavior of the grant dialog displayed to the user. If set to `true`,
+   * `single_select` limits the user to selecting only one vehicle. Defaults to
+   * `false`. See the [Single Select guide](https://smartcar.com/docs/guides/single-select/)
+   * for more information.
    */
   openDialog(options) {
     const href = this.getAuthUrl(options);
@@ -295,6 +310,11 @@ class Smartcar {
    * car brand selection screen. For a complete list of supported makes, please
    * see our [API Reference](https://smartcar.com/docs/api#authorization)
    * documentation.
+   * @param {Boolean} [options.singleSelect] - An optional value that sets the
+   * behavior of the grant dialog displayed to the user. If set to `true`,
+   * `single_select` limits the user to selecting only one vehicle. Defaults to
+   * `false`. See the [Single Select guide](https://smartcar.com/docs/guides/single-select/)
+   * for more information.
    */
   addClickHandler(options) {
     const id = options.id;
