@@ -263,6 +263,8 @@ class Smartcar {
         }
         if (!singleSelectParamAdded) {
           link += '&single_select=false';
+        } else {
+          link += '&single_select=true';
         }
       } else {
         link += `&single_select=${options.singleSelect === true}`;
