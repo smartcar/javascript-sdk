@@ -251,9 +251,9 @@ class Smartcar {
 
     link += `&mode=${this.mode}`;
 
-    if (options.singleSelect !== undefined) {
+    if (options.singleSelect !== undefined && options.singleSelect !== null) {
       let singleSelectParamAdded = false;
-      if (typeof options.singleSelect === 'object' && options.singleSelect !== null) {
+      if (typeof options.singleSelect === 'object') {
         const availableParams = ['vin'];
         for (const param of availableParams) {
           if (param in options.singleSelect) {
