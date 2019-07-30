@@ -210,10 +210,12 @@ class Smartcar {
    * car brand selection screen. For a complete list of supported brands, please
    * see our [API Reference](https://smartcar.com/docs/api#authorization)
    * documentation.
-   * @param {Boolean} [options.singleSelect] - An optional value that sets the
+   * @param {Boolean|Object} [options.singleSelect] - An optional value that sets the
    * behavior of the grant dialog displayed to the user. If set to `true`,
-   * `single_select` limits the user to selecting only one vehicle. Defaults to
-   * `false`. See the [Single Select guide](https://smartcar.com/docs/guides/single-select/)
+   * `single_select` limits the user to selecting only one vehicle. If `single_select`
+   * is passed in as an object with the property `vin`, Smartcar will only authorize
+   * the vehicle with the specified VIN. See the
+   * [Single Select guide](https://smartcar.com/docs/guides/single-select/)
    * for more information.
    *
    * @return {String} Connect URL to redirect user to.
@@ -249,8 +251,24 @@ class Smartcar {
 
     link += `&mode=${this.mode}`;
 
-    if (options.singleSelect !== undefined) {
-      link += `&single_select=${options.singleSelect === true}`;
+    if (options.singleSelect !== undefined && options.singleSelect !== null) {
+      let singleSelectParamAdded = false;
+      if (typeof options.singleSelect === 'object') {
+        const availableParams = ['vin'];
+        for (const param of availableParams) {
+          if (param in options.singleSelect) {
+            link += `&single_select_${param}=${options.singleSelect[param]}`;
+            singleSelectParamAdded = true;
+          }
+        }
+        if (!singleSelectParamAdded) {
+          link += '&single_select=false';
+        } else {
+          link += '&single_select=true';
+        }
+      } else {
+        link += `&single_select=${options.singleSelect === true}`;
+      }
     }
 
     if (options.state) {
@@ -282,10 +300,12 @@ class Smartcar {
    * car brand selection screen. For a complete list of supported makes, please
    * see our [API Reference](https://smartcar.com/docs/api#authorization)
    * documentation.
-   * @param {Boolean} [options.singleSelect] - An optional value that sets the
+   * @param {Boolean|Object} [options.singleSelect] - An optional value that sets the
    * behavior of the grant dialog displayed to the user. If set to `true`,
-   * `single_select` limits the user to selecting only one vehicle. Defaults to
-   * `false`. See the [Single Select guide](https://smartcar.com/docs/guides/single-select/)
+   * `single_select` limits the user to selecting only one vehicle. If `single_select`
+   * is passed in as an object with the property `vin`, Smartcar will only authorize
+   * the vehicle with the specified VIN. See the
+   * [Single Select guide](https://smartcar.com/docs/guides/single-select/)
    * for more information.
    */
   openDialog(options) {
@@ -310,10 +330,12 @@ class Smartcar {
    * car brand selection screen. For a complete list of supported makes, please
    * see our [API Reference](https://smartcar.com/docs/api#authorization)
    * documentation.
-   * @param {Boolean} [options.singleSelect] - An optional value that sets the
+   * @param {Boolean|Object} [options.singleSelect] - An optional value that sets the
    * behavior of the grant dialog displayed to the user. If set to `true`,
-   * `single_select` limits the user to selecting only one vehicle. Defaults to
-   * `false`. See the [Single Select guide](https://smartcar.com/docs/guides/single-select/)
+   * `single_select` limits the user to selecting only one vehicle. If `single_select`
+   * is passed in as an object with the property `vin`, Smartcar will only authorize
+   * the vehicle with the specified VIN. See the
+   * [Single Select guide](https://smartcar.com/docs/guides/single-select/)
    * for more information.
    */
   addClickHandler(options) {
