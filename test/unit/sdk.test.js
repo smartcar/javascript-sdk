@@ -8,10 +8,6 @@ const isValidWindowOptions = (str) =>
 describe('sdk', () => {
   const CDN_ORIGIN = 'https://javascript-sdk.smartcar.com';
 
-  beforeEach(() => {
-    Smartcar._hasBeenInstantiated = false;
-  });
-
   describe('constructor', () => {
     test('throws error if constructor called without redirectUri', () => {
       expect(() => new Smartcar({clientId: 'uuid'})).toThrow(
@@ -22,16 +18,6 @@ describe('sdk', () => {
     test('throws error if constructor called without clientId', () => {
       expect(() => new Smartcar({redirectUri: 'http://example.com'})).toThrow(
         'A client ID option must be provided',
-      );
-    });
-
-    test('throws error if smartcar already instantiated', () => {
-      // initial instantiation
-      // eslint-disable-next-line no-new
-      new Smartcar({redirectUri: 'http://example.com', clientId: 'my-id'});
-      expect(() => new Smartcar({redirectUri: 'http://example.com', clientId: 'my-id'})).toThrow(
-        'Smartcar has already been instantiated in the window. Only one' +
-          ' instance of Smartcar can be defined.',
       );
     });
 
