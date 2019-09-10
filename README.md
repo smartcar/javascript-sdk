@@ -185,6 +185,12 @@ https://application-backend.com/page?error=access_denied&error_description=User+
 
 > NOTE: If the page serving the redirect script file does not have the original query parameters sent from Connect (`code`, `state`, `error`, `error_description`), then the `onComplete` callback will be invoked with no parameters.
 
+## Contributing
+
+When contributing to this repo, ensure that prior to your pull request you run the following commands: 
+
+`npm run readme`
+`npm run jsdoc`
 
 [ci-url]: https://travis-ci.com/smartcar/javascript-sdk
 [ci-image]: https://travis-ci.com/smartcar/javascript-sdk.svg?token=jMbuVtXPGeJMPdsn7RQ5&branch=master
