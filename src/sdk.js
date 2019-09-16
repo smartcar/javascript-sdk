@@ -131,16 +131,6 @@ class Smartcar {
    * @param {Object} options - the SDK configuration object
    */
   static _validateConstructorOptions(options) {
-    // allow only one instance of Smartcar
-    if (Smartcar._hasBeenInstantiated) {
-      throw new Error(
-        'Smartcar has already been instantiated in the window. Only one' +
-          ' instance of Smartcar can be defined.',
-      );
-    } else {
-      Smartcar._hasBeenInstantiated = true;
-    }
-
     if (!options.clientId) {
       throw new TypeError('A client ID option must be provided');
     }
