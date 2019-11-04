@@ -74,6 +74,8 @@ class Smartcar {
           switch (error) {
             case 'access_denied':
               return new Smartcar.AccessDenied(description);
+            case 'invalid_subscription':
+              return new Smartcar.InvalidSubscription(description);
             case 'vehicle_incompatible':
               const params = event.data;
 
@@ -385,5 +387,20 @@ Smartcar.VehicleIncompatible = class extends Error {
     super(message);
     this.name = 'VehicleIncompatible';
     this.vehicleInfo = vehicleInfo;
+  }
+};
+
+/**
+ * Invalid subscription error returned by Connect.
+ *
+ * @extends Error
+ */
+Smartcar.InvalidSubscription = class extends Error {
+  /**
+   * @param {String} message - detailed error description
+   */
+  constructor(message) {
+    super(message);
+    this.name = 'InvalidSubscription';
   }
 };
