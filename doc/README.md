@@ -33,6 +33,8 @@ Smartcar JavaScript SDK documentation.
             * [new Smartcar.AccessDenied(message)](#new_Smartcar.AccessDenied_new)
         * [.VehicleIncompatible](#Smartcar.VehicleIncompatible) ⇐ <code>Error</code>
             * [new Smartcar.VehicleIncompatible(message, vehicleInfo)](#new_Smartcar.VehicleIncompatible_new)
+        * [.InvalidSubscription](#Smartcar.InvalidSubscription) ⇐ <code>Error</code>
+            * [new Smartcar.InvalidSubscription(message)](#new_Smartcar.InvalidSubscription_new)
 
 <a name="new_Smartcar_new"></a>
 
@@ -146,6 +148,21 @@ for more details.
 | vehicleInfo.make | <code>String</code> | returned if user gives permission. |
 | vehicleInfo.year | <code>Number</code> | returned if user gives permission. |
 | [vehicleInfo.model] | <code>String</code> | optionally returned if user gives permission. |
+
+<a name="Smartcar.InvalidSubscription"></a>
+
+### Smartcar.InvalidSubscription ⇐ <code>Error</code>
+Invalid subscription error returned by Connect.
+
+**Kind**: static class of [<code>Smartcar</code>](#Smartcar)
+**Extends**: <code>Error</code>
+<a name="new_Smartcar.InvalidSubscription_new"></a>
+
+#### new Smartcar.InvalidSubscription(message)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| message | <code>String</code> | detailed error description |
 
 <a name="OnComplete"></a>
 
