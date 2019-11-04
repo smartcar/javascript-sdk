@@ -545,7 +545,7 @@ describe('sdk', () => {
       });
 
     test(// eslint-disable-next-line max-len
-      'fires onComplete w/ AccessDenied error when `error: invalid_subscription` in postMessage', () => {
+      'fires onComplete w/ InvalidSubscription error when `error: invalid_subscription` in postMessage', () => {
         const options = {
           clientId: 'clientId',
           redirectUri: `${CDN_ORIGIN}?app_origin=https://app.com`,
@@ -572,7 +572,7 @@ describe('sdk', () => {
         smartcar.messageHandler(event);
 
         expect(smartcar.onComplete).toBeCalledWith(
-          new Smartcar.AccessDenied(errorDescription),
+          new Smartcar.InvalidSubscription(errorDescription),
           'super-secret-code',
           'some-state',
         );
