@@ -348,6 +348,17 @@ class Smartcar {
       return false;
     });
   }
+
+  /**
+   * Remove Smartcar's listeners on the global window object.
+   *
+   * The Smartcar SDK uses a global 'message' event listener to recieve the
+   * authorization code from the pop-up dialog. Call this method to remove the
+   * event listener from the global window.
+   */
+  unmount() {
+    window.removeEventListener('message', this.messageHandler);
+  }
 }
 
 /**

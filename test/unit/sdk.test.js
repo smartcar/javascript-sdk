@@ -990,5 +990,21 @@ describe('sdk', () => {
       document.getElementById(id).click();
       expect(mockOpen).toHaveBeenCalled();
     });
+
+    test('unmount removes the eventListener from the window object', () => {
+      const mockAddEventListener = jest.fn();
+      const mockRemoveEventListener = jest.fn();
+
+      window.addEventListener = mockAddEventListener;
+      window.removeEventListener = mockRemoveEventListener;
+
+      const smartcar = new Smartcar(options);
+      smartcar.unmount();
+
+      expect(mockAddEventListener)
+        .toHaveBeenCalledWith('message', smartcar.messageHandler);
+      expect(mockRemoveEventListener)
+        .toHaveBeenCalledWith('message', smartcar.messageHandler);
+    });
   });
 });

@@ -28,6 +28,7 @@ Smartcar JavaScript SDK documentation.
         * [.getAuthUrl(options)](#Smartcar+getAuthUrl) ⇒ <code>String</code>
         * [.openDialog(options)](#Smartcar+openDialog)
         * [.addClickHandler(options)](#Smartcar+addClickHandler)
+        * [.unmount()](#Smartcar+unmount)
     * _static_
         * [.AccessDenied](#Smartcar.AccessDenied) ⇐ <code>Error</code>
             * [new Smartcar.AccessDenied(message)](#new_Smartcar.AccessDenied_new)
@@ -111,6 +112,16 @@ On-click event calls openDialog when the specified element is clicked.
 | [options.vehicleInfo.make] | <code>String</code> |  | `vehicleInfo` is an object with an optional property `make`, which allows users to bypass the car brand selection screen. For a complete list of supported makes, please see our [API Reference](https://smartcar.com/docs/api#authorization) documentation. |
 | [options.singleSelect] | <code>Boolean</code> \| <code>Object</code> |  | An optional value that sets the behavior of the grant dialog displayed to the user. If set to `true`, `single_select` limits the user to selecting only one vehicle. If `single_select` is passed in as an object with the property `vin`, Smartcar will only authorize the vehicle with the specified VIN. See the [Single Select guide](https://smartcar.com/docs/guides/single-select/) for more information. |
 
+<a name="Smartcar+unmount"></a>
+
+### smartcar.unmount()
+Remove Smartcar's listeners on the global window object.
+
+The Smartcar SDK uses a global 'message' event listener to recieve the
+authorization code from the pop-up dialog. Call this method to remove the
+event listener from the global window.
+
+**Kind**: instance method of [<code>Smartcar</code>](#Smartcar)
 <a name="Smartcar.AccessDenied"></a>
 
 ### Smartcar.AccessDenied ⇐ <code>Error</code>
