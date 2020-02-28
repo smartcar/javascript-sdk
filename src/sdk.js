@@ -312,7 +312,8 @@ class Smartcar {
    * On-click event calls openDialog when the specified element is clicked.
    *
    * @param {Object} options - clickHandler configuration object
-   * @param {String} options.id - id of the element to add click handler to
+   * @param {String} [options.id] - id of the element to add click handler to
+   * @param {String} [options.selector] - css selector of the elements to add click handler to
    * @param {String} [options.state] - arbitrary state passed to redirect uri
    * @param {Boolean} [options.forcePrompt=false] - force permission approval
    * screen to show on every authentication, even if the user has previously
@@ -331,33 +332,54 @@ class Smartcar {
    * for more information.
    */
   addClickHandler(options) {
-    const id = options.id;
-
-    const element = document.getElementById(id);
-    if (!element) {
-      throw new Error(`Could not add click handler: element with id '${id}' was not found.`);
+    const { id, selector } = options;
+    if (!id && !selector) {
+      throw new Error(`Could not add click handler: both id and selector are not passed in.`);
     }
 
-    delete options.id;
+    // event listener will be added to all of the DOM elements that matches the id/selector.
+    this._elements = [];
+    if (id) {
+      this._elements.push(document.getElementById(id));
+      delete options.id;
+    } 
+    if (selector) {
+      this._elements.push(...document.querySelectorAll(selector));
+      delete options.selector;
+    }
+    if (!this._elements.length) {
+      throw new Error(`Could not add click handler: element with '${id || selector}' was not found.`);
+    }
 
-    element.addEventListener('click', () => {
+    this._clickHandler = () => {
       this.openDialog(options);
       // this is equivalent to calling:
       // event.preventDefault();
       // event.stopPropogation();
       return false;
-    });
+    }
+
+    this._elements.forEach(element => element.addEventListener('click', this._clickHandler));
   }
 
   /**
-   * Remove Smartcar's listeners on the global window object.
+   * Remove Smartcar's event listeners.
    *
+   * 1. remove listener on the global window object:
    * The Smartcar SDK uses a global 'message' event listener to recieve the
    * authorization code from the pop-up dialog. Call this method to remove the
    * event listener from the global window.
+   * 
+   * 2. remove click event listeners on DOM elements
+   * The Smartcar SDK also provides an `addClickHandler` method to attach click 
+   * events to DOM elements. These event listeners will also be removed by calling
+   * this `unmount` method.
    */
   unmount() {
     window.removeEventListener('message', this.messageHandler);
+    if (this._elements && this._elements.length) {
+      this._elements.forEach(element => element.removeEventListener('click', this._clickHandler));
+    }
   }
 }
 
