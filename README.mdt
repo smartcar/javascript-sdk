@@ -27,12 +27,6 @@ npm install @smartcar/auth
 <script src="https://javascript-sdk.smartcar.com/${version}/sdk.js"></script>
 ```
 
-Before v2.2.0, the SDK was versioned as follows:
-```html
-<!-- Deprecated -->
-<script src="https://javascript-sdk.smartcar.com/sdk-<version>.js"></script>
-```
-
 ## SDK reference
 
 For detailed documentation on parameters and available methods, please refer to
@@ -54,7 +48,7 @@ The SDK manages the front-end flow of the [OAuth authorization process](https://
 4. Your JavaScript front end receives the `code` in the onComplete function registered in the SDK constructor. This function needs to communicate with your backend to exchange the code for access and refresh tokens.
 5. Your application's back end server needs to accept the `code` and exchange it for an access token.
 
-The SDK facilitates generating OAuth links, creating pop-up dialogs, and receiving authorization codes. This SDK will not assist you with exchanging authorization codes for an access token or making requests to vehicles. Please see our [back-end SDKs](https://smartcar.com/docs#backend-sdks) for more information on handling the access tokens and vehicle requests.
+The SDK facilitates generating OAuth links, creating pop-up dialogs, and receiving authorization codes. This SDK will not assist you with exchanging authorization codes for an access token or making requests to vehicles. Please see our [back-end SDKs](https://smartcar.com/docs/api#smartcar-api-sdks) for more information on handling the access tokens and vehicle requests.
 
 ## Quick start
 
@@ -68,14 +62,6 @@ https://javascript-sdk.smartcar.com/v${majorVersion}/redirect?app_origin=<Your A
 Note that the version number refers to the major version of the SDK you are using, so updating the SDK to a new major version requires updating your redirect URI in the Smartcar Dashboard accordingly.
 
 The `app_origin` should be the location at which your website is located. The origin consists of the protocol and the host of your site only, without the resource path.
-
-Before v2.2.0, redirect URIs were formatted as follows:
-
-```
-// Deprecated
-https://javascript-sdk.smartcar.com/redirect-<version>?app_origin=<Your Application's Origin>
-```
-For more information on this deprecation, [see our documentation](https://smartcar.com/docs/guides/new-redirect-uri/).
 
 Some example origins are:
 
@@ -110,7 +96,7 @@ const smartcar = new Smartcar({
 
 **Reference:** [`new Smartcar(options)`](doc#new_Smartcar_new)
 
-> NOTE: See the full set of available scopes for each endpoint in the [Smartcar API reference](https://smartcar.com/docs#get-all-vehicles) under "Required Permissions".
+> NOTE: See the full set of available scopes for each endpoint in the [Smartcar API reference](https://smartcar.com/docs/api#permissions).
 
 ### 3. Launch Connect
 
@@ -163,7 +149,7 @@ const smartcar = new Smartcar({
 
 Make sure to also register the URI on the [Smartcar dashboard](https://dashboard.smartcar.com).
 
-2. On your `redirect_uri` route, you will need to accept the authorization code according to the query parameters documented in the [Smartcar API reference](https://smartcar.com/docs#3-handle-smartcar-response).
+2. On your `redirect_uri` route, you will need to accept the authorization code according to the query parameters documented in the [Smartcar API reference](https://smartcar.com/docs/api#auth-code-exchange).
 
 For example:
 
