@@ -165,11 +165,20 @@ class Smartcar {
 
   /**
    * Calculate popup window size and position based on current window settings.
-   *
+   * 
+   * @param {Object} options - the postion and dimention setting of the popup window
+   * @param {String} [options.top] - the top property of 
+   * [window feature](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
+   * @param {String} [options.left] - the left property of 
+   * [window feature](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
+   * @param {String} [options.width] - the width property of 
+   * [window feature](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
+   * @param {String} [options.height] - the height property of 
+   * [window feature](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
    * @private
    * @return {String} a string of window settings
    */
-  static _getWindowOptions() {
+  static _getWindowOptions({ top, left, width, height}) {
     // Sets default popup window size as percentage of screen size
     // Note that this only applies to desktop browsers
     const windowSettings = {
@@ -177,14 +186,14 @@ class Smartcar {
       height: window.screen.height * 0.75,
     };
 
-    const width = (window.outerWidth - windowSettings.width) / 2;
-    const height = (window.outerHeight - windowSettings.height) / 8;
+    const widthOffset = (window.outerWidth - windowSettings.width) / 2;
+    const heightOffset = (window.outerHeight - windowSettings.height) / 8;
 
     let options = '';
-    options += `top=${window.screenY + height},`;
-    options += `left=${window.screenX + width},`;
-    options += `width=${windowSettings.width},`;
-    options += `height=${windowSettings.height},`;
+    options += `top=${top || window.screenY + heightOffset},`;
+    options += `left=${left || window.screenX + widthOffset},`;
+    options += `width=${width || windowSettings.width},`;
+    options += `height=${height || windowSettings.height},`;
 
     return options;
   }
@@ -299,10 +308,21 @@ class Smartcar {
    * the vehicle with the specified VIN. See the
    * [Single Select guide](https://smartcar.com/docs/guides/single-select/)
    * for more information.
+   * @param {Object} [options.windowOptions] - the position and dimension settings
+   * of the popup window
+   * @param {String} [options.windowOptions.top] - the top property of 
+   * [window feature](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
+   * @param {String} [options.windowOptions.left] - the left property of 
+   * [window feature](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
+   * @param {String} [options.windowOptions.width] - the width property of 
+   * [window feature](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
+   * @param {String} [options.windowOptions.height] - the height property of 
+   * [window feature](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
    */
   openDialog(options) {
+    const windowOptions = Smartcar._getWindowOptions(options.windowOptions || {});
+    delete options.windowOptions;
     const href = this.getAuthUrl(options);
-    const windowOptions = Smartcar._getWindowOptions();
     window.open(href, 'Connect your car', windowOptions);
   }
 
