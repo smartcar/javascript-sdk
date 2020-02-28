@@ -168,13 +168,13 @@ class Smartcar {
    * 
    * @param {Object} options - the postion and dimention setting of the popup window
    * @param {String} [options.top] - the top property of 
-   * [window feature](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
+   * [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
    * @param {String} [options.left] - the left property of 
-   * [window feature](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
+   * [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
    * @param {String} [options.width] - the width property of 
-   * [window feature](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
+   * [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
    * @param {String} [options.height] - the height property of 
-   * [window feature](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
+   * [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
    * @private
    * @return {String} a string of window settings
    */
@@ -311,13 +311,13 @@ class Smartcar {
    * @param {Object} [options.windowOptions] - the position and dimension settings
    * of the popup window
    * @param {String} [options.windowOptions.top] - the top property of 
-   * [window feature](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
+   * [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
    * @param {String} [options.windowOptions.left] - the left property of 
-   * [window feature](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
+   * [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
    * @param {String} [options.windowOptions.width] - the width property of 
-   * [window feature](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
+   * [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
    * @param {String} [options.windowOptions.height] - the height property of 
-   * [window feature](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
+   * [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
    */
   openDialog(options) {
     const windowOptions = Smartcar._getWindowOptions(options.windowOptions || {});
@@ -333,7 +333,7 @@ class Smartcar {
    *
    * @param {Object} options - clickHandler configuration object
    * @param {String} [options.id] - id of the element to add click handler to
-   * @param {String} [options.selector] - css selector of the elements to add click handler to
+   * @param {String} [options.selector] - css selector of the element(s) to add click handler to
    * @param {String} [options.state] - arbitrary state passed to redirect uri
    * @param {Boolean} [options.forcePrompt=false] - force permission approval
    * screen to show on every authentication, even if the user has previously
@@ -357,7 +357,7 @@ class Smartcar {
       throw new Error(`Could not add click handler: both id and selector are not passed in.`);
     }
 
-    // event listener will be added to all of the DOM elements that matches the id/selector.
+    // event listener will be added to all of the DOM elements that matches the id and selector.
     this._elements = [];
     if (id) {
       this._elements.push(document.getElementById(id));
