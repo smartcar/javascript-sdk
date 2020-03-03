@@ -96,7 +96,7 @@ const smartcar = new Smartcar({
 
 **Reference:** [`new Smartcar(options)`](doc#new_Smartcar_new)
 
-> NOTE: See the full set of available scopes for each endpoint in the [Smartcar API reference](https://smartcar.com/docs/api#get-all-vehicles) under "Required Permissions".
+> NOTE: See the full set of available scopes for each endpoint in the [Smartcar API reference](https://smartcar.com/docs/api#permissions).
 
 ### 3. Launch Connect
 
