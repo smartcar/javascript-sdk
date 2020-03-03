@@ -48,7 +48,7 @@ The SDK manages the front-end flow of the [OAuth authorization process](https://
 4. Your JavaScript front end receives the `code` in the onComplete function registered in the SDK constructor. This function needs to communicate with your backend to exchange the code for access and refresh tokens.
 5. Your application's back end server needs to accept the `code` and exchange it for an access token.
 
-The SDK facilitates generating OAuth links, creating pop-up dialogs, and receiving authorization codes. This SDK will not assist you with exchanging authorization codes for an access token or making requests to vehicles. Please see our [back-end SDKs](https://smartcar.com/docs/api#sdks) for more information on handling the access tokens and vehicle requests.
+The SDK facilitates generating OAuth links, creating pop-up dialogs, and receiving authorization codes. This SDK will not assist you with exchanging authorization codes for an access token or making requests to vehicles. Please see our [back-end SDKs](https://smartcar.com/docs/api#smartcar-api-sdks) for more information on handling the access tokens and vehicle requests.
 
 ## Quick start
 
