@@ -167,18 +167,31 @@ class Smartcar {
    * Calculate popup window size and position based on current window settings.
    *
    * @param {Object} options - the postion and dimention setting of the popup window
-   * @param {String} [options.top] - the top property of
+   * @param {String|Number} [options.top] - the top property of
    * [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
-   * @param {String} [options.left] - the left property of
+   * @param {String|Number} [options.left] - the left property of
    * [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
-   * @param {String} [options.width] - the width property of
+   * @param {String|Number} [options.width] - the width property of
    * [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
-   * @param {String} [options.height] - the height property of
+   * the minimum required value is 100.
+   * @param {String|Number} [options.height] - the height property of
    * [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
+   * the minimum required value is 100.
    * @private
    * @return {String} a string of window settings
    */
-  static _getWindowOptions({top, left, width, height}) {
+  static _getWindowOptions(windowOptions) {
+    Object.keys(windowOptions).forEach((option) => {
+      const numValue = parseFloat(windowOptions[option]);
+      if (isNaN(numValue)) {
+        windowOptions[option] = '';
+      } else if (numValue < 100 && (option === 'width' || option === 'height')) {
+        windowOptions[option] = '100';
+      } else {
+        windowOptions[option] = String(numValue);
+      }
+    });
+
     // Sets default popup window size as percentage of screen size
     // Note that this only applies to desktop browsers
     const windowSettings = {
@@ -190,10 +203,10 @@ class Smartcar {
     const heightOffset = (window.outerHeight - windowSettings.height) / 8;
 
     let options = '';
-    options += `top=${top || window.screenY + heightOffset},`;
-    options += `left=${left || window.screenX + widthOffset},`;
-    options += `width=${width || windowSettings.width},`;
-    options += `height=${height || windowSettings.height},`;
+    options += `top=${windowOptions.top || window.screenY + heightOffset},`;
+    options += `left=${windowOptions.left || window.screenX + widthOffset},`;
+    options += `width=${windowOptions.width || windowSettings.width},`;
+    options += `height=${windowOptions.height || windowSettings.height},`;
 
     return options;
   }
@@ -321,7 +334,6 @@ class Smartcar {
    */
   openDialog(options) {
     const windowOptions = Smartcar._getWindowOptions(options.windowOptions || {});
-    delete options.windowOptions;
     const href = this.getAuthUrl(options);
     window.open(href, 'Connect your car', windowOptions);
   }
@@ -353,30 +365,35 @@ class Smartcar {
    */
   addClickHandler(options) {
     const {id, selector} = options;
+
+    // check if id or selector option exists
     if (!id && !selector) {
-      throw new Error('Could not add click handler: both id and selector are not passed in.');
+      throw new Error('Could not add click handler: id or selector must be provided.');
     }
 
-    // event listener will be added to all of the DOM elements that matches the id and selector.
-    this._elements = [];
+    // find all the DOM elements that match the id and selector
+    const elements = [];
     if (id) {
       const element = document.getElementById(id);
       if (element) {
-        this._elements.push(element);
+        elements.push(element);
       }
-      delete options.id;
     }
     if (selector) {
-      this._elements.push(...document.querySelectorAll(selector));
-      delete options.selector;
+      elements.push(...document.querySelectorAll(selector));
     }
-    if (!this._elements.length) {
+    if (!elements.length) {
       throw new Error(`
         Could not add click handler: element with '${id || selector}' was not found.
       `);
     }
 
-    this._clickHandler = () => {
+    // _elementToClickHandler stores all the element - clickHandler pairs under the same instance
+    // because it is possible to call addClickHandler multiple times with different options
+    if (!this._elementToClickHandler) {
+      this._elementToClickHandler = new Map();
+    }
+    const clickHandler = () => {
       this.openDialog(options);
       // this is equivalent to calling:
       // event.preventDefault();
@@ -384,7 +401,12 @@ class Smartcar {
       return false;
     };
 
-    this._elements.forEach((element) => element.addEventListener('click', this._clickHandler));
+    elements.forEach((element) => {
+      // register element - clickHandler pair
+      this._elementToClickHandler.set(element, clickHandler);
+      // register eventListener
+      element.addEventListener('click', clickHandler);
+    });
   }
 
   /**
@@ -402,8 +424,10 @@ class Smartcar {
    */
   unmount() {
     window.removeEventListener('message', this.messageHandler);
-    if (this._elements && this._elements.length) {
-      this._elements.forEach((element) => element.removeEventListener('click', this._clickHandler));
+    if (this._elementToClickHandler) {
+      for (const [element, clickHandler] of this._elementToClickHandler.entries()) {
+        element.removeEventListener('click', clickHandler);
+      }
     }
   }
 }

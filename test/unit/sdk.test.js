@@ -933,15 +933,28 @@ describe('sdk', () => {
       expect(window.open).toHaveBeenCalled();
     });
 
+    test('_getWindowOptions returns a valid windowOptions string', () => {
+      const windowOptionsA = {
+        top: 0,
+        left: '100a',
+        width: NaN,
+      };
+      const windowOptionsB = {
+        top: 100,
+        left: 100.1,
+        width: 20,
+        height: 'abcd',
+      };
+
+      expect(Smartcar._getWindowOptions(windowOptionsA)).toBe('top=0,left=100,width=0,height=0,');
+      expect(Smartcar._getWindowOptions(windowOptionsB)).toBe('top=100,left=100.1,width=100,height=0,');
+    });
+
     test('addClickHandler throws error if both id and selector are not passed in', () => {
       // setup document body
       document.body.innerHTML = `<div>
       <button>Connect your car</button>
       </div>`;
-
-      // mock window.open
-      const mockOpen = jest.fn();
-      window.open = mockOpen;
 
       const smartcar = new Smartcar(options);
       const clickHandlerOptions = {
@@ -950,7 +963,7 @@ describe('sdk', () => {
       };
 
       expect(() => smartcar.addClickHandler(clickHandlerOptions)).toThrow(
-        'Could not add click handler: both id and selector are not passed in.',
+        'Could not add click handler: id or selector must be provided.',
       );
     });
 
@@ -961,10 +974,6 @@ describe('sdk', () => {
       document.body.innerHTML = `<div>
       <button id="${id}">Connect your car</button>
       </div>`;
-
-      // mock window.open
-      const mockOpen = jest.fn();
-      window.open = mockOpen;
 
       const smartcar = new Smartcar(options);
       const clickHandlerOptions = {
@@ -985,10 +994,6 @@ describe('sdk', () => {
       document.body.innerHTML = `<div>
       <button>Connect your car</button>
       </div>`;
-
-      // mock window.open
-      const mockOpen = jest.fn();
-      window.open = mockOpen;
 
       const smartcar = new Smartcar(options);
       const clickHandlerOptions = {
@@ -1093,30 +1098,58 @@ describe('sdk', () => {
 
     test('unmount removes the click eventListeners attached by addClickHandler', () => {
       const id = 'connect-car-button';
-      const className = 'connect-button-class';
+      const classNameA = 'connect-button-classA';
+      const classNameB = 'connect-button-classB';
 
       // mock dom & event listeners
       document.body.innerHTML = `<div>
       <button id="${id}">Connect your car</button>
-      <button class="${className}">Connect your car</button>
+      <button class="${classNameA}">Connect your car</button>
+      <button class="${classNameB}">Fancy connect</button>
+      <button class="${classNameB}">Fancy connect</button>
       </div>`;
       document.getElementById(id).addEventListener = jest.fn();
-      document.querySelectorAll(`.${className}`)
-        .forEach((element) => { element.addEventListener = jest.fn(); });
+      document.getElementById(id).removeEventListener = jest.fn();
+      document.querySelectorAll(`.${classNameA}`).forEach((element) => {
+        element.addEventListener = jest.fn();
+        element.removeEventListener = jest.fn();
+      });
+      document.querySelectorAll(`.${classNameB}`).forEach((element) => {
+        element.addEventListener = jest.fn();
+        element.removeEventListener = jest.fn();
+      });
 
       const smartcar = new Smartcar(options);
-      const clickHandlerOptions = {
+      const clickHandlerOptionsA = {
         id,
-        selector: `.${className}`,
+        selector: `.${classNameA}`,
         state: dialogOptions.state,
         forcePrompt: dialogOptions.forcePrompt,
       };
-      smartcar.addClickHandler(clickHandlerOptions);
+      const clickHandlerOptionsB = {
+        selector: `.${classNameB}`,
+        forcePrompt: dialogOptions.forcePrompt,
+        state: 'fancy',
+      };
+
+      // call addClickHandler for multiple times with different options
+      smartcar.addClickHandler(clickHandlerOptionsA);
+      smartcar.addClickHandler(clickHandlerOptionsB);
+
       smartcar.unmount();
 
       expect(document.getElementById(id).addEventListener).toHaveBeenCalledTimes(1);
-      document.querySelectorAll(`.${className}`)
-        .forEach((element) => { expect(element.addEventListener).toHaveBeenCalledTimes(1); });
+      expect(document.getElementById(id).removeEventListener).toHaveBeenCalledTimes(1);
+      document.querySelectorAll(`.${classNameA}`)
+        .forEach((element) => {
+          expect(element.addEventListener).toHaveBeenCalledTimes(1);
+          expect(element.removeEventListener).toHaveBeenCalledTimes(1);
+        });
+      document.querySelectorAll(`.${classNameB}`)
+        .forEach((element) => {
+          expect(element.addEventListener).toHaveBeenCalledTimes(1);
+          expect(element.removeEventListener).toHaveBeenCalledTimes(1);
+        });
     });
   });
 });
