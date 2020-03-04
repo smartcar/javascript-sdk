@@ -229,7 +229,7 @@ class Smartcar {
    * `single_select` limits the user to selecting only one vehicle. If `single_select`
    * is passed in as an object with the property `vin`, Smartcar will only authorize
    * the vehicle with the specified VIN. See the
-   * [Single Select guide](https://smartcar.com/docs/guides/single-select/)
+   * [API reference](https://smartcar.com/docs/api/#connect-match)
    * for more information.
    *
    * @return {String} Connect URL to redirect user to.
@@ -319,7 +319,7 @@ class Smartcar {
    * `single_select` limits the user to selecting only one vehicle. If `single_select`
    * is passed in as an object with the property `vin`, Smartcar will only authorize
    * the vehicle with the specified VIN. See the
-   * [Single Select guide](https://smartcar.com/docs/guides/single-select/)
+   * [API reference](https://smartcar.com/docs/api/#connect-match)
    * for more information.
    * @param {Object} [options.windowOptions] - the position and dimension settings
    * of the popup window
@@ -360,7 +360,7 @@ class Smartcar {
    * `single_select` limits the user to selecting only one vehicle. If `single_select`
    * is passed in as an object with the property `vin`, Smartcar will only authorize
    * the vehicle with the specified VIN. See the
-   * [Single Select guide](https://smartcar.com/docs/guides/single-select/)
+   * [API reference](https://smartcar.com/docs/api/#connect-match)
    * for more information.
    */
   addClickHandler(options) {
