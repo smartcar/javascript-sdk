@@ -93,6 +93,11 @@ Launches Smartcar Connect in a new window.
 | [options.forcePrompt] | <code>Boolean</code> | <code>false</code> | force permission approval screen to show on every authentication, even if the user has previously consented to the exact scope of permission |
 | [options.vehicleInfo.make] | <code>String</code> |  | `vehicleInfo` is an object with an optional property `make`, which allows users to bypass the car brand selection screen. For a complete list of supported makes, please see our [API Reference](https://smartcar.com/docs/api#authorization) documentation. |
 | [options.singleSelect] | <code>Boolean</code> \| <code>Object</code> |  | An optional value that sets the behavior of the grant dialog displayed to the user. If set to `true`, `single_select` limits the user to selecting only one vehicle. If `single_select` is passed in as an object with the property `vin`, Smartcar will only authorize the vehicle with the specified VIN. See the [Single Select guide](https://smartcar.com/docs/guides/single-select/) for more information. |
+| [options.windowOptions] | <code>Object</code> |  | the position and dimension settings of the popup window |
+| [options.windowOptions.top] | <code>String</code> |  | the top property of [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features) |
+| [options.windowOptions.left] | <code>String</code> |  | the left property of [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features) |
+| [options.windowOptions.width] | <code>String</code> |  | the width property of [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features) |
+| [options.windowOptions.height] | <code>String</code> |  | the height property of [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features) |
 
 <a name="Smartcar+addClickHandler"></a>
 
@@ -106,7 +111,8 @@ On-click event calls openDialog when the specified element is clicked.
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | options | <code>Object</code> |  | clickHandler configuration object |
-| options.id | <code>String</code> |  | id of the element to add click handler to |
+| [options.id] | <code>String</code> |  | id of the element to add click handler to |
+| [options.selector] | <code>String</code> |  | css selector of the element(s) to add click handler to |
 | [options.state] | <code>String</code> |  | arbitrary state passed to redirect uri |
 | [options.forcePrompt] | <code>Boolean</code> | <code>false</code> | force permission approval screen to show on every authentication, even if the user has previously consented to the exact scope of permission |
 | [options.vehicleInfo.make] | <code>String</code> |  | `vehicleInfo` is an object with an optional property `make`, which allows users to bypass the car brand selection screen. For a complete list of supported makes, please see our [API Reference](https://smartcar.com/docs/api#authorization) documentation. |
@@ -115,11 +121,17 @@ On-click event calls openDialog when the specified element is clicked.
 <a name="Smartcar+unmount"></a>
 
 ### smartcar.unmount()
-Remove Smartcar's listeners on the global window object.
+Remove Smartcar's event listeners.
 
+1. remove listener on the global window object:
 The Smartcar SDK uses a global 'message' event listener to recieve the
 authorization code from the pop-up dialog. Call this method to remove the
 event listener from the global window.
+
+2. remove click event listeners on DOM elements
+The Smartcar SDK also provides an `addClickHandler` method to attach click
+events to DOM elements. These event listeners will also be removed by calling
+this `unmount` method.
 
 **Kind**: instance method of [<code>Smartcar</code>](#Smartcar)
 <a name="Smartcar.AccessDenied"></a>
