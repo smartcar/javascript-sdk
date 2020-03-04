@@ -22,22 +22,20 @@ Smartcar JavaScript SDK documentation.
 ## Smartcar
 **Kind**: global class
 
-- [Smartcar JavaScript SDK](#smartcar-javascript-sdk)
-  - [Classes](#classes)
-  - [Typedefs](#typedefs)
-  - [Smartcar](#smartcar)
-    - [new Smartcar(options)](#new-smartcaroptions)
-    - [smartcar.getAuthUrl(options) ⇒ <code>String</code>](#smartcargetauthurloptions-%e2%87%92-string)
-    - [smartcar.openDialog(options)](#smartcaropendialogoptions)
-    - [smartcar.addClickHandler(options)](#smartcaraddclickhandleroptions)
-    - [smartcar.unmount()](#smartcarunmount)
-    - [Smartcar.AccessDenied ⇐ <code>Error</code>](#smartcaraccessdenied-%e2%87%90-error)
-      - [new Smartcar.AccessDenied(message)](#new-smartcaraccessdeniedmessage)
-    - [Smartcar.VehicleIncompatible ⇐ <code>Error</code>](#smartcarvehicleincompatible-%e2%87%90-error)
-      - [new Smartcar.VehicleIncompatible(message, vehicleInfo)](#new-smartcarvehicleincompatiblemessage-vehicleinfo)
-    - [Smartcar.InvalidSubscription ⇐ <code>Error</code>](#smartcarinvalidsubscription-%e2%87%90-error)
-      - [new Smartcar.InvalidSubscription(message)](#new-smartcarinvalidsubscriptionmessage)
-  - [OnComplete : <code>function</code>](#oncomplete--function)
+* [Smartcar](#Smartcar)
+    * [new Smartcar(options)](#new_Smartcar_new)
+    * _instance_
+        * [.getAuthUrl(options)](#Smartcar+getAuthUrl) ⇒ <code>String</code>
+        * [.openDialog(options)](#Smartcar+openDialog)
+        * [.addClickHandler(options)](#Smartcar+addClickHandler)
+        * [.unmount()](#Smartcar+unmount)
+    * _static_
+        * [.AccessDenied](#Smartcar.AccessDenied) ⇐ <code>Error</code>
+            * [new Smartcar.AccessDenied(message)](#new_Smartcar.AccessDenied_new)
+        * [.VehicleIncompatible](#Smartcar.VehicleIncompatible) ⇐ <code>Error</code>
+            * [new Smartcar.VehicleIncompatible(message, vehicleInfo)](#new_Smartcar.VehicleIncompatible_new)
+        * [.InvalidSubscription](#Smartcar.InvalidSubscription) ⇐ <code>Error</code>
+            * [new Smartcar.InvalidSubscription(message)](#new_Smartcar.InvalidSubscription_new)
 
 <a name="new_Smartcar_new"></a>
 
@@ -68,7 +66,7 @@ Generates Smartcar OAuth URL.
 | [options.state] | <code>String</code> |  | arbitrary state passed to redirect uri |
 | [options.forcePrompt] | <code>Boolean</code> | <code>false</code> | force permission approval screen to show on every authentication, even if the user has previously consented to the exact scope of permission |
 | [options.vehicleInfo.make] | <code>String</code> |  | `vehicleInfo` is an object with an optional property `make`, which allows users to bypass the car brand selection screen. For a complete list of supported brands, please see our [API Reference](https://smartcar.com/docs/api#authorization) documentation. |
-| [options.singleSelect] | <code>Boolean</code> \| <code>Object</code> |  | An optional value that sets the behavior of the grant dialog displayed to the user. If set to `true`, `single_select` limits the user to selecting only one vehicle. If `single_select` is passed in as an object with the property `vin`, Smartcar will only authorize the vehicle with the specified VIN. See the [API reference](https://smartcar.com/docs/api#connect-match) for more information. |
+| [options.singleSelect] | <code>Boolean</code> \| <code>Object</code> |  | An optional value that sets the behavior of the grant dialog displayed to the user. If set to `true`, `single_select` limits the user to selecting only one vehicle. If `single_select` is passed in as an object with the property `vin`, Smartcar will only authorize the vehicle with the specified VIN. See the [API reference](https://smartcar.com/docs/api/#connect-match) for more information. |
 
 **Example**
 ```js
@@ -94,7 +92,7 @@ Launches Smartcar Connect in a new window.
 | [options.state] | <code>String</code> |  | arbitrary state passed to redirect uri |
 | [options.forcePrompt] | <code>Boolean</code> | <code>false</code> | force permission approval screen to show on every authentication, even if the user has previously consented to the exact scope of permission |
 | [options.vehicleInfo.make] | <code>String</code> |  | `vehicleInfo` is an object with an optional property `make`, which allows users to bypass the car brand selection screen. For a complete list of supported makes, please see our [API Reference](https://smartcar.com/docs/api#authorization) documentation. |
-| [options.singleSelect] | <code>Boolean</code> \| <code>Object</code> |  | An optional value that sets the behavior of the grant dialog displayed to the user. If set to `true`, `single_select` limits the user to selecting only one vehicle. If `single_select` is passed in as an object with the property `vin`, Smartcar will only authorize the vehicle with the specified VIN. See the [API reference](https://smartcar.com/docs/api#connect-match) for more information. |
+| [options.singleSelect] | <code>Boolean</code> \| <code>Object</code> |  | An optional value that sets the behavior of the grant dialog displayed to the user. If set to `true`, `single_select` limits the user to selecting only one vehicle. If `single_select` is passed in as an object with the property `vin`, Smartcar will only authorize the vehicle with the specified VIN. See the [API reference](https://smartcar.com/docs/api/#connect-match) for more information. |
 | [options.windowOptions] | <code>Object</code> |  | the position and dimension settings of the popup window |
 | [options.windowOptions.top] | <code>String</code> |  | the top property of [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features) |
 | [options.windowOptions.left] | <code>String</code> |  | the left property of [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features) |
@@ -118,7 +116,7 @@ On-click event calls openDialog when the specified element is clicked.
 | [options.state] | <code>String</code> |  | arbitrary state passed to redirect uri |
 | [options.forcePrompt] | <code>Boolean</code> | <code>false</code> | force permission approval screen to show on every authentication, even if the user has previously consented to the exact scope of permission |
 | [options.vehicleInfo.make] | <code>String</code> |  | `vehicleInfo` is an object with an optional property `make`, which allows users to bypass the car brand selection screen. For a complete list of supported makes, please see our [API Reference](https://smartcar.com/docs/api#authorization) documentation. |
-| [options.singleSelect] | <code>Boolean</code> \| <code>Object</code> |  | An optional value that sets the behavior of the grant dialog displayed to the user. If set to `true`, `single_select` limits the user to selecting only one vehicle. If `single_select` is passed in as an object with the property `vin`, Smartcar will only authorize the vehicle with the specified VIN. See the [API reference](https://smartcar.com/docs/api#connect-match) for more information. |
+| [options.singleSelect] | <code>Boolean</code> \| <code>Object</code> |  | An optional value that sets the behavior of the grant dialog displayed to the user. If set to `true`, `single_select` limits the user to selecting only one vehicle. If `single_select` is passed in as an object with the property `vin`, Smartcar will only authorize the vehicle with the specified VIN. See the [API reference](https://smartcar.com/docs/api/#connect-match) for more information. |
 
 <a name="Smartcar+unmount"></a>
 
