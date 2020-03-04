@@ -166,10 +166,32 @@ class Smartcar {
   /**
    * Calculate popup window size and position based on current window settings.
    *
+   * @param {Object} options - the postion and dimention setting of the popup window
+   * @param {String|Number} [options.top] - the top property of
+   * [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
+   * @param {String|Number} [options.left] - the left property of
+   * [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
+   * @param {String|Number} [options.width] - the width property of
+   * [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
+   * the minimum required value is 100.
+   * @param {String|Number} [options.height] - the height property of
+   * [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
+   * the minimum required value is 100.
    * @private
    * @return {String} a string of window settings
    */
-  static _getWindowOptions() {
+  static _getWindowOptions(windowOptions) {
+    Object.keys(windowOptions).forEach((option) => {
+      const numValue = parseFloat(windowOptions[option]);
+      if (isNaN(numValue)) {
+        windowOptions[option] = '';
+      } else if (numValue < 100 && (option === 'width' || option === 'height')) {
+        windowOptions[option] = '100';
+      } else {
+        windowOptions[option] = String(numValue);
+      }
+    });
+
     // Sets default popup window size as percentage of screen size
     // Note that this only applies to desktop browsers
     const windowSettings = {
@@ -177,14 +199,14 @@ class Smartcar {
       height: window.screen.height * 0.75,
     };
 
-    const width = (window.outerWidth - windowSettings.width) / 2;
-    const height = (window.outerHeight - windowSettings.height) / 8;
+    const widthOffset = (window.outerWidth - windowSettings.width) / 2;
+    const heightOffset = (window.outerHeight - windowSettings.height) / 8;
 
     let options = '';
-    options += `top=${window.screenY + height},`;
-    options += `left=${window.screenX + width},`;
-    options += `width=${windowSettings.width},`;
-    options += `height=${windowSettings.height},`;
+    options += `top=${windowOptions.top || window.screenY + heightOffset},`;
+    options += `left=${windowOptions.left || window.screenX + widthOffset},`;
+    options += `width=${windowOptions.width || windowSettings.width},`;
+    options += `height=${windowOptions.height || windowSettings.height},`;
 
     return options;
   }
@@ -299,10 +321,20 @@ class Smartcar {
    * the vehicle with the specified VIN. See the
    * [Single Select guide](https://smartcar.com/docs/guides/single-select/)
    * for more information.
+   * @param {Object} [options.windowOptions] - the position and dimension settings
+   * of the popup window
+   * @param {String} [options.windowOptions.top] - the top property of
+   * [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
+   * @param {String} [options.windowOptions.left] - the left property of
+   * [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
+   * @param {String} [options.windowOptions.width] - the width property of
+   * [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
+   * @param {String} [options.windowOptions.height] - the height property of
+   * [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
    */
   openDialog(options) {
+    const windowOptions = Smartcar._getWindowOptions(options.windowOptions || {});
     const href = this.getAuthUrl(options);
-    const windowOptions = Smartcar._getWindowOptions();
     window.open(href, 'Connect your car', windowOptions);
   }
 
@@ -312,7 +344,8 @@ class Smartcar {
    * On-click event calls openDialog when the specified element is clicked.
    *
    * @param {Object} options - clickHandler configuration object
-   * @param {String} options.id - id of the element to add click handler to
+   * @param {String} [options.id] - id of the element to add click handler to
+   * @param {String} [options.selector] - css selector of the element(s) to add click handler to
    * @param {String} [options.state] - arbitrary state passed to redirect uri
    * @param {Boolean} [options.forcePrompt=false] - force permission approval
    * screen to show on every authentication, even if the user has previously
@@ -331,33 +364,71 @@ class Smartcar {
    * for more information.
    */
   addClickHandler(options) {
-    const id = options.id;
+    const {id, selector} = options;
 
-    const element = document.getElementById(id);
-    if (!element) {
-      throw new Error(`Could not add click handler: element with id '${id}' was not found.`);
+    // check if id or selector option exists
+    if (!id && !selector) {
+      throw new Error('Could not add click handler: id or selector must be provided.');
     }
 
-    delete options.id;
+    // find all the DOM elements that match the id and selector
+    const elements = [];
+    if (id) {
+      const element = document.getElementById(id);
+      if (element) {
+        elements.push(element);
+      }
+    }
+    if (selector) {
+      elements.push(...document.querySelectorAll(selector));
+    }
+    if (!elements.length) {
+      throw new Error(`
+        Could not add click handler: element with '${id || selector}' was not found.
+      `);
+    }
 
-    element.addEventListener('click', () => {
+    // _elementToClickHandler stores all the element - clickHandler pairs under the same instance
+    // because it is possible to call addClickHandler multiple times with different options
+    if (!this._elementToClickHandler) {
+      this._elementToClickHandler = new Map();
+    }
+    const clickHandler = () => {
       this.openDialog(options);
       // this is equivalent to calling:
       // event.preventDefault();
       // event.stopPropogation();
       return false;
+    };
+
+    elements.forEach((element) => {
+      // register element - clickHandler pair
+      this._elementToClickHandler.set(element, clickHandler);
+      // register eventListener
+      element.addEventListener('click', clickHandler);
     });
   }
 
   /**
-   * Remove Smartcar's listeners on the global window object.
+   * Remove Smartcar's event listeners.
    *
+   * 1. remove listener on the global window object:
    * The Smartcar SDK uses a global 'message' event listener to recieve the
    * authorization code from the pop-up dialog. Call this method to remove the
    * event listener from the global window.
+   *
+   * 2. remove click event listeners on DOM elements
+   * The Smartcar SDK also provides an `addClickHandler` method to attach click
+   * events to DOM elements. These event listeners will also be removed by calling
+   * this `unmount` method.
    */
   unmount() {
     window.removeEventListener('message', this.messageHandler);
+    if (this._elementToClickHandler) {
+      for (const [element, clickHandler] of this._elementToClickHandler.entries()) {
+        element.removeEventListener('click', clickHandler);
+      }
+    }
   }
 }
 
