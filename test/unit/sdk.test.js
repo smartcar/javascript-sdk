@@ -933,17 +933,47 @@ describe('sdk', () => {
       expect(window.open).toHaveBeenCalled();
     });
 
-    test('addClickHandler throws error if id does not exist', () => {
+    test('_getWindowOptions returns a valid windowOptions string', () => {
+      const windowOptionsA = {
+        top: 0,
+        left: '100a',
+        width: NaN,
+      };
+      const windowOptionsB = {
+        top: 100,
+        left: 100.1,
+        width: 20,
+        height: 'abcd',
+      };
+
+      expect(Smartcar._getWindowOptions(windowOptionsA)).toBe('top=0,left=100,width=0,height=0,');
+      expect(Smartcar._getWindowOptions(windowOptionsB)).toBe('top=100,left=100.1,width=100,height=0,');
+    });
+
+    test('addClickHandler throws error if both id and selector are not passed in', () => {
+      // setup document body
+      document.body.innerHTML = `<div>
+      <button>Connect your car</button>
+      </div>`;
+
+      const smartcar = new Smartcar(options);
+      const clickHandlerOptions = {
+        state: dialogOptions.state,
+        forcePrompt: dialogOptions.forcePrompt,
+      };
+
+      expect(() => smartcar.addClickHandler(clickHandlerOptions)).toThrow(
+        'Could not add click handler: id or selector must be provided.',
+      );
+    });
+
+    test('addClickHandler throws error if id matches no DOM element', () => {
       const id = 'connect-car-button';
 
       // setup document body
       document.body.innerHTML = `<div>
       <button id="${id}">Connect your car</button>
       </div>`;
-
-      // mock window.open
-      const mockOpen = jest.fn();
-      window.open = mockOpen;
 
       const smartcar = new Smartcar(options);
       const clickHandlerOptions = {
@@ -953,7 +983,27 @@ describe('sdk', () => {
       };
 
       expect(() => smartcar.addClickHandler(clickHandlerOptions)).toThrow(
-        "Could not add click handler: element with id 'incorrect-id' was not found.",
+        "Could not add click handler: element with 'incorrect-id' was not found.",
+      );
+    });
+
+    test('addClickHandler throws error if selector matches no DOM element', () => {
+      const className = 'incorrect-class-name';
+
+      // setup document body
+      document.body.innerHTML = `<div>
+      <button>Connect your car</button>
+      </div>`;
+
+      const smartcar = new Smartcar(options);
+      const clickHandlerOptions = {
+        selector: `.${className}`,
+        state: dialogOptions.state,
+        forcePrompt: dialogOptions.forcePrompt,
+      };
+
+      expect(() => smartcar.addClickHandler(clickHandlerOptions)).toThrow(
+        "Could not add click handler: element with '.incorrect-class-name' was not found.",
       );
     });
 
@@ -991,6 +1041,45 @@ describe('sdk', () => {
       expect(mockOpen).toHaveBeenCalled();
     });
 
+    test('addClickHandler adds event listeners to all DOM elements that match the id/selector options', () => {
+      const id = 'connect-car-button';
+      const className = 'connect-button-class';
+
+      // setup document body
+      document.body.innerHTML = `<div>
+      <button id="${id}">Connect your car</button>
+      <button class="${className}">Connect your car</button>
+      <button class="${className}">Connect your car</button>
+      </div>`;
+
+      // mock window.open
+      const mockOpen = jest.fn();
+      window.open = mockOpen;
+
+      const smartcar = new Smartcar(options);
+      const clickHandlerOptions = {
+        id,
+        selector: `.${className}`,
+        state: dialogOptions.state,
+        forcePrompt: dialogOptions.forcePrompt,
+      };
+
+      smartcar.addClickHandler(clickHandlerOptions);
+
+      expect(mockOpen).toHaveBeenCalledTimes(0);
+
+      mockOpen.mockImplementation((href, description, windowOptions) => {
+        expect(href).toEqual(expectedLink);
+        expect(description).toEqual('Connect your car');
+        expect(isValidWindowOptions(windowOptions))
+          .toBe(true, 'correctly formatted windowOptions');
+      });
+
+      document.getElementById(id).click();
+      document.querySelectorAll(`.${className}`).forEach((element) => element.click());
+      expect(mockOpen).toHaveBeenCalledTimes(3);
+    });
+
     test('unmount removes the eventListener from the window object', () => {
       const mockAddEventListener = jest.fn();
       const mockRemoveEventListener = jest.fn();
@@ -1005,6 +1094,62 @@ describe('sdk', () => {
         .toHaveBeenCalledWith('message', smartcar.messageHandler);
       expect(mockRemoveEventListener)
         .toHaveBeenCalledWith('message', smartcar.messageHandler);
+    });
+
+    test('unmount removes the click eventListeners attached by addClickHandler', () => {
+      const id = 'connect-car-button';
+      const classNameA = 'connect-button-classA';
+      const classNameB = 'connect-button-classB';
+
+      // mock dom & event listeners
+      document.body.innerHTML = `<div>
+      <button id="${id}">Connect your car</button>
+      <button class="${classNameA}">Connect your car</button>
+      <button class="${classNameB}">Fancy connect</button>
+      <button class="${classNameB}">Fancy connect</button>
+      </div>`;
+      document.getElementById(id).addEventListener = jest.fn();
+      document.getElementById(id).removeEventListener = jest.fn();
+      document.querySelectorAll(`.${classNameA}`).forEach((element) => {
+        element.addEventListener = jest.fn();
+        element.removeEventListener = jest.fn();
+      });
+      document.querySelectorAll(`.${classNameB}`).forEach((element) => {
+        element.addEventListener = jest.fn();
+        element.removeEventListener = jest.fn();
+      });
+
+      const smartcar = new Smartcar(options);
+      const clickHandlerOptionsA = {
+        id,
+        selector: `.${classNameA}`,
+        state: dialogOptions.state,
+        forcePrompt: dialogOptions.forcePrompt,
+      };
+      const clickHandlerOptionsB = {
+        selector: `.${classNameB}`,
+        forcePrompt: dialogOptions.forcePrompt,
+        state: 'fancy',
+      };
+
+      // call addClickHandler for multiple times with different options
+      smartcar.addClickHandler(clickHandlerOptionsA);
+      smartcar.addClickHandler(clickHandlerOptionsB);
+
+      smartcar.unmount();
+
+      expect(document.getElementById(id).addEventListener).toHaveBeenCalledTimes(1);
+      expect(document.getElementById(id).removeEventListener).toHaveBeenCalledTimes(1);
+      document.querySelectorAll(`.${classNameA}`)
+        .forEach((element) => {
+          expect(element.addEventListener).toHaveBeenCalledTimes(1);
+          expect(element.removeEventListener).toHaveBeenCalledTimes(1);
+        });
+      document.querySelectorAll(`.${classNameB}`)
+        .forEach((element) => {
+          expect(element.addEventListener).toHaveBeenCalledTimes(1);
+          expect(element.removeEventListener).toHaveBeenCalledTimes(1);
+        });
     });
   });
 });
