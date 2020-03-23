@@ -1,5 +1,7 @@
 'use strict';
 
+const uuid = require('uuid/v4');
+
 /* eslint-env node */
 
 class Smartcar {
@@ -46,6 +48,8 @@ class Smartcar {
     this.onComplete = options.onComplete;
     this.mode = options.testMode === true ? 'test' : 'live';
     this.responseType = 'code';
+    // identifier for matching message event and multiple Smartcar instances
+    this.instanceId = uuid();
 
     // handler
     this.messageHandler = (event) => {
@@ -58,6 +62,20 @@ class Smartcar {
       // bail if `message.name` is not `SmartcarAuthMessage`
       // this prevents attempting to handle messages intended for others
       if (message.name !== 'SmartcarAuthMessage') {
+        return;
+      }
+
+      // bail if `state` is invalid
+      let stateObject;
+      try {
+        stateObject = JSON.parse(window.atob(message.state));
+      } catch (e) {
+        return;
+      }
+      // `originalState` is optional
+      const {originalState = '', instanceId} = stateObject;
+      // bail if `instanceId` doesn't match
+      if (instanceId !== this.instanceId) {
         return;
       }
 
@@ -116,7 +134,7 @@ class Smartcar {
          * parameters they must also handle populating the corresponding query
          * parameters in their redirect uri.
          */
-        this.onComplete(err, message.code, message.state);
+        this.onComplete(err, message.code, originalState);
       }
     };
 
@@ -285,9 +303,15 @@ class Smartcar {
       }
     }
 
+    // augment state to track the corresponding instance
+    const state = {
+      instanceId: this.instanceId,
+    };
     if (options.state) {
-      link += `&state=${options.state}`;
+      state.originalState = options.state;
     }
+    // convert the augmented state to a base64 string
+    link += `&state=${window.btoa(JSON.stringify(state))}`;
 
     if (options.vehicleInfo) {
       const availableParams = ['make'];
