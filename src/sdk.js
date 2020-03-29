@@ -1,7 +1,5 @@
 'use strict';
 
-const uuid = require('uuid/v4');
-
 /* eslint-env node */
 
 class Smartcar {
@@ -49,7 +47,8 @@ class Smartcar {
     this.mode = options.testMode === true ? 'test' : 'live';
     this.responseType = 'code';
     // identifier for matching message event and multiple Smartcar instances
-    this.instanceId = uuid();
+    // it is a string composed of a timestamp and a 8-digit random number
+    this.instanceId = (new Date()).getTime() + String(Math.random()).slice(2, 10);
 
     // handler
     this.messageHandler = (event) => {
@@ -72,8 +71,8 @@ class Smartcar {
       } catch (e) {
         return;
       }
-      // `originalState` is optional
-      const {originalState = '', instanceId} = stateObject;
+
+      const {originalState, instanceId} = stateObject;
       // bail if `instanceId` doesn't match
       if (instanceId !== this.instanceId) {
         return;

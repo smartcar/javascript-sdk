@@ -1,13 +1,13 @@
 'use strict';
 
-const uuid = require('uuid/v4');
 const Smartcar = require('../../dist/umd/sdk.js');
-
-jest.mock('uuid/v4');
-uuid.mockImplementation(() => 'mock uuid');
 
 const isValidWindowOptions = (str) =>
   (/^top=[0-9.]+,left=[0-9.]+,width=[0-9.]+,height=[0-9.]+,$/).test(str);
+
+const originalState = 'foobarbaz';
+const getEncodedDefaultState = (instanceId) => window.btoa(`{"instanceId":"${instanceId}"}`);
+const getEncodedState = (instanceId) => window.btoa(`{"instanceId":"${instanceId}","originalState":"${originalState}"}`);
 
 describe('sdk', () => {
   const CDN_ORIGIN = 'https://javascript-sdk.smartcar.com';
@@ -144,7 +144,7 @@ describe('sdk', () => {
           isSmartcarHosted: false,
           code: 'super-secret-code',
           error: undefined,
-          state: window.btoa('{"instanceId":"mock uuid","originalState":"some-state"}'),
+          state: window.btoa(`{"instanceId":"${smartcar.instanceId}","originalState":"some-state"}`),
         },
         origin: 'https://selfhosted.com',
       };
@@ -169,7 +169,7 @@ describe('sdk', () => {
           isSmartcarHosted: false,
           code: 'super-secret-code',
           error: undefined,
-          state: window.btoa('{"instanceId":"mock uuid","originalState":"some-state"}'),
+          state: window.btoa(`{"instanceId":"${smartcar.instanceId}","originalState":"some-state"}`),
         },
       };
 
@@ -195,7 +195,7 @@ describe('sdk', () => {
           isSmartcarHosted: false,
           code: 'super-secret-code',
           error: undefined,
-          state: window.btoa('{"instanceId":"mock uuid","originalState":"some-state"}'),
+          state: window.btoa(`{"instanceId":"${smartcar.instanceId}","originalState":"some-state"}`),
         },
         origin: 'https://some-other-url.com',
       };
@@ -241,7 +241,7 @@ describe('sdk', () => {
           isSmartcarHosted: false,
           code: 'super-secret-code',
           error: undefined,
-          state: window.btoa('{"instanceId":"mock uuid","originalState":"some-state"}'),
+          state: window.btoa(`{"instanceId":"${smartcar.instanceId}","originalState":"some-state"}`),
         },
         origin: 'https://selfhosted.com',
       };
@@ -268,9 +268,65 @@ describe('sdk', () => {
           isSmartcarHosted: false,
           code: 'super-secret-code',
           error: undefined,
-          state: window.btoa('{"instanceId":"mock uuid","originalState":"some-state"}'),
+          state: window.btoa(`{"instanceId":"${smartcar.instanceId}","originalState":"some-state"}`),
         },
         origin: 'https://selfhosted.com',
+      };
+
+      smartcar.messageHandler(event);
+
+      expect(smartcar.onComplete).not.toBeCalledWith(null, expect.anything(), expect.anything());
+    });
+
+    test("doesn't fire onComplete when message.state is not in base64 format", () => {
+      const options = {
+        clientId: 'clientId',
+        redirectUri: `${CDN_ORIGIN}?app_origin=https://app.com`,
+        scope: ['read_vehicle_info', 'read_odometer'],
+        // eslint-disable-next-line no-unused-vars, no-empty-function
+        onComplete: jest.fn((__, _) => {}),
+      };
+
+      const smartcar = new Smartcar(options);
+
+      const event = {
+        data: {
+          name: 'SmartcarAuthMessage',
+          isSmartcarHosted: true,
+          code: 'super-secret-code',
+          error: null,
+          errorDescription: null,
+          state: '{"instanceId":"${smartcar.instanceId}","originalState":"some-state"}',
+        },
+        origin: CDN_ORIGIN,
+      };
+
+      smartcar.messageHandler(event);
+
+      expect(smartcar.onComplete).not.toBeCalledWith(null, expect.anything(), expect.anything());
+    });
+
+    test("doesn't fire onComplete when instanceId doesn't match", () => {
+      const options = {
+        clientId: 'clientId',
+        redirectUri: `${CDN_ORIGIN}?app_origin=https://app.com`,
+        scope: ['read_vehicle_info', 'read_odometer'],
+        // eslint-disable-next-line no-unused-vars, no-empty-function
+        onComplete: jest.fn((__, _) => {}),
+      };
+
+      const smartcar = new Smartcar(options);
+
+      const event = {
+        data: {
+          name: 'SmartcarAuthMessage',
+          isSmartcarHosted: true,
+          code: 'super-secret-code',
+          error: null,
+          errorDescription: null,
+          state: window.btoa('{"instanceId":"incorrect id","originalState":"some-state"}'),
+        },
+        origin: CDN_ORIGIN,
       };
 
       smartcar.messageHandler(event);
@@ -297,7 +353,7 @@ describe('sdk', () => {
             code: 'super-secret-code',
             error: null,
             errorDescription: null,
-            state: window.btoa('{"instanceId":"mock uuid","originalState":"some-state"}'),
+            state: window.btoa(`{"instanceId":"${smartcar.instanceId}","originalState":"some-state"}`),
           },
           origin: CDN_ORIGIN,
         };
@@ -324,7 +380,7 @@ describe('sdk', () => {
           isSmartcarHosted: true,
           code: 'super-secret-code',
           error: null,
-          state: window.btoa('{"instanceId":"mock uuid","originalState":"some-state"}'),
+          state: window.btoa(`{"instanceId":"${smartcar.instanceId}","originalState":"some-state"}`),
         },
         origin: CDN_ORIGIN,
       };
@@ -351,7 +407,7 @@ describe('sdk', () => {
           isSmartcarHosted: true,
           code: 'super-secret-code',
           errorDescription: 'this doesnt matter',
-          state: window.btoa('{"instanceId":"mock uuid","originalState":"some-state"}'),
+          state: window.btoa(`{"instanceId":"${smartcar.instanceId}","originalState":"some-state"}`),
         },
         origin: CDN_ORIGIN,
       };
@@ -388,7 +444,7 @@ describe('sdk', () => {
             code: 'super-secret-code',
             error: 'vehicle_incompatible',
             errorDescription,
-            state: window.btoa('{"instanceId":"mock uuid","originalState":"some-state"}'),
+            state: window.btoa(`{"instanceId":"${smartcar.instanceId}","originalState":"some-state"}`),
             ...vehicleInfo,
           },
           origin: CDN_ORIGIN,
@@ -429,7 +485,7 @@ describe('sdk', () => {
             code: 'super-secret-code',
             error: 'vehicle_incompatible',
             errorDescription,
-            state: window.btoa('{"instanceId":"mock uuid","originalState":"some-state"}'),
+            state: window.btoa(`{"instanceId":"${smartcar.instanceId}","originalState":"some-state"}`),
             ...vehicleInfo,
           },
           origin: CDN_ORIGIN,
@@ -469,7 +525,7 @@ describe('sdk', () => {
             code: 'super-secret-code',
             error: 'vehicle_incompatible',
             errorDescription,
-            state: window.btoa('{"instanceId":"mock uuid","originalState":"some-state"}'),
+            state: window.btoa(`{"instanceId":"${smartcar.instanceId}","originalState":"some-state"}`),
             ...vehicleInfo,
           },
           origin: CDN_ORIGIN,
@@ -502,7 +558,7 @@ describe('sdk', () => {
             code: 'super-secret-code',
             error: 'vehicle_incompatible',
             errorDescription,
-            state: window.btoa('{"instanceId":"mock uuid","originalState":"some-state"}'),
+            state: window.btoa(`{"instanceId":"${smartcar.instanceId}","originalState":"some-state"}`),
           },
           origin: CDN_ORIGIN,
         };
@@ -534,7 +590,7 @@ describe('sdk', () => {
             code: 'super-secret-code',
             error: 'access_denied',
             errorDescription,
-            state: window.btoa('{"instanceId":"mock uuid","originalState":"some-state"}'),
+            state: window.btoa(`{"instanceId":"${smartcar.instanceId}","originalState":"some-state"}`),
           },
           origin: CDN_ORIGIN,
         };
@@ -568,7 +624,7 @@ describe('sdk', () => {
             code: 'super-secret-code',
             error: 'invalid_subscription',
             errorDescription,
-            state: window.btoa('{"instanceId":"mock uuid","originalState":"some-state"}'),
+            state: window.btoa(`{"instanceId":"${smartcar.instanceId}","originalState":"some-state"}`),
           },
           origin: CDN_ORIGIN,
         };
@@ -603,7 +659,7 @@ describe('sdk', () => {
             code: 'super-secret-code',
             error,
             errorDescription,
-            state: window.btoa('{"instanceId":"mock uuid","originalState":"some-state"}'),
+            state: window.btoa(`{"instanceId":"${smartcar.instanceId}","originalState":"some-state"}`),
           },
           origin: CDN_ORIGIN,
         };
@@ -619,9 +675,6 @@ describe('sdk', () => {
   });
 
   describe('getAuthUrl', () => {
-    const originalState = 'foobarbaz';
-    const encodedDefaultState = window.btoa('{"instanceId":"mock uuid"}');
-    const encodedState = window.btoa(`{"instanceId":"mock uuid","originalState":"${originalState}"}`);
 
     test('generates basic link without optional params', () => {
       const options = {
@@ -633,7 +686,7 @@ describe('sdk', () => {
       const smartcar = new Smartcar(options);
 
       const expectedLink =
-        `https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=auto&mode=live&state=${encodedDefaultState}`;
+        `https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=auto&mode=live&state=${getEncodedDefaultState(smartcar.instanceId)}`;
       const link = smartcar.getAuthUrl();
       expect(link).toEqual(expectedLink);
     });
@@ -649,7 +702,7 @@ describe('sdk', () => {
       const smartcar = new Smartcar(options);
 
       const expectedLink =
-        `https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&state=${encodedState}`;
+        `https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&state=${getEncodedState(smartcar.instanceId)}`;
       const link = smartcar.getAuthUrl({
         state: originalState,
         forcePrompt: true,
@@ -669,7 +722,7 @@ describe('sdk', () => {
       const smartcar = new Smartcar(options);
 
       const expectedLink =
-        `https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=test&state=${encodedState}`;
+        `https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=test&state=${getEncodedState(smartcar.instanceId)}`;
       const link = smartcar.getAuthUrl({
         state: originalState,
         forcePrompt: true,
@@ -677,231 +730,231 @@ describe('sdk', () => {
       expect(link).toEqual(expectedLink);
     });
 
-    // test('generates live mode link', () => {
-    //   const options = {
-    //     clientId: 'clientId',
-    //     redirectUri: 'https://smartcar.com',
-    //     scope: ['read_vehicle_info', 'read_odometer'],
-    //     onComplete: jest.fn(),
-    //     testMode: false,
-    //   };
+    test('generates live mode link', () => {
+      const options = {
+        clientId: 'clientId',
+        redirectUri: 'https://smartcar.com',
+        scope: ['read_vehicle_info', 'read_odometer'],
+        onComplete: jest.fn(),
+        testMode: false,
+      };
 
-    //   const smartcar = new Smartcar(options);
+      const smartcar = new Smartcar(options);
 
-    //   const expectedLink =
-    //     `https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&state=${encodedState}`;
-    //   const link = smartcar.getAuthUrl({
-    //     state: originalState,
-    //     forcePrompt: true,
-    //   });
-    //   expect(link).toEqual(expectedLink);
-    // });
+      const expectedLink =
+        `https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&state=${getEncodedState(smartcar.instanceId)}`;
+      const link = smartcar.getAuthUrl({
+        state: originalState,
+        forcePrompt: true,
+      });
+      expect(link).toEqual(expectedLink);
+    });
 
-    // test('generate link when vehicleInfo={...} included', () => {
-    //   const options = {
-    //     clientId: 'clientId',
-    //     redirectUri: 'https://smartcar.com',
-    //     scope: ['read_vehicle_info', 'read_odometer'],
-    //     onComplete: jest.fn(),
-    //     testMode: false,
-    //   };
+    test('generate link when vehicleInfo={...} included', () => {
+      const options = {
+        clientId: 'clientId',
+        redirectUri: 'https://smartcar.com',
+        scope: ['read_vehicle_info', 'read_odometer'],
+        onComplete: jest.fn(),
+        testMode: false,
+      };
 
-    //   const smartcar = new Smartcar(options);
+      const smartcar = new Smartcar(options);
 
-    //   const expectedLink =
-    //     `https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&state=${encodedState}&make=TESLA`;
+      const expectedLink =
+        `https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&state=${getEncodedState(smartcar.instanceId)}&make=TESLA`;
 
-    //   const link = smartcar.getAuthUrl({
-    //     state: originalState,
-    //     forcePrompt: true,
-    //     vehicleInfo: {
-    //       make: 'TESLA',
-    //     },
-    //   });
+      const link = smartcar.getAuthUrl({
+        state: originalState,
+        forcePrompt: true,
+        vehicleInfo: {
+          make: 'TESLA',
+        },
+      });
 
-    //   expect(link).toEqual(expectedLink);
-    // });
+      expect(link).toEqual(expectedLink);
+    });
 
-    // test('ignores erroneous vehicle info', () => {
-    //   const options = {
-    //     clientId: 'clientId',
-    //     redirectUri: 'https://smartcar.com',
-    //     scope: ['read_vehicle_info', 'read_odometer'],
-    //     onComplete: jest.fn(),
-    //     testMode: false,
-    //   };
+    test('ignores erroneous vehicle info', () => {
+      const options = {
+        clientId: 'clientId',
+        redirectUri: 'https://smartcar.com',
+        scope: ['read_vehicle_info', 'read_odometer'],
+        onComplete: jest.fn(),
+        testMode: false,
+      };
 
-    //   const smartcar = new Smartcar(options);
+      const smartcar = new Smartcar(options);
 
-    //   const link = smartcar.getAuthUrl({
-    //     state: 'foobarbaz',
-    //     forcePrompt: true,
-    //     vehicleInfo: {
-    //       pizza: 'isGood',
-    //     },
-    //   });
+      const link = smartcar.getAuthUrl({
+        state: 'foobarbaz',
+        forcePrompt: true,
+        vehicleInfo: {
+          pizza: 'isGood',
+        },
+      });
 
-    //   expect(link.includes('&pizza=isGood')).toBe(false);
-    // });
+      expect(link.includes('&pizza=isGood')).toBe(false);
+    });
 
-    // test('Adds single_select=true when singleSelect included', () => {
-    //   const options = {
-    //     clientId: 'clientId',
-    //     redirectUri: 'https://smartcar.com',
-    //     scope: ['read_vehicle_info', 'read_odometer'],
-    //     onComplete: jest.fn(),
-    //     testMode: false,
-    //   };
+    test('Adds single_select=true when singleSelect included', () => {
+      const options = {
+        clientId: 'clientId',
+        redirectUri: 'https://smartcar.com',
+        scope: ['read_vehicle_info', 'read_odometer'],
+        onComplete: jest.fn(),
+        testMode: false,
+      };
 
-    //   const smartcar = new Smartcar(options);
+      const smartcar = new Smartcar(options);
 
-    //   const expectedLink =
-    //     `https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&single_select=true&state=${encodedState}&make=TESLA`;
+      const expectedLink =
+        `https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&single_select=true&state=${getEncodedState(smartcar.instanceId)}&make=TESLA`;
 
-    //   const link = smartcar.getAuthUrl({
-    //     state: originalState,
-    //     forcePrompt: true,
-    //     vehicleInfo: {
-    //       make: 'TESLA',
-    //     },
-    //     singleSelect: true,
-    //   });
+      const link = smartcar.getAuthUrl({
+        state: originalState,
+        forcePrompt: true,
+        vehicleInfo: {
+          make: 'TESLA',
+        },
+        singleSelect: true,
+      });
 
-    //   expect(link).toEqual(expectedLink);
-    // });
+      expect(link).toEqual(expectedLink);
+    });
 
-    // test('Adds single_select_vin=12345 when singleSelect included as an object', () => {
-    //   const options = {
-    //     clientId: 'clientId',
-    //     redirectUri: 'https://smartcar.com',
-    //     scope: ['read_vehicle_info', 'read_odometer'],
-    //     onComplete: jest.fn(),
-    //     testMode: false,
-    //   };
+    test('Adds single_select_vin=12345 when singleSelect included as an object', () => {
+      const options = {
+        clientId: 'clientId',
+        redirectUri: 'https://smartcar.com',
+        scope: ['read_vehicle_info', 'read_odometer'],
+        onComplete: jest.fn(),
+        testMode: false,
+      };
 
-    //   const smartcar = new Smartcar(options);
+      const smartcar = new Smartcar(options);
 
-    //   const expectedLink =
-    //     `https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&single_select_vin=12345&single_select=true&state=${encodedState}&make=TESLA`;
+      const expectedLink =
+        `https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&single_select_vin=12345&single_select=true&state=${getEncodedState(smartcar.instanceId)}&make=TESLA`;
 
-    //   const link = smartcar.getAuthUrl({
-    //     state: originalState,
-    //     forcePrompt: true,
-    //     vehicleInfo: {
-    //       make: 'TESLA',
-    //     },
-    //     singleSelect: {
-    //       vin: '12345',
-    //     },
-    //   });
+      const link = smartcar.getAuthUrl({
+        state: originalState,
+        forcePrompt: true,
+        vehicleInfo: {
+          make: 'TESLA',
+        },
+        singleSelect: {
+          vin: '12345',
+        },
+      });
 
-    //   expect(link).toEqual(expectedLink);
-    // });
+      expect(link).toEqual(expectedLink);
+    });
 
-    // test('Ignores junk properties when singleSelect is included as an object', () => {
-    //   const options = {
-    //     clientId: 'clientId',
-    //     redirectUri: 'https://smartcar.com',
-    //     scope: ['read_vehicle_info', 'read_odometer'],
-    //     onComplete: jest.fn(),
-    //     testMode: false,
-    //   };
+    test('Ignores junk properties when singleSelect is included as an object', () => {
+      const options = {
+        clientId: 'clientId',
+        redirectUri: 'https://smartcar.com',
+        scope: ['read_vehicle_info', 'read_odometer'],
+        onComplete: jest.fn(),
+        testMode: false,
+      };
 
-    //   const smartcar = new Smartcar(options);
+      const smartcar = new Smartcar(options);
 
-    //   const expectedLink =
-    //     `https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&single_select_vin=vin&single_select=true&state=${encodedState}&make=TESLA`;
+      const expectedLink =
+        `https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&single_select_vin=vin&single_select=true&state=${getEncodedState(smartcar.instanceId)}&make=TESLA`;
 
-    //   const link = smartcar.getAuthUrl({
-    //     state: originalState,
-    //     forcePrompt: true,
-    //     vehicleInfo: {
-    //       make: 'TESLA',
-    //     },
-    //     singleSelect: {
-    //       pizza: '12345',
-    //       vin: 'vin',
-    //     },
-    //   });
+      const link = smartcar.getAuthUrl({
+        state: originalState,
+        forcePrompt: true,
+        vehicleInfo: {
+          make: 'TESLA',
+        },
+        singleSelect: {
+          pizza: '12345',
+          vin: 'vin',
+        },
+      });
 
-    //   expect(link).toEqual(expectedLink);
-    // });
+      expect(link).toEqual(expectedLink);
+    });
 
-    // test('Ignores junk properties when singleSelect is included as an object with only junk properties', () => {
-    //   const options = {
-    //     clientId: 'clientId',
-    //     redirectUri: 'https://smartcar.com',
-    //     scope: ['read_vehicle_info', 'read_odometer'],
-    //     onComplete: jest.fn(),
-    //     testMode: false,
-    //   };
+    test('Ignores junk properties when singleSelect is included as an object with only junk properties', () => {
+      const options = {
+        clientId: 'clientId',
+        redirectUri: 'https://smartcar.com',
+        scope: ['read_vehicle_info', 'read_odometer'],
+        onComplete: jest.fn(),
+        testMode: false,
+      };
 
-    //   const smartcar = new Smartcar(options);
+      const smartcar = new Smartcar(options);
 
-    //   const expectedLink =
-    //     `https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&single_select=false&state=${encodedState}&make=TESLA`;
+      const expectedLink =
+        `https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&single_select=false&state=${getEncodedState(smartcar.instanceId)}&make=TESLA`;
 
-    //   const link = smartcar.getAuthUrl({
-    //     state: originalState,
-    //     forcePrompt: true,
-    //     vehicleInfo: {
-    //       make: 'TESLA',
-    //     },
-    //     singleSelect: {
-    //       pizza: '12345',
-    //     },
-    //   });
+      const link = smartcar.getAuthUrl({
+        state: originalState,
+        forcePrompt: true,
+        vehicleInfo: {
+          make: 'TESLA',
+        },
+        singleSelect: {
+          pizza: '12345',
+        },
+      });
 
-    //   expect(link).toEqual(expectedLink);
-    // });
+      expect(link).toEqual(expectedLink);
+    });
 
-    // test('Sets single_select=false with junk values passed to singleSelect', () => {
-    //   const options = {
-    //     clientId: 'clientId',
-    //     redirectUri: 'https://smartcar.com',
-    //     scope: ['read_vehicle_info', 'read_odometer'],
-    //     onComplete: jest.fn(),
-    //     testMode: false,
-    //   };
+    test('Sets single_select=false with junk values passed to singleSelect', () => {
+      const options = {
+        clientId: 'clientId',
+        redirectUri: 'https://smartcar.com',
+        scope: ['read_vehicle_info', 'read_odometer'],
+        onComplete: jest.fn(),
+        testMode: false,
+      };
 
-    //   const smartcar = new Smartcar(options);
+      const smartcar = new Smartcar(options);
 
-    //   const expectedLink =
-    //     `https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&single_select=false&state=${encodedState}&make=TESLA`;
+      const expectedLink =
+        `https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&single_select=false&state=${getEncodedState(smartcar.instanceId)}&make=TESLA`;
 
-    //   const link = smartcar.getAuthUrl({
-    //     state: originalState,
-    //     forcePrompt: true,
-    //     vehicleInfo: {
-    //       make: 'TESLA',
-    //     },
-    //     singleSelect: 'dnsadnlksa',
-    //   });
+      const link = smartcar.getAuthUrl({
+        state: originalState,
+        forcePrompt: true,
+        vehicleInfo: {
+          make: 'TESLA',
+        },
+        singleSelect: 'dnsadnlksa',
+      });
 
-    //   expect(link).toEqual(expectedLink);
-    // });
+      expect(link).toEqual(expectedLink);
+    });
 
-    // test('Excludes single_select from url when not passed to getAuthUrl', () => {
-    //   const options = {
-    //     clientId: 'clientId',
-    //     redirectUri: 'https://smartcar.com',
-    //     scope: ['read_vehicle_info', 'read_odometer'],
-    //     onComplete: jest.fn(),
-    //     testMode: false,
-    //   };
+    test('Excludes single_select from url when not passed to getAuthUrl', () => {
+      const options = {
+        clientId: 'clientId',
+        redirectUri: 'https://smartcar.com',
+        scope: ['read_vehicle_info', 'read_odometer'],
+        onComplete: jest.fn(),
+        testMode: false,
+      };
 
-    //   const smartcar = new Smartcar(options);
+      const smartcar = new Smartcar(options);
 
-    //   const link = smartcar.getAuthUrl({
-    //     state: 'foobarbaz',
-    //     forcePrompt: true,
-    //     vehicleInfo: {
-    //       make: 'TESLA',
-    //     },
-    //   });
+      const link = smartcar.getAuthUrl({
+        state: 'foobarbaz',
+        forcePrompt: true,
+        vehicleInfo: {
+          make: 'TESLA',
+        },
+      });
 
-    //   expect(link.includes('single_select')).toBe(false);
-    // });
+      expect(link.includes('single_select')).toBe(false);
+    });
   });
 
   describe('openDialog and addClickHandler', () => {
@@ -913,12 +966,12 @@ describe('sdk', () => {
     };
 
     const dialogOptions = {
-      state: 'foobarbaz',
+      state: originalState,
       forcePrompt: true,
     };
 
     // expected OAuth link
-    const expectedLink = 'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&state=eyJpbnN0YW5jZUlkIjoibW9jayB1dWlkIiwib3JpZ2luYWxTdGF0ZSI6ImZvb2JhcmJheiJ9';
+    const expectedBaseLink = 'https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&state=';
 
     test('openDialog calls window.open', () => {
       // mock window.open
@@ -930,7 +983,7 @@ describe('sdk', () => {
       expect(window.open).toHaveBeenCalledTimes(0);
 
       mockOpen.mockImplementation((href, description, windowOptions) => {
-        expect(href).toEqual(expectedLink);
+        expect(href).toEqual(`${expectedBaseLink}${getEncodedState(smartcar.instanceId)}`);
         expect(description).toEqual('Connect your car');
         expect(isValidWindowOptions(windowOptions))
           .toBe(true, 'correctly formatted windowOptions');
@@ -1038,7 +1091,7 @@ describe('sdk', () => {
       expect(mockOpen).toHaveBeenCalledTimes(0);
 
       mockOpen.mockImplementation((href, description, windowOptions) => {
-        expect(href).toEqual(expectedLink);
+        expect(href).toEqual(`${expectedBaseLink}${getEncodedState(smartcar.instanceId)}`);
         expect(description).toEqual('Connect your car');
         expect(isValidWindowOptions(windowOptions))
           .toBe(true, 'correctly formatted windowOptions');
@@ -1076,7 +1129,7 @@ describe('sdk', () => {
       expect(mockOpen).toHaveBeenCalledTimes(0);
 
       mockOpen.mockImplementation((href, description, windowOptions) => {
-        expect(href).toEqual(expectedLink);
+        expect(href).toEqual(`${expectedBaseLink}${getEncodedState(smartcar.instanceId)}`);
         expect(description).toEqual('Connect your car');
         expect(isValidWindowOptions(windowOptions))
           .toBe(true, 'correctly formatted windowOptions');
