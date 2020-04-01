@@ -7,7 +7,7 @@ const isValidWindowOptions = (str) =>
 
 const originalState = 'foobarbaz';
 const getEncodedDefaultState = (instanceId) => window.btoa(`{"instanceId":"${instanceId}"}`);
-const getEncodedState = (instanceId) => window.btoa(`{"instanceId":"${instanceId}","originalState":"${originalState}"}`);
+const getEncodedState = (instanceId, state = originalState) => window.btoa(`{"instanceId":"${instanceId}","originalState":"${state}"}`);
 
 describe('sdk', () => {
   const CDN_ORIGIN = 'https://javascript-sdk.smartcar.com';
@@ -144,7 +144,7 @@ describe('sdk', () => {
           isSmartcarHosted: false,
           code: 'super-secret-code',
           error: undefined,
-          state: window.btoa(`{"instanceId":"${smartcar.instanceId}","originalState":"some-state"}`),
+          state: getEncodedState(smartcar.instanceId, 'some-state'),
         },
         origin: 'https://selfhosted.com',
       };
@@ -169,7 +169,7 @@ describe('sdk', () => {
           isSmartcarHosted: false,
           code: 'super-secret-code',
           error: undefined,
-          state: window.btoa(`{"instanceId":"${smartcar.instanceId}","originalState":"some-state"}`),
+          state: getEncodedState(smartcar.instanceId, 'some-state'),
         },
       };
 
@@ -195,7 +195,7 @@ describe('sdk', () => {
           isSmartcarHosted: false,
           code: 'super-secret-code',
           error: undefined,
-          state: window.btoa(`{"instanceId":"${smartcar.instanceId}","originalState":"some-state"}`),
+          state: getEncodedState(smartcar.instanceId, 'some-state'),
         },
         origin: 'https://some-other-url.com',
       };
@@ -241,7 +241,7 @@ describe('sdk', () => {
           isSmartcarHosted: false,
           code: 'super-secret-code',
           error: undefined,
-          state: window.btoa(`{"instanceId":"${smartcar.instanceId}","originalState":"some-state"}`),
+          state: getEncodedState(smartcar.instanceId, 'some-state'),
         },
         origin: 'https://selfhosted.com',
       };
@@ -268,7 +268,7 @@ describe('sdk', () => {
           isSmartcarHosted: false,
           code: 'super-secret-code',
           error: undefined,
-          state: window.btoa(`{"instanceId":"${smartcar.instanceId}","originalState":"some-state"}`),
+          state: getEncodedState(smartcar.instanceId, 'some-state'),
         },
         origin: 'https://selfhosted.com',
       };
@@ -324,7 +324,7 @@ describe('sdk', () => {
           code: 'super-secret-code',
           error: null,
           errorDescription: null,
-          state: window.btoa('{"instanceId":"incorrect id","originalState":"some-state"}'),
+          state: getEncodedState('incorrect id', 'some-state'),
         },
         origin: CDN_ORIGIN,
       };
@@ -353,7 +353,7 @@ describe('sdk', () => {
             code: 'super-secret-code',
             error: null,
             errorDescription: null,
-            state: window.btoa(`{"instanceId":"${smartcar.instanceId}","originalState":"some-state"}`),
+            state: getEncodedState(smartcar.instanceId, 'some-state'),
           },
           origin: CDN_ORIGIN,
         };
@@ -380,7 +380,7 @@ describe('sdk', () => {
           isSmartcarHosted: true,
           code: 'super-secret-code',
           error: null,
-          state: window.btoa(`{"instanceId":"${smartcar.instanceId}","originalState":"some-state"}`),
+          state: getEncodedState(smartcar.instanceId, 'some-state'),
         },
         origin: CDN_ORIGIN,
       };
@@ -407,7 +407,7 @@ describe('sdk', () => {
           isSmartcarHosted: true,
           code: 'super-secret-code',
           errorDescription: 'this doesnt matter',
-          state: window.btoa(`{"instanceId":"${smartcar.instanceId}","originalState":"some-state"}`),
+          state: getEncodedState(smartcar.instanceId, 'some-state'),
         },
         origin: CDN_ORIGIN,
       };
@@ -444,7 +444,7 @@ describe('sdk', () => {
             code: 'super-secret-code',
             error: 'vehicle_incompatible',
             errorDescription,
-            state: window.btoa(`{"instanceId":"${smartcar.instanceId}","originalState":"some-state"}`),
+            state: getEncodedState(smartcar.instanceId, 'some-state'),
             ...vehicleInfo,
           },
           origin: CDN_ORIGIN,
@@ -485,7 +485,7 @@ describe('sdk', () => {
             code: 'super-secret-code',
             error: 'vehicle_incompatible',
             errorDescription,
-            state: window.btoa(`{"instanceId":"${smartcar.instanceId}","originalState":"some-state"}`),
+            state: getEncodedState(smartcar.instanceId, 'some-state'),
             ...vehicleInfo,
           },
           origin: CDN_ORIGIN,
@@ -525,7 +525,7 @@ describe('sdk', () => {
             code: 'super-secret-code',
             error: 'vehicle_incompatible',
             errorDescription,
-            state: window.btoa(`{"instanceId":"${smartcar.instanceId}","originalState":"some-state"}`),
+            state: getEncodedState(smartcar.instanceId, 'some-state'),
             ...vehicleInfo,
           },
           origin: CDN_ORIGIN,
@@ -558,7 +558,7 @@ describe('sdk', () => {
             code: 'super-secret-code',
             error: 'vehicle_incompatible',
             errorDescription,
-            state: window.btoa(`{"instanceId":"${smartcar.instanceId}","originalState":"some-state"}`),
+            state: getEncodedState(smartcar.instanceId, 'some-state'),
           },
           origin: CDN_ORIGIN,
         };
@@ -590,7 +590,7 @@ describe('sdk', () => {
             code: 'super-secret-code',
             error: 'access_denied',
             errorDescription,
-            state: window.btoa(`{"instanceId":"${smartcar.instanceId}","originalState":"some-state"}`),
+            state: getEncodedState(smartcar.instanceId, 'some-state'),
           },
           origin: CDN_ORIGIN,
         };
@@ -624,7 +624,7 @@ describe('sdk', () => {
             code: 'super-secret-code',
             error: 'invalid_subscription',
             errorDescription,
-            state: window.btoa(`{"instanceId":"${smartcar.instanceId}","originalState":"some-state"}`),
+            state: getEncodedState(smartcar.instanceId, 'some-state'),
           },
           origin: CDN_ORIGIN,
         };
@@ -659,7 +659,7 @@ describe('sdk', () => {
             code: 'super-secret-code',
             error,
             errorDescription,
-            state: window.btoa(`{"instanceId":"${smartcar.instanceId}","originalState":"some-state"}`),
+            state: getEncodedState(smartcar.instanceId, 'some-state'),
           },
           origin: CDN_ORIGIN,
         };
