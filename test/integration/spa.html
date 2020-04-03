@@ -23,11 +23,12 @@
       onComplete: () => location.replace('on-post-message-url'),
     };
 
-    // don't need reference, just bind to window
-    new window.Smartcar(options);
+    // bind listener to window
+    const smartcar = new window.Smartcar(options);
+    const encodedState = window.btoa(`{"instanceId":"${smartcar.instanceId}"}`);
 
     // on page load, open redirect page which should immediately post back,
     // causing onComplete to replace the page url.
-    window.open(redirectUri);
+    window.open(`${redirectUri}&state=${encodedState}`);
   </script>
 </html>
