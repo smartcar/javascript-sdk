@@ -957,6 +957,28 @@ describe('sdk', () => {
     });
   });
 
+  test('Includes flags when passed to getAuthUrl', () => {
+    const options = {
+      clientId: 'clientId',
+      redirectUri: 'https://smartcar.com',
+      scope: ['read_vehicle_info', 'read_odometer'],
+      onComplete: jest.fn(),
+      testMode: false,
+    };
+
+    const smartcar = new Smartcar(options);
+
+    const link = smartcar.getAuthUrl({
+      state: originalState,
+      forcePrompt: true,
+      flags: ['country:DE', 'flag:suboption'],
+    });
+
+    const expectedLink =
+    `https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&state=${getEncodedState(smartcar.instanceId)}&flags=country%3ADE%20flag%3Asuboption`;
+    expect(link).toBe(expectedLink);
+  });
+
   describe('openDialog and addClickHandler', () => {
     const options = {
       clientId: 'clientId',
