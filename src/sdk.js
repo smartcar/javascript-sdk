@@ -249,8 +249,7 @@ class Smartcar {
    * [API reference](https://smartcar.com/docs/api/#connect-match)
    * for more information.
    * @param {String[]} [options.flags] - An optional space-separated list of feature
-   * flags that your application has early access to. Flags are colon separated for
-   * any suboptions they may have
+   * flags that your application has early access to. 
    *
    * @return {String} Connect URL to redirect user to.
    *
