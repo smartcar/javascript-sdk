@@ -249,7 +249,7 @@ class Smartcar {
    * [API reference](https://smartcar.com/docs/api/#connect-match)
    * for more information.
    * @param {String[]} [options.flags] - An optional space-separated list of feature
-   * flags that your application has early access to. 
+   * flags that your application has early access to.
    *
    * @return {String} Connect URL to redirect user to.
    *
@@ -262,7 +262,8 @@ class Smartcar {
    * &state=0facda3319
    * &make=TESLA
    * &single_select=true
-   * &flags=country:DE
+   * &single_select_vin=5YJSA1E14FF101307
+   * &flags=country:DE color:00819D
    */
   getAuthUrl(options) {
     options = options || {};
