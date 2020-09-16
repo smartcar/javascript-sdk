@@ -248,6 +248,8 @@ class Smartcar {
    * the vehicle with the specified VIN. See the
    * [API reference](https://smartcar.com/docs/api/#connect-match)
    * for more information.
+   * @param {String[]} [options.flags] - An optional space-separated list of feature
+   * flags that your application has early access to.
    *
    * @return {String} Connect URL to redirect user to.
    *
@@ -260,6 +262,8 @@ class Smartcar {
    * &state=0facda3319
    * &make=TESLA
    * &single_select=true
+   * &single_select_vin=5YJSA1E14FF101307
+   * &flags=country:DE color:00819D
    */
   getAuthUrl(options) {
     options = options || {};
@@ -319,6 +323,10 @@ class Smartcar {
           link += `&${param}=${encodeURIComponent(options.vehicleInfo[param])}`;
         }
       }
+    }
+
+    if (options.flags) {
+      link += `&flags=${encodeURIComponent(options.flags.join(' '))}`;
     }
 
     return link;
