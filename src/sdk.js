@@ -352,6 +352,8 @@ class Smartcar {
    * the vehicle with the specified VIN. See the
    * [API reference](https://smartcar.com/docs/api/#connect-match)
    * for more information.
+   * @param {String[]} [options.flags] - An optional space-separated list of feature
+   * flags that your application has early access to.
    * @param {Object} [options.windowOptions] - the position and dimension settings
    * of the popup window
    * @param {String} [options.windowOptions.top] - the top property of
@@ -393,6 +395,8 @@ class Smartcar {
    * the vehicle with the specified VIN. See the
    * [API reference](https://smartcar.com/docs/api/#connect-match)
    * for more information.
+   * @param {String[]} [options.flags] - An optional space-separated list of feature
+   * flags that your application has early access to.
    */
   addClickHandler(options) {
     const {id, selector} = options;
