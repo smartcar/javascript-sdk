@@ -15,6 +15,9 @@ Smartcar JavaScript SDK documentation.
 <dl>
 <dt><a href="#OnComplete">OnComplete</a> : <code>function</code></dt>
 <dd></dd>
+<dt><a href="#WindowOptions">WindowOptions</a> : <code>Object</code></dt>
+<dd><p>Position and size settings for the popup window.</p>
+</dd>
 </dl>
 
 <a name="Smartcar"></a>
@@ -97,11 +100,7 @@ Launches Smartcar Connect in a new window.
 | [options.vehicleInfo.make] | <code>String</code> |  | `vehicleInfo` is an object with an optional property `make`, which allows users to bypass the car brand selection screen. For a complete list of supported makes, please see our [API Reference](https://smartcar.com/docs/api#authorization) documentation. |
 | [options.singleSelect] | <code>Boolean</code> \| <code>Object</code> |  | An optional value that sets the behavior of the grant dialog displayed to the user. If set to `true`, `single_select` limits the user to selecting only one vehicle. If `single_select` is passed in as an object with the property `vin`, Smartcar will only authorize the vehicle with the specified VIN. See the [API reference](https://smartcar.com/docs/api/#connect-match) for more information. |
 | [options.flags] | <code>Array.&lt;String&gt;</code> |  | An optional space-separated list of feature flags that your application has early access to. |
-| [options.windowOptions] | <code>Object</code> |  | the position and dimension settings of the popup window |
-| [options.windowOptions.top] | <code>String</code> |  | the top property of [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features) |
-| [options.windowOptions.left] | <code>String</code> |  | the left property of [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features) |
-| [options.windowOptions.width] | <code>String</code> |  | the width property of [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features) |
-| [options.windowOptions.height] | <code>String</code> |  | the height property of [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features) |
+| [options.windowOptions] | [<code>WindowOptions</code>](#WindowOptions) |  | position and size settings for the popup window |
 
 <a name="Smartcar+addClickHandler"></a>
 
@@ -122,6 +121,7 @@ On-click event calls openDialog when the specified element is clicked.
 | [options.vehicleInfo.make] | <code>String</code> |  | `vehicleInfo` is an object with an optional property `make`, which allows users to bypass the car brand selection screen. For a complete list of supported makes, please see our [API Reference](https://smartcar.com/docs/api#authorization) documentation. |
 | [options.singleSelect] | <code>Boolean</code> \| <code>Object</code> |  | An optional value that sets the behavior of the grant dialog displayed to the user. If set to `true`, `single_select` limits the user to selecting only one vehicle. If `single_select` is passed in as an object with the property `vin`, Smartcar will only authorize the vehicle with the specified VIN. See the [API reference](https://smartcar.com/docs/api/#connect-match) for more information. |
 | [options.flags] | <code>Array.&lt;String&gt;</code> |  | An optional space-separated list of feature flags that your application has early access to. |
+| [options.windowOptions] | [<code>WindowOptions</code>](#WindowOptions) |  | position and size settings for the popup window |
 
 <a name="Smartcar+unmount"></a>
 
@@ -202,4 +202,21 @@ Invalid subscription error returned by Connect.
 | error | <code>Error</code> | something went wrong in Connect; this normally indicates that the user denied access to your application or does not have a connected vehicle |
 | code | <code>String</code> | the authorization code to be exchanged from a backend sever for an access token |
 | [state] | <code>Object</code> | contains state if it was set on the initial authorization request |
+
+<a name="WindowOptions"></a>
+
+## WindowOptions : <code>Object</code>
+Position and size settings for the popup window.
+
+**Kind**: global typedef
+**See**: Please reference the [Window.open()#Window Features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
+MDN article for more details
+**Properties**
+
+| Name | Type |
+| --- | --- |
+| [top] | <code>String</code> |
+| [left] | <code>String</code> |
+| [width] | <code>String</code> |
+| [height] | <code>String</code> |
 
