@@ -181,20 +181,23 @@ class Smartcar {
   }
 
   /**
+   * Position and size settings for the popup window.
+   *
+   * @see Please reference the {@link https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features|Window.open()#Window Features}
+   * MDN article for more details
+   *
+   * @typedef {Object} WindowOptions
+   * @property {String} [top]
+   * @property {String} [left]
+   * @property {String} [width]
+   * @property {String} [height]
+   */
+
+  /**
    * Calculate popup window size and position based on current window settings.
    *
-   * @param {Object} options - the postion and dimention setting of the popup window
-   * @param {String|Number} [options.top] - the top property of
-   * [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
-   * @param {String|Number} [options.left] - the left property of
-   * [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
-   * @param {String|Number} [options.width] - the width property of
-   * [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
-   * the minimum required value is 100.
-   * @param {String|Number} [options.height] - the height property of
-   * [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
-   * the minimum required value is 100.
    * @private
+   * @param {WindowOptions} options
    * @return {String} a string of window settings
    */
   static _getWindowOptions(windowOptions) {
@@ -354,16 +357,8 @@ class Smartcar {
    * for more information.
    * @param {String[]} [options.flags] - An optional space-separated list of feature
    * flags that your application has early access to.
-   * @param {Object} [options.windowOptions] - the position and dimension settings
-   * of the popup window
-   * @param {String} [options.windowOptions.top] - the top property of
-   * [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
-   * @param {String} [options.windowOptions.left] - the left property of
-   * [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
-   * @param {String} [options.windowOptions.width] - the width property of
-   * [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
-   * @param {String} [options.windowOptions.height] - the height property of
-   * [window features](https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features)
+   * @param {WindowOptions} [options.windowOptions] - position and size settings for
+   * the popup window
    */
   openDialog(options) {
     const windowOptions = Smartcar._getWindowOptions(options.windowOptions || {});
@@ -397,6 +392,8 @@ class Smartcar {
    * for more information.
    * @param {String[]} [options.flags] - An optional space-separated list of feature
    * flags that your application has early access to.
+   * @param {WindowOptions} [options.windowOptions] - position and size settings for
+   * the popup window
    */
   addClickHandler(options) {
     const {id, selector} = options;
