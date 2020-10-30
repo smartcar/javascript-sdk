@@ -1,0 +1,6 @@
+{
+  "extends": "smartcar/browser",
+  "rules": {
+    "no-restricted-syntax": "off"
+  }
+}

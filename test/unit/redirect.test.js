@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * @jest-environment node
+ */
+
 /* eslint-disable global-require */
 
 describe('redirect', () => {
