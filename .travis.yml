@@ -4,7 +4,7 @@ language:
   - node_js
 
 node_js:
-  - '10'
+  - '16'
 
 services:
   - docker
@@ -21,7 +21,7 @@ stages:
 jobs:
   include:
     - stage: test
-      node_js: '10'
+      node_js: '16'
       before_install:
         - docker run --name selenium-container -d --net host -v /dev/shm:/dev/shm selenium/standalone-chrome
       script:
@@ -31,6 +31,6 @@ jobs:
         - git clone --mirror https://github.com/smartcar/javascript-sdk.git
         - npx semantic-release --branch "$TRAVIS_BRANCH" --extends ./build/sr-configs/verify.js --repository-url ./javascript-sdk.git
     - stage: publish
-      node_js: '10'
+      node_js: '16'
       if: branch = master
       script: npx semantic-release --extends ./build/sr-configs/publish.js
