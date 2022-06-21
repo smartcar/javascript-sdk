@@ -4,7 +4,6 @@
 
 module.exports = {
   testEnvironment: 'jest-environment-jsdom-global',
-  testURL: 'http://localhost/',
   moduleFileExtensions: ['js'],
   moduleDirectories: ['node_modules'],
   coverageThreshold: {
@@ -14,5 +13,8 @@ module.exports = {
       lines: 100,
       statements: 100,
     },
+  },
+  testEnvironmentOptions: {
+    url: 'http://localhost/',
   },
 };

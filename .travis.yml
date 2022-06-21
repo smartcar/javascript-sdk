@@ -1,4 +1,10 @@
-sudo: required
+dist: bionic
+
+services:
+  - xvfb
+
+addons:
+  firefox: latest
 
 language:
   - node_js
@@ -13,6 +19,7 @@ if: tag IS blank # do not build tags
 
 install:
   - npm ci
+  - firefox -headless &
 
 stages:
   - test
@@ -22,8 +29,6 @@ jobs:
   include:
     - stage: test
       node_js: '16'
-      before_install:
-        - docker run --name selenium-container -d --net host -v /dev/shm:/dev/shm selenium/standalone-chrome
       script:
         - npm test
         - npm run cover
