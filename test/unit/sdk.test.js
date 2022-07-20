@@ -810,7 +810,7 @@ describe('sdk', () => {
       expect(link).toEqual(expectedLink);
     });
 
-    test('Connect errors on invalid mode', () => {
+    test('constructor errors on invalid mode', () => {
       expect(
         () =>
           new Smartcar({
