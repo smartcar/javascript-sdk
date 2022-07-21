@@ -53,7 +53,8 @@ Initializes Smartcar class.
 | options.redirectUri | <code>String</code> |  | the registered redirect uri of the application |
 | [options.scope] | <code>Array.&lt;String&gt;</code> |  | requested permission scopes |
 | [options.onComplete] | [<code>OnComplete</code>](#OnComplete) |  | called on completion of Smartcar Connect |
-| [options.testMode] | <code>Boolean</code> | <code>false</code> | launch Smartcar Connect in test mode |
+| [options.testMode] | <code>Boolean</code> | <code>false</code> | Deprecated, please use `mode` instead. Launch Smartcar Connect in [test mode](https://smartcar.com/docs/guides/testing/). |
+| [options.mode] | <code>String</code> | <code>&#x27;live&#x27;</code> | Determine what mode Smartcar Connect should be launched in. Should be one of test, live or simulated. |
 
 <a name="Smartcar+getAuthUrl"></a>
 
