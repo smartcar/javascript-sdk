@@ -710,27 +710,7 @@ describe('sdk', () => {
       expect(link).toEqual(expectedLink);
     });
 
-    test('generates live mode link using testMode (Deprecated)', () => {
-      const options = {
-        clientId: 'clientId',
-        redirectUri: 'https://smartcar.com',
-        scope: ['read_vehicle_info', 'read_odometer'],
-        onComplete: jest.fn(),
-        testMode: false,
-      };
-
-      const smartcar = new Smartcar(options);
-
-      const expectedLink =
-        `https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&state=${getEncodedState(smartcar.instanceId)}`;
-      const link = smartcar.getAuthUrl({
-        state: originalState,
-        forcePrompt: true,
-      });
-      expect(link).toEqual(expectedLink);
-    });
-
-    test('generates test mode link using testMode (Deprecated)', () => {
+    test('generates test mode link', () => {
       const options = {
         clientId: 'clientId',
         redirectUri: 'https://smartcar.com',
@@ -750,53 +730,13 @@ describe('sdk', () => {
       expect(link).toEqual(expectedLink);
     });
 
-    test('generates test mode link', () => {
-      const options = {
-        clientId: 'clientId',
-        redirectUri: 'https://smartcar.com',
-        scope: ['read_vehicle_info', 'read_odometer'],
-        onComplete: jest.fn(),
-        mode: 'test',
-      };
-
-      const smartcar = new Smartcar(options);
-
-      const expectedLink =
-        `https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=test&state=${getEncodedState(smartcar.instanceId)}`;
-      const link = smartcar.getAuthUrl({
-        state: originalState,
-        forcePrompt: true,
-      });
-      expect(link).toEqual(expectedLink);
-    });
-
-    test('generates simulated mode link', () => {
-      const options = {
-        clientId: 'clientId',
-        redirectUri: 'https://smartcar.com',
-        scope: ['read_vehicle_info', 'read_odometer'],
-        onComplete: jest.fn(),
-        mode: 'simulated',
-      };
-
-      const smartcar = new Smartcar(options);
-
-      const expectedLink =
-        `https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=simulated&state=${getEncodedState(smartcar.instanceId)}`;
-      const link = smartcar.getAuthUrl({
-        state: originalState,
-        forcePrompt: true,
-      });
-      expect(link).toEqual(expectedLink);
-    });
-
     test('generates live mode link', () => {
       const options = {
         clientId: 'clientId',
         redirectUri: 'https://smartcar.com',
         scope: ['read_vehicle_info', 'read_odometer'],
         onComplete: jest.fn(),
-        mode: 'live',
+        testMode: false,
       };
 
       const smartcar = new Smartcar(options);
@@ -810,29 +750,13 @@ describe('sdk', () => {
       expect(link).toEqual(expectedLink);
     });
 
-    test('constructor errors on invalid mode', () => {
-      expect(
-        () =>
-          new Smartcar({
-            clientId: 'clientId',
-            redirectUri: 'https://smartcar.com',
-            scope: ['read_vehicle_info', 'read_odometer'],
-            onComplete: jest.fn(),
-            mode: 'pizza',
-          }),
-      ).toThrow(
-        'The "mode" parameter MUST be one of the following: \'test\', \'live\', \'simulated\'',
-      );
-    });
-
-
     test('generate link when vehicleInfo={...} included', () => {
       const options = {
         clientId: 'clientId',
         redirectUri: 'https://smartcar.com',
         scope: ['read_vehicle_info', 'read_odometer'],
         onComplete: jest.fn(),
-        mode: 'live',
+        testMode: false,
       };
 
       const smartcar = new Smartcar(options);
@@ -857,7 +781,7 @@ describe('sdk', () => {
         redirectUri: 'https://smartcar.com',
         scope: ['read_vehicle_info', 'read_odometer'],
         onComplete: jest.fn(),
-        mode: 'live',
+        testMode: false,
       };
 
       const smartcar = new Smartcar(options);
@@ -879,7 +803,7 @@ describe('sdk', () => {
         redirectUri: 'https://smartcar.com',
         scope: ['read_vehicle_info', 'read_odometer'],
         onComplete: jest.fn(),
-        mode: 'live',
+        testMode: false,
       };
 
       const smartcar = new Smartcar(options);
@@ -905,7 +829,7 @@ describe('sdk', () => {
         redirectUri: 'https://smartcar.com',
         scope: ['read_vehicle_info', 'read_odometer'],
         onComplete: jest.fn(),
-        mode: 'live',
+        testMode: false,
       };
 
       const smartcar = new Smartcar(options);
@@ -933,7 +857,7 @@ describe('sdk', () => {
         redirectUri: 'https://smartcar.com',
         scope: ['read_vehicle_info', 'read_odometer'],
         onComplete: jest.fn(),
-        mode: 'live',
+        testMode: false,
       };
 
       const smartcar = new Smartcar(options);
@@ -962,7 +886,7 @@ describe('sdk', () => {
         redirectUri: 'https://smartcar.com',
         scope: ['read_vehicle_info', 'read_odometer'],
         onComplete: jest.fn(),
-        mode: 'live',
+        testMode: false,
       };
 
       const smartcar = new Smartcar(options);
@@ -990,7 +914,7 @@ describe('sdk', () => {
         redirectUri: 'https://smartcar.com',
         scope: ['read_vehicle_info', 'read_odometer'],
         onComplete: jest.fn(),
-        mode: 'live',
+        testMode: false,
       };
 
       const smartcar = new Smartcar(options);
@@ -1016,7 +940,7 @@ describe('sdk', () => {
         redirectUri: 'https://smartcar.com',
         scope: ['read_vehicle_info', 'read_odometer'],
         onComplete: jest.fn(),
-        mode: 'live',
+        testMode: false,
       };
 
       const smartcar = new Smartcar(options);
@@ -1039,7 +963,7 @@ describe('sdk', () => {
       redirectUri: 'https://smartcar.com',
       scope: ['read_vehicle_info', 'read_odometer'],
       onComplete: jest.fn(),
-      mode: 'live',
+      testMode: false,
     };
 
     const smartcar = new Smartcar(options);

@@ -24,11 +24,8 @@ class Smartcar {
    * application
    * @param {String[]} [options.scope] - requested permission scopes
    * @param {OnComplete} [options.onComplete] - called on completion of Smartcar Connect
-   * @param {Boolean} [options.testMode=false] - Deprecated, please use `mode` instead.
-   * Launch Smartcar Connect in [test mode](https://smartcar.com/docs/guides/testing/).
-   * @param {String} [options.mode='live'] - Determine what mode Smartcar Connect should be
-   * launched in. Should be one of test, live or simulated.
- */
+   * @param {Boolean} [options.testMode=false] - launch Smartcar Connect in test mode
+   */
   constructor(options) {
     // polyfill String.prototype.startsWith for IE11 support
     // istanbul ignore next
@@ -47,21 +44,7 @@ class Smartcar {
     this.redirectUri = options.redirectUri;
     this.scope = options.scope;
     this.onComplete = options.onComplete;
-    this.mode = 'live';
-    if (options.hasOwnProperty('testMode')) {
-      // eslint-disable-next-line no-console
-      console.warn(
-        'The "testMode" parameter is deprecated, please use the "mode" parameter instead.',
-      );
-      this.mode = options.testMode === true ? 'test' : 'live';
-    } else if (options.hasOwnProperty('mode')) {
-      this.mode = options.mode;
-    }
-    if (!['test', 'live', 'simulated'].includes(this.mode)) {
-      throw new Error(
-        'The "mode" parameter MUST be one of the following: \'test\', \'live\', \'simulated\'',
-      );
-    }
+    this.mode = options.testMode === true ? 'test' : 'live';
     this.responseType = 'code';
     // identifier for matching message event and multiple Smartcar instances
     // it is a string composed of a timestamp and a 8-digit random number
