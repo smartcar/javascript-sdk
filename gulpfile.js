@@ -51,12 +51,15 @@ gulp.task('build:umd', function() {
 /**
  * Build sdk.js for npm publishing.
  */
-gulp.task('build:npm', gulp.series('build:umd', function buildNPM() {
-  return gulp
-    .src('dist/umd/sdk.js')
-    .pipe(babel())
-    .pipe(gulp.dest('dist/npm'));
-}));
+gulp.task(
+  'build:npm',
+  gulp.series('build:umd', function buildNPM() {
+    return gulp
+      .src('dist/umd/sdk.js')
+      .pipe(babel())
+      .pipe(gulp.dest('dist/npm'));
+  }),
+);
 
 /**
  * Build redirect for CDN publishing.
@@ -72,13 +75,16 @@ gulp.task('build:cdn:redirect', function() {
 /**
  * Build SDK for CDN publishing.
  */
-gulp.task('build:cdn:sdk', gulp.series('build:umd', function buildCDNSdk() {
-  return gulp
-    .src('dist/umd/sdk.js')
-    .pipe(babel())
-    .pipe(uglify())
-    .pipe(gulp.dest(`dist/cdn/${version}`));
-}));
+gulp.task(
+  'build:cdn:sdk',
+  gulp.series('build:umd', function buildCDNSdk() {
+    return gulp
+      .src('dist/umd/sdk.js')
+      .pipe(babel())
+      .pipe(uglify())
+      .pipe(gulp.dest(`dist/cdn/${version}`));
+  }),
+);
 
 /**
  * Build all JS for CDN publishing.
@@ -97,47 +103,15 @@ gulp.task('build:cdn:html', function() {
 });
 
 /**
- * Legacy support for accessing redirect via old URL scheme publishing.
- *
- * Previously, files would be `redirect-{semver}`. Now they are
- * `v{majorVersion}/redirect`.
- *
- * Based on usage data, customers only use 2.0.0, 2.1.0, and 2.1.1 at the time
- * of this change, so we chose to explicitly provide backwards compatibility for
- * these version only.
- *
- */
-gulp.task('build:cdn:html:legacy', function(done) {
-  // We should only update old files while we're on major version 2
-  if (Number(majorVersion) !== 2) {
-    return done();
-  }
-
-  return gulp
-    .src('src/redirect.html')
-    .pipe(template({majorVersion: '2'}))
-    .pipe(rename('redirect-2.0.0'))
-    .pipe(gulp.dest('dist/cdn/legacy'))
-    .pipe(rename('redirect-2.1.0'))
-    .pipe(gulp.dest('dist/cdn/legacy'))
-    .pipe(rename('redirect-2.1.1'))
-    .pipe(gulp.dest('dist/cdn/legacy'));
-});
-
-/**
  * Build all tasks for CDN publishing.
  */
-gulp.task('build:cdn', gulp.parallel('build:cdn:js', 'build:cdn:html', 'build:cdn:html:legacy'));
+gulp.task('build:cdn', gulp.parallel('build:cdn:js', 'build:cdn:html'));
 
 /**
  * Build all tasks for CDN and npm publishing.
  *
  * dist/
  * ├── cdn
- * │   ├── legacy
- * │   │   ├──  redirect-2.0.0  // Legacy HTML files proxy v2 files
- * │   │   ├──  redirect-2.1.0
- * │   │   └──  redirect-2.1.1
  * │   ├── v2                  // Only major versions of redirect are exposed
  * │   │   ├──  redirect       // HTML file
  * │   │   └──  redirect.js    // Referenced by both the new and old HTML files
@@ -154,20 +128,6 @@ gulp.task('build', gulp.parallel('build:cdn', 'build:npm'));
 const publisher = awspublish.create({
   region: 'us-west-2',
   params: {Bucket: 'smartcar-production-javascript-sdk'},
-});
-
-/**
- * Publish legacy HTML to the CDN. These files must be uploaded to the root of
- * the bucket and depend on /v2/redirect.js existing.
- *
- * We strip the `.html` extension from our html file so add content-type header
- * to identify the file as `text/html`.
- */
-gulp.task('publish:cdn:html:legacy', function() {
-  return gulp
-    .src('dist/cdn/legacy/*')
-    .pipe(publisher.publish({'content-type': 'text/html'}))
-    .pipe(awspublish.reporter());
 });
 
 /**
@@ -209,16 +169,12 @@ gulp.task('publish:cdn:sdk', function() {
 /**
  * Publish JS to the CDN.
  */
-gulp.task('publish:cdn:js', gulp.parallel('publish:cdn:sdk', 'publish:cdn:redirect'));
+gulp.task(
+  'publish:cdn:js',
+  gulp.parallel('publish:cdn:sdk', 'publish:cdn:redirect'),
+);
 
 /**
  * Publish all files to the CDN.
  */
-gulp.task(
-  'publish:cdn',
-  gulp.parallel(
-    'publish:cdn:js',
-    'publish:cdn:html',
-    'publish:cdn:html:legacy',
-  ),
-);
+gulp.task('publish:cdn', gulp.parallel('publish:cdn:js', 'publish:cdn:html'));
