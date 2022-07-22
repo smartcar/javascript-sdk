@@ -51,12 +51,15 @@ gulp.task('build:umd', function() {
 /**
  * Build sdk.js for npm publishing.
  */
-gulp.task('build:npm', gulp.series('build:umd', function buildNPM() {
-  return gulp
-    .src('dist/umd/sdk.js')
-    .pipe(babel())
-    .pipe(gulp.dest('dist/npm'));
-}));
+gulp.task(
+  'build:npm',
+  gulp.series('build:umd', function buildNPM() {
+    return gulp
+      .src('dist/umd/sdk.js')
+      .pipe(babel())
+      .pipe(gulp.dest('dist/npm'));
+  }),
+);
 
 /**
  * Build redirect for CDN publishing.
@@ -72,13 +75,16 @@ gulp.task('build:cdn:redirect', function() {
 /**
  * Build SDK for CDN publishing.
  */
-gulp.task('build:cdn:sdk', gulp.series('build:umd', function buildCDNSdk() {
-  return gulp
-    .src('dist/umd/sdk.js')
-    .pipe(babel())
-    .pipe(uglify())
-    .pipe(gulp.dest(`dist/cdn/${version}`));
-}));
+gulp.task(
+  'build:cdn:sdk',
+  gulp.series('build:umd', function buildCDNSdk() {
+    return gulp
+      .src('dist/umd/sdk.js')
+      .pipe(babel())
+      .pipe(uglify())
+      .pipe(gulp.dest(`dist/cdn/${version}`));
+  }),
+);
 
 /**
  * Build all JS for CDN publishing.
@@ -127,7 +133,10 @@ gulp.task('build:cdn:html:legacy', function(done) {
 /**
  * Build all tasks for CDN publishing.
  */
-gulp.task('build:cdn', gulp.parallel('build:cdn:js', 'build:cdn:html', 'build:cdn:html:legacy'));
+gulp.task(
+  'build:cdn',
+  gulp.parallel('build:cdn:js', 'build:cdn:html', 'build:cdn:html:legacy'),
+);
 
 /**
  * Build all tasks for CDN and npm publishing.
@@ -209,7 +218,10 @@ gulp.task('publish:cdn:sdk', function() {
 /**
  * Publish JS to the CDN.
  */
-gulp.task('publish:cdn:js', gulp.parallel('publish:cdn:sdk', 'publish:cdn:redirect'));
+gulp.task(
+  'publish:cdn:js',
+  gulp.parallel('publish:cdn:sdk', 'publish:cdn:redirect'),
+);
 
 /**
  * Publish all files to the CDN.
