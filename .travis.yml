@@ -33,8 +33,7 @@ jobs:
         - npm test
         - npm run cover
         - bash <(curl -s https://codecov.io/bash)
-        - git clone --mirror https://github.com/smartcar/javascript-sdk.git
-        - npx semantic-release --branch "$TRAVIS_BRANCH" --extends ./build/sr-configs/verify.js --repository-url ./javascript-sdk.git
+        - npx semantic-release --branches "$TRAVIS_BRANCH" --extends ./build/sr-configs/verify.js
     - stage: publish
       node_js: '16'
       if: branch = master
