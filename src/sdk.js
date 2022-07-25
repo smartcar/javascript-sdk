@@ -191,7 +191,7 @@ class Smartcar {
       if (usesOldUriScheme) {
         // eslint-disable-next-line no-console
         console.warn(
-          "\nThe Smartcar redirect URI you're using is outdated! To update it, please see:\nhttps://smartcar.com/docs/guides/new-redirect-uri\n",
+          "\nThe Smartcar redirect URI you're using is outdated! To update it, please see:\nhttps://github.com/smartcar/javascript-sdk#1-register-a-javascript-sdk-redirect-uri\n",
         );
       }
     }
