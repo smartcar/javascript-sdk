@@ -93,8 +93,6 @@ class Smartcar {
         return;
       }
 
-
-
       const {originalState, instanceId} = stateObject;
       // bail if `instanceId` doesn't match
       if (instanceId !== this.instanceId) {
