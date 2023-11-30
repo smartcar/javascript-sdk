@@ -12,6 +12,10 @@ class Smartcar {
    * backend sever for an access token
    * @param {Object} [state] - contains state if it was set on the initial
    * authorization request
+   * @param {String} [virtualKeyUrl] - virtual key URL used by Tesla to register
+   * Smartcar's virtual key on a vehicle. This registration will be required in order to use
+   * any commands on a Tesla vehicle. It is an optional argument as it is only included in
+   * specific cases.
    */
 
   /**
@@ -89,6 +93,8 @@ class Smartcar {
         return;
       }
 
+
+
       const {originalState, instanceId} = stateObject;
       // bail if `instanceId` doesn't match
       if (instanceId !== this.instanceId) {
@@ -138,6 +144,8 @@ class Smartcar {
 
         const err = generateError(message.error, message.errorDescription);
 
+        const virtualKeyUrl = message.virtualKeyUrl;
+
         /**
          * Call `onComplete` with parameters even if developer is not using
          * a Smartcar-hosted redirect. Regardless of if they are using a
@@ -150,7 +158,7 @@ class Smartcar {
          * parameters they must also handle populating the corresponding query
          * parameters in their redirect uri.
          */
-        this.onComplete(err, message.code, originalState);
+        this.onComplete(err, message.code, originalState, virtualKeyUrl);
       }
     };
 

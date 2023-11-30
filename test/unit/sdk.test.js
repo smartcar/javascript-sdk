@@ -360,8 +360,41 @@ describe('sdk', () => {
 
         smartcar.messageHandler(event);
 
-        expect(smartcar.onComplete).toBeCalledWith(null, expect.anything(), expect.anything());
+        expect(smartcar.onComplete).toBeCalledWith(
+          null,
+          expect.anything(),
+          expect.anything(),
+          undefined,
+        );
       });
+
+    test('fires onComplete with virtualKeyUrl when included', () => {
+      const options = {
+        clientId: 'clientId',
+        redirectUri: `${CDN_ORIGIN}?app_origin=https://app.com`,
+        scope: ['read_vehicle_info', 'read_odometer'],
+        // eslint-disable-next-line no-unused-vars, no-empty-function
+        onComplete: jest.fn((__, _) => {}),
+      };
+
+      const smartcar = new Smartcar(options);
+
+      const event = {
+        data: {
+          name: 'SmartcarAuthMessage',
+          isSmartcarHosted: true,
+          code: 'super-secret-code',
+          errorDescription: 'this doesnt matter',
+          state: getEncodedState(smartcar.instanceId, 'some-state'),
+          virtualKeyUrl: 'https://www.tesla.com/_ak/smartcar.com',
+        },
+        origin: CDN_ORIGIN,
+      };
+
+      smartcar.messageHandler(event);
+
+      expect(smartcar.onComplete).toBeCalledWith(null, 'super-secret-code', 'some-state', 'https://www.tesla.com/_ak/smartcar.com');
+    });
 
     test('fires onComplete w/o error when error: null in postMessage', () => {
       const options = {
@@ -387,7 +420,7 @@ describe('sdk', () => {
 
       smartcar.messageHandler(event);
 
-      expect(smartcar.onComplete).toBeCalledWith(null, 'super-secret-code', 'some-state');
+      expect(smartcar.onComplete).toBeCalledWith(null, 'super-secret-code', 'some-state', undefined);
     });
 
     test('fires onComplete w/o error when error key not in postMessage', () => {
@@ -414,7 +447,7 @@ describe('sdk', () => {
 
       smartcar.messageHandler(event);
 
-      expect(smartcar.onComplete).toBeCalledWith(null, 'super-secret-code', 'some-state');
+      expect(smartcar.onComplete).toBeCalledWith(null, 'super-secret-code', 'some-state', undefined);
     });
 
     test(// eslint-disable-next-line max-len
@@ -456,6 +489,7 @@ describe('sdk', () => {
           new Smartcar.VehicleIncompatible(errorDescription, vehicleInfo),
           'super-secret-code',
           'some-state',
+          undefined,
         );
       });
 
@@ -601,6 +635,7 @@ describe('sdk', () => {
           new Smartcar.AccessDenied(errorDescription),
           'super-secret-code',
           'some-state',
+          undefined,
         );
       });
 
@@ -635,6 +670,7 @@ describe('sdk', () => {
           new Smartcar.InvalidSubscription(errorDescription),
           'super-secret-code',
           'some-state',
+          undefined,
         );
       });
 
@@ -670,6 +706,7 @@ describe('sdk', () => {
           Error(`Unexpected error: ${error} - ${errorDescription}`),
           'super-secret-code',
           'some-state',
+          undefined,
         );
       });
   });

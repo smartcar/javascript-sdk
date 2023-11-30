@@ -21,7 +21,7 @@
     "pretest": "gulp build",
     "test": "jest",
     "posttest": "npm run lint -s",
-    "lint": "eslint . --cache",
+    "lint": "eslint . --cache --fix",
     "cover": "npm test -- --coverage",
     "readme": "gulp template:readme",
     "jsdoc": "jsdoc2md --example-lang js --template doc/.template.hbs --files src/sdk.js | sed 's/[ \t]*$//' > doc/README.md",
