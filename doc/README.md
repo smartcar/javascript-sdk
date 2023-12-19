@@ -203,6 +203,7 @@ Invalid subscription error returned by Connect.
 | error | <code>Error</code> | something went wrong in Connect; this normally indicates that the user denied access to your application or does not have a connected vehicle |
 | code | <code>String</code> | the authorization code to be exchanged from a backend sever for an access token |
 | [state] | <code>Object</code> | contains state if it was set on the initial authorization request |
+| [virtualKeyUrl] | <code>String</code> | virtual key URL used by Tesla to register Smartcar's virtual key on a vehicle. This registration will be required in order to use any commands on a Tesla vehicle. It is an optional argument as it is only included in specific cases. |
 
 <a name="WindowOptions"></a>
 
