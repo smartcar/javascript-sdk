@@ -292,6 +292,7 @@ class Smartcar {
    * &single_select=true
    * &single_select_vin=5YJSA1E14FF101307
    * &flags=country:DE color:00819D
+   * &user=2dad4eaf-9094-4bff-bb0f-ffbbdde8b562
    */
   getAuthUrl(options) {
     options = options || {};
