@@ -72,6 +72,7 @@ Generates Smartcar OAuth URL.
 | [options.vehicleInfo.make] | <code>String</code> |  | `vehicleInfo` is an object with an optional property `make`, which allows users to bypass the car brand selection screen. For a complete list of supported brands, please see our [API Reference](https://smartcar.com/docs/api#authorization) documentation. |
 | [options.singleSelect] | <code>Boolean</code> \| <code>Object</code> |  | An optional value that sets the behavior of the grant dialog displayed to the user. If set to `true`, `single_select` limits the user to selecting only one vehicle. If `single_select` is passed in as an object with the property `vin`, Smartcar will only authorize the vehicle with the specified VIN. See the [API reference](https://smartcar.com/docs/api/#connect-match) for more information. |
 | [options.flags] | <code>Array.&lt;String&gt;</code> |  | An optional space-separated list of feature flags that your application has early access to. |
+| [options.user] | <code>String</code> |  | An optional unique identifier for a vehicle owner. This identifier is used to aggregate analytics across Connect sessions for each vehicle owner. |
 
 **Example**
 ```js
@@ -85,6 +86,7 @@ response_type=code
 &single_select=true
 &single_select_vin=5YJSA1E14FF101307
 &flags=country:DE color:00819D
+&user=2dad4eaf-9094-4bff-bb0f-ffbbdde8b562
 ```
 <a name="Smartcar+openDialog"></a>
 
