@@ -276,6 +276,8 @@ class Smartcar {
    * for more information.
    * @param {String[]} [options.flags] - An optional space-separated list of feature
    * flags that your application has early access to.
+   * @param {String} [options.user] - An optional unique identifier for a vehicle owner.
+   * This identifier is used to aggregate analytics across Connect sessions for each vehicle owner.
    *
    * @return {String} Connect URL to redirect user to.
    *
@@ -353,6 +355,10 @@ class Smartcar {
 
     if (options.flags) {
       link += `&flags=${encodeURIComponent(options.flags.join(' '))}`;
+    }
+
+    if (options.user) {
+      link += `&user=${encodeURIComponent(options.user)}`;
     }
 
     return link;
