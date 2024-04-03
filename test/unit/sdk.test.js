@@ -1092,6 +1092,28 @@ describe('sdk', () => {
     expect(link).toBe(expectedLink);
   });
 
+  test('Includes user when passed to getAuthUrl', () => {
+    const options = {
+      clientId: 'clientId',
+      redirectUri: 'https://smartcar.com',
+      scope: ['read_vehicle_info', 'read_odometer'],
+      onComplete: jest.fn(),
+      mode: 'live',
+    };
+
+    const smartcar = new Smartcar(options);
+
+    const link = smartcar.getAuthUrl({
+      state: originalState,
+      forcePrompt: true,
+      user: 'test-user-param',
+    });
+
+    const expectedLink =
+    `https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&state=${getEncodedState(smartcar.instanceId)}&user=test-user-param`;
+    expect(link).toBe(expectedLink);
+  });
+
   describe('openDialog and addClickHandler', () => {
     const options = {
       clientId: 'clientId',
