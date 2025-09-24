@@ -309,8 +309,8 @@ class Smartcar {
     const forcePrompt = options.forcePrompt === true;
     link += `&approval_prompt=${forcePrompt ? 'force' : 'auto'}`;
 
-    // If scope is not specified, Smartcar will default to requesting all scopes
-    // from the user
+    // If scope is not specified, Smartcar will default to requesting the application's vehicle
+    // access configuration if available or the default set of permissions
     if (this.scope) {
       link += `&scope=${encodeURIComponent(this.scope.join(' '))}`;
     }
