@@ -74,7 +74,7 @@ class Smartcar {
     // handler
     this.messageHandler = (event) => {
       // bail if message from unexpected source
-      if (!this.redirectUri.startsWith(event.origin)) {
+      if (this.redirectUri && !this.redirectUri.startsWith(event.origin)) {
         return;
       }
 
@@ -177,30 +177,29 @@ class Smartcar {
       throw new TypeError('A client ID option must be provided');
     }
 
-    if (!options.redirectUri) {
-      throw new TypeError('A redirect URI option must be provided');
-    }
+    if (options.redirectUri) {
+      if (options.redirectUri.startsWith('https://javascript-sdk.smartcar.com')) {
+        // require onComplete method with at least two parameters (error & code)
+        // when hosting on Smartcar CDN
+        if (!options.onComplete || options.onComplete.length < 2) {
+          throw new Error(
+            "When using Smartcar's CDN redirect an onComplete function with at" +
+              ' least 2 parameters (error & code) is required to handle' +
+              ' completion of Connect',
+          );
+        }
 
-    if (options.redirectUri.startsWith('https://javascript-sdk.smartcar.com')) {
-      // require onComplete method with at least two parameters (error & code)
-      // when hosting on Smartcar CDN
-      if (!options.onComplete || options.onComplete.length < 2) {
-        throw new Error(
-          "When using Smartcar's CDN redirect an onComplete function with at" +
-            ' least 2 parameters (error & code) is required to handle' +
-            ' completion of Connect',
-        );
-      }
+        const usesOldUriScheme = (/redirect-[0-9]+\.[0-9]+\.[0-9]+\?/).test(options.redirectUri);
 
-      const usesOldUriScheme = (/redirect-[0-9]+\.[0-9]+\.[0-9]+\?/).test(options.redirectUri);
-
-      if (usesOldUriScheme) {
-        // eslint-disable-next-line no-console
-        console.warn(
-          "\nThe Smartcar redirect URI you're using is outdated! To update it, please see:\nhttps://github.com/smartcar/javascript-sdk#1-register-a-javascript-sdk-redirect-uri\n",
-        );
+        if (usesOldUriScheme) {
+          // eslint-disable-next-line no-console
+          console.warn(
+            "\nThe Smartcar redirect URI you're using is outdated! To update it, please see:\nhttps://github.com/smartcar/javascript-sdk#1-register-a-javascript-sdk-redirect-uri\n",
+          );
+        }
       }
     }
+
   }
 
   /**
@@ -301,14 +300,17 @@ class Smartcar {
     link += 'https://connect.smartcar.com/oauth/authorize';
     link += `?response_type=${this.responseType}`;
     link += `&client_id=${this.clientId}`;
-    link += `&redirect_uri=${encodeURIComponent(this.redirectUri)}`;
+
+    if (this.redirectUri) {
+      link += `&redirect_uri=${encodeURIComponent(this.redirectUri)}`;
+    }
 
     // map forcePrompt to approvalPrompt, two options: 'force' and 'auto'
     const forcePrompt = options.forcePrompt === true;
     link += `&approval_prompt=${forcePrompt ? 'force' : 'auto'}`;
 
-    // If scope is not specified, Smartcar will default to requesting all scopes
-    // from the user
+    // If scope is not specified, Smartcar will default to requesting the application's vehicle
+    // access configuration if available or the default set of permissions
     if (this.scope) {
       link += `&scope=${encodeURIComponent(this.scope.join(' '))}`;
     }

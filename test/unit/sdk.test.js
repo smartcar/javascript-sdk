@@ -13,12 +13,6 @@ describe('sdk', () => {
   const CDN_ORIGIN = 'https://javascript-sdk.smartcar.com';
 
   describe('constructor', () => {
-    test('throws error if constructor called without redirectUri', () => {
-      expect(() => new Smartcar({clientId: 'uuid'})).toThrow(
-        'A redirect URI option must be provided',
-      );
-    });
-
     test('throws error if constructor called without clientId', () => {
       expect(() => new Smartcar({redirectUri: 'http://example.com'})).toThrow(
         'A client ID option must be provided',
@@ -127,6 +121,28 @@ describe('sdk', () => {
       const smartcar = new Smartcar(options);
 
       expect(smartcar.onComplete).toBe(undefined);
+    });
+
+    test("doesn't break if redirect uri is not passed", () => {
+      const options = {
+        clientId: 'clientId',
+        scope: ['read_vehicle_info', 'read_odometer'],
+      };
+
+      const smartcar = new Smartcar(options);
+
+      const event = {
+        data: {
+          name: 'SmartcarAuthMessage',
+          isSmartcarHosted: false,
+          code: 'super-secret-code',
+          error: undefined,
+          state: getEncodedState(smartcar.instanceId, 'some-state'),
+        },
+        origin: 'https://selfhosted.com',
+      };
+
+      smartcar.messageHandler(event);
     });
 
     test("doesn't break if onComplete is not passed", () => {
