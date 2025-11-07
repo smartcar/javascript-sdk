@@ -1,0 +1,64 @@
+- pipeline: "CI"
+  events:
+  - type: PUSH
+    refs:
+    - refs/heads/*
+  fail_on_prepare_env_warning: true
+  actions:
+  - action: "Install Dependencies"
+    type: "BUILD"
+    docker_image_name: "node"
+    docker_image_tag: "16"
+    execute_commands:
+    - "npm ci"
+    volume_mappings:
+    - "/:/buddy/javascript-sdk"
+    shell: "BASH"
+
+  - action: "Run Tests"
+    type: "BUILD"
+    docker_image_name: "node"
+    docker_image_tag: "16"
+    execute_commands:
+    - "apt-get update && apt-get install -y xvfb firefox-esr"
+    - "export DISPLAY=:99"
+    - "Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &"
+    - "firefox --version"
+    - "npm test"
+    - "npm run cover"
+    volume_mappings:
+    - "/:/buddy/javascript-sdk"
+    shell: "BASH"
+
+  - action: "Upload Coverage"
+    type: "BUILD" 
+    working_directory: "/buddy/javascript-sdk"
+    docker_image_name: "node"
+    docker_image_tag: "16"
+    execute_commands:
+    - "bash <(curl -s https://codecov.io/bash)"
+    volume_mappings:
+    - "/:/buddy/javascript-sdk"
+    shell: "BASH"
+
+  - action: "Verify Documentation"
+    type: "BUILD"
+    docker_image_name: "node"
+    docker_image_tag: "16"
+    execute_commands:
+    - "npm run readme"
+    - "npm run jsdoc"
+    - "git diff --exit-code --name-only README.md doc/README.md || (echo 'Documentation is out of date. Please run npm run readme and npm run jsdoc to update.' && exit 1)"
+    volume_mappings:
+    - "/:/buddy/javascript-sdk"
+    shell: "BASH"
+
+  - action: "Semantic Release Verify"
+    type: "BUILD"
+    docker_image_name: "node"
+    docker_image_tag: "16"
+    execute_commands:
+    - "npx semantic-release --branches \"$BUDDY_EXECUTION_BRANCH\" --extends ./build/sr-configs/verify.js"
+    volume_mappings:
+    - "/:/buddy/javascript-sdk"
+    shell: "BASH"
