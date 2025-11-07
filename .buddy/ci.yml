@@ -3,6 +3,7 @@
   - type: PUSH
     refs:
     - refs/heads/*
+  fail_on_prepare_env_warning: true
   actions:
   - action: "Install Dependencies"
     type: "BUILD"
