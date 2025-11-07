@@ -69,6 +69,9 @@
     type: "BUILD"
     docker_image_name: "library/node"
     docker_image_tag: "20"
+    setup_commands:
+    - "apt-get update || true"
+    - "apt-get install -y jq"
     execute_commands:
     - "npx semantic-release --branches \"$BUDDY_EXECUTION_BRANCH\" --extends ./build/sr-configs/verify.js"
     volume_mappings:
