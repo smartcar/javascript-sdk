@@ -7,7 +7,7 @@
   actions:
   - action: "Install Dependencies"
     type: "BUILD"
-    docker_image_name: "node"
+    docker_image_name: "library/node"
     docker_image_tag: "16"
     execute_commands:
     - "npm ci"
@@ -17,7 +17,7 @@
 
   - action: "Run Tests"
     type: "BUILD"
-    docker_image_name: "node"
+    docker_image_name: "library/node"
     docker_image_tag: "16"
     execute_commands:
     - "# Set Firefox environment variables to help with headless operation"
@@ -66,7 +66,7 @@
   - action: "Upload Coverage"
     type: "BUILD" 
     working_directory: "/buddy/javascript-sdk"
-    docker_image_name: "node"
+    docker_image_name: "library/node"
     docker_image_tag: "16"
     execute_commands:
     - "bash <(curl -s https://codecov.io/bash)"
@@ -76,7 +76,7 @@
 
   - action: "Verify Documentation"
     type: "BUILD"
-    docker_image_name: "node"
+    docker_image_name: "library/node"
     docker_image_tag: "16"
     execute_commands:
     - "npm run readme"
@@ -88,7 +88,7 @@
 
   - action: "Semantic Release Verify"
     type: "BUILD"
-    docker_image_name: "node"
+    docker_image_name: "library/node"
     docker_image_tag: "16"
     execute_commands:
     - "npx semantic-release --branches \"$BUDDY_EXECUTION_BRANCH\" --extends ./build/sr-configs/verify.js"
