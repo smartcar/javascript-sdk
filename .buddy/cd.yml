@@ -7,7 +7,7 @@
   actions:
   - action: "Install Dependencies"
     type: "BUILD"
-    docker_image_name: "node"
+    docker_image_name: "library/node"
     docker_image_tag: "16"
     execute_commands:
     - "npm ci"
@@ -17,7 +17,7 @@
 
   - action: "Publish Release"
     type: "BUILD"
-    docker_image_name: "node"
+    docker_image_name: "library/node"
     docker_image_tag: "16"
     execute_commands:
     - "npx semantic-release --extends ./build/sr-configs/publish.js"
