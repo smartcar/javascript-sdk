@@ -145,6 +145,27 @@ describe('sdk', () => {
       smartcar.messageHandler(event);
     });
 
+    test("doesn't break if scope is not passed", () => {
+      const options = {
+        clientId: 'clientId',
+      };
+
+      const smartcar = new Smartcar(options);
+
+      const event = {
+        data: {
+          name: 'SmartcarAuthMessage',
+          isSmartcarHosted: false,
+          code: 'super-secret-code',
+          error: undefined,
+          state: getEncodedState(smartcar.instanceId, 'some-state'),
+        },
+        origin: 'https://selfhosted.com',
+      };
+
+      smartcar.messageHandler(event);
+    });
+
     test("doesn't break if onComplete is not passed", () => {
       const options = {
         clientId: 'clientId',
@@ -1127,6 +1148,19 @@ describe('sdk', () => {
 
     const expectedLink =
     `https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=force&scope=read_vehicle_info%20read_odometer&mode=live&state=${getEncodedState(smartcar.instanceId)}&user=test-user-param`;
+    expect(link).toBe(expectedLink);
+  });
+
+  test('generates link without redirectUri and scope', () => {
+    const smartcar = new Smartcar({
+      clientId: 'clientId',
+      onComplete: jest.fn(),
+    });
+
+    const link = smartcar.getAuthUrl();
+
+    const expectedLink =
+      `https://connect.smartcar.com/oauth/authorize?response_type=code&client_id=clientId&approval_prompt=auto&mode=live&state=${getEncodedDefaultState(smartcar.instanceId)}`;
     expect(link).toBe(expectedLink);
   });
 
