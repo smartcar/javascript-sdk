@@ -138,6 +138,7 @@ describe('sdk', () => {
           code: 'super-secret-code',
           error: undefined,
           state: getEncodedState(smartcar.instanceId, 'some-state'),
+          userId: 'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
         },
         origin: 'https://selfhosted.com',
       };
@@ -159,6 +160,7 @@ describe('sdk', () => {
           code: 'super-secret-code',
           error: undefined,
           state: getEncodedState(smartcar.instanceId, 'some-state'),
+          userId: 'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
         },
         origin: 'https://selfhosted.com',
       };
@@ -182,6 +184,7 @@ describe('sdk', () => {
           code: 'super-secret-code',
           error: undefined,
           state: getEncodedState(smartcar.instanceId, 'some-state'),
+          userId: 'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
         },
         origin: 'https://selfhosted.com',
       };
@@ -207,6 +210,7 @@ describe('sdk', () => {
           code: 'super-secret-code',
           error: undefined,
           state: getEncodedState(smartcar.instanceId, 'some-state'),
+          userId: 'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
         },
       };
 
@@ -233,6 +237,7 @@ describe('sdk', () => {
           code: 'super-secret-code',
           error: undefined,
           state: getEncodedState(smartcar.instanceId, 'some-state'),
+          userId: 'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
         },
         origin: 'https://some-other-url.com',
       };
@@ -279,6 +284,7 @@ describe('sdk', () => {
           code: 'super-secret-code',
           error: undefined,
           state: getEncodedState(smartcar.instanceId, 'some-state'),
+          userId: 'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
         },
         origin: 'https://selfhosted.com',
       };
@@ -306,6 +312,7 @@ describe('sdk', () => {
           code: 'super-secret-code',
           error: undefined,
           state: getEncodedState(smartcar.instanceId, 'some-state'),
+          userId: 'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
         },
         origin: 'https://selfhosted.com',
       };
@@ -334,6 +341,7 @@ describe('sdk', () => {
           error: null,
           errorDescription: null,
           state: '{"instanceId":"${smartcar.instanceId}","originalState":"some-state"}',
+          userId: 'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
         },
         origin: CDN_ORIGIN,
       };
@@ -362,6 +370,7 @@ describe('sdk', () => {
           error: null,
           errorDescription: null,
           state: getEncodedState('incorrect id', 'some-state'),
+          userId: 'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
         },
         origin: CDN_ORIGIN,
       };
@@ -391,6 +400,7 @@ describe('sdk', () => {
             error: null,
             errorDescription: null,
             state: getEncodedState(smartcar.instanceId, 'some-state'),
+            userId: 'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
           },
           origin: CDN_ORIGIN,
         };
@@ -402,6 +412,7 @@ describe('sdk', () => {
           expect.anything(),
           expect.anything(),
           undefined,
+          'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
         );
       });
 
@@ -424,13 +435,14 @@ describe('sdk', () => {
           errorDescription: 'this doesnt matter',
           state: getEncodedState(smartcar.instanceId, 'some-state'),
           virtualKeyUrl: 'https://www.tesla.com/_ak/smartcar.com',
+          userId: 'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
         },
         origin: CDN_ORIGIN,
       };
 
       smartcar.messageHandler(event);
 
-      expect(smartcar.onComplete).toBeCalledWith(null, 'super-secret-code', 'some-state', 'https://www.tesla.com/_ak/smartcar.com');
+      expect(smartcar.onComplete).toBeCalledWith(null, 'super-secret-code', 'some-state', 'https://www.tesla.com/_ak/smartcar.com', 'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c');
     });
 
     test('fires onComplete w/o error when error: null in postMessage', () => {
@@ -451,13 +463,20 @@ describe('sdk', () => {
           code: 'super-secret-code',
           error: null,
           state: getEncodedState(smartcar.instanceId, 'some-state'),
+          userId: 'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
         },
         origin: CDN_ORIGIN,
       };
 
       smartcar.messageHandler(event);
 
-      expect(smartcar.onComplete).toBeCalledWith(null, 'super-secret-code', 'some-state', undefined);
+      expect(smartcar.onComplete).toBeCalledWith(
+        null,
+        'super-secret-code',
+        'some-state',
+        undefined,
+        'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
+      );
     });
 
     test('fires onComplete w/o error when error key not in postMessage', () => {
@@ -478,13 +497,20 @@ describe('sdk', () => {
           code: 'super-secret-code',
           errorDescription: 'this doesnt matter',
           state: getEncodedState(smartcar.instanceId, 'some-state'),
+          userId: 'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
         },
         origin: CDN_ORIGIN,
       };
 
       smartcar.messageHandler(event);
 
-      expect(smartcar.onComplete).toBeCalledWith(null, 'super-secret-code', 'some-state', undefined);
+      expect(smartcar.onComplete).toBeCalledWith(
+        null,
+        'super-secret-code',
+        'some-state',
+        undefined,
+        'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
+      );
     });
 
     test(// eslint-disable-next-line max-len
@@ -513,6 +539,7 @@ describe('sdk', () => {
             isSmartcarHosted: true,
             code: 'super-secret-code',
             error: 'vehicle_incompatible',
+            userId: 'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
             errorDescription,
             state: getEncodedState(smartcar.instanceId, 'some-state'),
             ...vehicleInfo,
@@ -527,6 +554,7 @@ describe('sdk', () => {
           'super-secret-code',
           'some-state',
           undefined,
+          'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
         );
       });
 
@@ -659,6 +687,7 @@ describe('sdk', () => {
             name: 'SmartcarAuthMessage',
             isSmartcarHosted: true,
             code: 'super-secret-code',
+            userId: 'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
             error: 'access_denied',
             errorDescription,
             state: getEncodedState(smartcar.instanceId, 'some-state'),
@@ -673,6 +702,7 @@ describe('sdk', () => {
           'super-secret-code',
           'some-state',
           undefined,
+          'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
         );
       });
 
@@ -694,6 +724,7 @@ describe('sdk', () => {
             name: 'SmartcarAuthMessage',
             isSmartcarHosted: true,
             code: 'super-secret-code',
+            userId: 'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
             error: 'invalid_subscription',
             errorDescription,
             state: getEncodedState(smartcar.instanceId, 'some-state'),
@@ -708,6 +739,7 @@ describe('sdk', () => {
           'super-secret-code',
           'some-state',
           undefined,
+          'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
         );
       });
 
@@ -730,6 +762,7 @@ describe('sdk', () => {
             name: 'SmartcarAuthMessage',
             isSmartcarHosted: true,
             code: 'super-secret-code',
+            userId: 'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
             error,
             errorDescription,
             state: getEncodedState(smartcar.instanceId, 'some-state'),
@@ -744,6 +777,7 @@ describe('sdk', () => {
           'super-secret-code',
           'some-state',
           undefined,
+          'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
         );
       });
   });

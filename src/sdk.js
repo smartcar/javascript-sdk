@@ -16,6 +16,7 @@ class Smartcar {
    * Smartcar's virtual key on a vehicle. This registration will be required in order to use
    * any commands on a Tesla vehicle. It is an optional argument as it is only included in
    * specific cases.
+   * @param {String} userId - A unique identifier for the vehicle owner that granted access.
    */
 
   /**
@@ -144,6 +145,8 @@ class Smartcar {
 
         const virtualKeyUrl = message.virtualKeyUrl;
 
+        const userId = message.userId;
+
         /**
          * Call `onComplete` with parameters even if developer is not using
          * a Smartcar-hosted redirect. Regardless of if they are using a
@@ -156,7 +159,7 @@ class Smartcar {
          * parameters they must also handle populating the corresponding query
          * parameters in their redirect uri.
          */
-        this.onComplete(err, message.code, originalState, virtualKeyUrl);
+        this.onComplete(err, message.code, originalState, virtualKeyUrl, userId);
       }
     };
 
