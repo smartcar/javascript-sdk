@@ -49,8 +49,8 @@ Initializes Smartcar class.
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | options | <code>Object</code> |  | the SDK configuration object |
-| [options.applicationId] | <code>String</code> |  | the application's id. Either `applicationId` or `clientId` is required. |
-| [options.clientId] | <code>String</code> |  | Deprecated alias for `applicationId`. Either `applicationId` or `clientId` is required. |
+| options.applicationId | <code>String</code> |  | the application's id |
+| [options.clientId] | <code>String</code> |  | Deprecated alias for applicationId |
 | options.redirectUri | <code>String</code> |  | the registered redirect uri of the application |
 | [options.scope] | <code>Array.&lt;String&gt;</code> |  | requested permission scopes |
 | [options.onComplete] | [<code>OnComplete</code>](#OnComplete) |  | called on completion of Smartcar Connect |
@@ -79,7 +79,7 @@ Generates Smartcar OAuth URL.
 ```js
 https://connect.smartcar.com/oauth/authorize?
 response_type=code
-&client_id=8229df9f-91a0-4ff0-a1ae-a1f38ee24d07
+&application_id=8229df9f-91a0-4ff0-a1ae-a1f38ee24d07
 &scope=read_odometer read_vehicle_info
 &redirect_uri=https://example.com/home
 &state=0facda3319
