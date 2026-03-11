@@ -10,9 +10,14 @@
     // this test we hit a local redirect server where we provide the
     // `app_origin` param ensuring it will post back to that `app_origin`
 
-    const clientPort = 3000;
-    const redirectPort = 4000;
-    const clientUri = `http://localhost:${clientPort}`;
+    const clientUri = window.location.origin;
+    const params = new URLSearchParams(window.location.search);
+    const redirectPort = params.get('redirectPort');
+
+    if (!redirectPort) {
+      throw new Error('missing redirectPort query parameter');
+    }
+
     const redirectUri =
       `http://localhost:${redirectPort}/redirect?app_origin=${clientUri}`;
 

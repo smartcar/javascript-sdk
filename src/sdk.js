@@ -26,7 +26,7 @@ class Smartcar {
    *
    * @constructor
    * @param {Object} options - the SDK configuration object
-    * @param {String} [options.applicationId] - the application's id
+    * @param {String} options.applicationId - the application's id
     * @param {String} [options.clientId] - Deprecated alias for applicationId
    * @param {String} options.redirectUri - the registered redirect uri of the
    * application
@@ -299,7 +299,7 @@ class Smartcar {
    * @example
    * https://connect.smartcar.com/oauth/authorize?
    * response_type=code
-   * &client_id=8229df9f-91a0-4ff0-a1ae-a1f38ee24d07
+   * &application_id=8229df9f-91a0-4ff0-a1ae-a1f38ee24d07
    * &scope=read_odometer read_vehicle_info
    * &redirect_uri=https://example.com/home
    * &state=0facda3319

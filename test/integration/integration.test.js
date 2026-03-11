@@ -1,5 +1,6 @@
 'use strict';
 
+const fs = require('fs');
 const path = require('path');
 
 const express = require('express');
@@ -13,6 +14,14 @@ const {version} = require('../../package.json');
 const majorVersion = version.slice(0, version.indexOf('.'));
 
 /* eslint-disable no-process-env */
+// Some Linux Firefox packages (for example snap builds) cannot access random
+// temp profile paths from geckodriver unless TMPDIR is explicitly writable.
+if (!process.env.TMPDIR) {
+  const tmpDir = path.join(__dirname, '.tmp');
+  fs.mkdirSync(tmpDir, {recursive: true});
+  process.env.TMPDIR = tmpDir;
+}
+
 const HEADLESS = isCI || process.env.HEADLESS;
 /* eslint-enable */
 
@@ -29,12 +38,12 @@ if (HEADLESS) {
 
 describe('postMessage', function() {
   let client, redirect;
-  const clientPort = 3000;
-  const redirectPort = 4000;
+  let clientPort;
+  let redirectPort;
 
   const shared = {};
 
-  beforeAll(function() {
+  beforeAll(async function() {
     shared.driver = new Builder()
       .setChromeOptions(chromeOptions)
       .setFirefoxOptions(firefoxOptions)
@@ -83,8 +92,13 @@ describe('postMessage', function() {
       // for both single page and server side
       .get('/sdk.js', (_, res) =>
         res.sendFile(path.join(__dirname, getFullVersionedPath('sdk', 'js'))),
-      )
-      .listen(clientPort);
+      );
+    await new Promise((resolve) => {
+      client = client.listen(0, () => {
+        clientPort = client.address().port;
+        resolve();
+      });
+    });
 
     // mock out Smartcar Javascript SDK CDN
     redirect = express()
@@ -99,8 +113,13 @@ describe('postMessage', function() {
         res.sendFile(
           path.join(__dirname, getMajorVersionedPath('redirect', 'js')),
         ),
-      )
-      .listen(redirectPort);
+      );
+    await new Promise((resolve) => {
+      redirect = redirect.listen(0, () => {
+        redirectPort = redirect.address().port;
+        resolve();
+      });
+    });
   });
 
   afterAll(async function() {
@@ -115,7 +134,9 @@ describe('postMessage', function() {
     // is then handled as expected by client at `app_origin`
 
     // see spa.html for code run on page load
-    await shared.driver.get(`http://localhost:${clientPort}/spa`);
+    await shared.driver.get(
+      `http://localhost:${clientPort}/spa?redirectPort=${redirectPort}`,
+    );
     await shared.driver.wait(until.urlContains('on-post-message-url'));
 
     const url = await shared.driver.getCurrentUrl();
