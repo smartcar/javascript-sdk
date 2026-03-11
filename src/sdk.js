@@ -315,7 +315,7 @@ class Smartcar {
     let link = '';
     link += 'https://connect.smartcar.com/oauth/authorize';
     link += `?response_type=${this.responseType}`;
-    link += `&client_id=${this.clientId}`;
+    link += `&application_id=${this.applicationId}`;
 
     if (this.redirectUri) {
       link += `&redirect_uri=${encodeURIComponent(this.redirectUri)}`;
