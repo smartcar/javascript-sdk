@@ -13,10 +13,79 @@ describe('sdk', () => {
   const CDN_ORIGIN = 'https://javascript-sdk.smartcar.com';
 
   describe('constructor', () => {
-    test('throws error if constructor called without clientId', () => {
+    test('throws error if constructor called without applicationId or clientId', () => {
       expect(() => new Smartcar({redirectUri: 'http://example.com'})).toThrow(
-        'A client ID option must be provided',
+        'An applicationId option must be provided',
       );
+    });
+
+    test('warns once when using deprecated clientId option', () => {
+      const spy = jest.spyOn(global.console, 'warn').mockImplementation(() => undefined);
+
+      // eslint-disable-next-line no-new
+      new Smartcar({
+        clientId: 'legacy-client-id-1',
+        redirectUri: 'https://selfhosted.com',
+      });
+
+      // eslint-disable-next-line no-new
+      new Smartcar({
+        clientId: 'legacy-client-id-2',
+        redirectUri: 'https://selfhosted.com',
+      });
+
+      const deprecationMessage =
+        'The "clientId" parameter is deprecated, please use the "applicationId" parameter instead.';
+
+      const callsWithDeprecationWarning = spy.mock.calls.filter(
+        (args) => args[0] === deprecationMessage,
+      );
+
+      expect(callsWithDeprecationWarning.length).toEqual(1);
+
+      spy.mockRestore();
+    });
+
+    test('does not warn when using applicationId option', () => {
+      const spy = jest.spyOn(global.console, 'warn').mockImplementation(() => undefined);
+
+      // eslint-disable-next-line no-new
+      new Smartcar({
+        applicationId: 'application-id',
+        redirectUri: 'https://selfhosted.com',
+      });
+
+      const deprecationMessage =
+        'The "clientId" parameter is deprecated, please use the "applicationId" parameter instead.';
+
+      const callsWithDeprecationWarning = spy.mock.calls.filter(
+        (args) => args[0] === deprecationMessage,
+      );
+
+      expect(callsWithDeprecationWarning.length).toEqual(0);
+
+      spy.mockRestore();
+    });
+
+    test('initializes correctly with applicationId only', () => {
+      const smartcar = new Smartcar({
+        applicationId: 'application-id',
+        redirectUri: 'https://selfhosted.com',
+      });
+
+      expect(smartcar.applicationId).toEqual('application-id');
+      expect(smartcar.clientId).toEqual('application-id');
+    });
+
+    test('prefers applicationId over clientId when both are provided', () => {
+      const smartcar = new Smartcar({
+        applicationId: 'application-id',
+        clientId: 'legacy-client-id',
+        redirectUri: 'https://selfhosted.com',
+      });
+
+      expect(smartcar.applicationId).toEqual('application-id');
+      expect(smartcar.clientId).toEqual('application-id');
     });
 
     test('throws error if using Smartcar hosting without onComplete', () => {

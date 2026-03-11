@@ -2,6 +2,8 @@
 
 /* eslint-env node */
 
+let hasWarnedClientIdDeprecation = false;
+
 class Smartcar {
   /**
    * @callback OnComplete
@@ -24,7 +26,8 @@ class Smartcar {
    *
    * @constructor
    * @param {Object} options - the SDK configuration object
-   * @param {String} options.clientId - the application's client id
+    * @param {String} [options.applicationId] - the application's id
+    * @param {String} [options.clientId] - Deprecated alias for applicationId
    * @param {String} options.redirectUri - the registered redirect uri of the
    * application
    * @param {String[]} [options.scope] - requested permission scopes
@@ -48,7 +51,17 @@ class Smartcar {
     // ensure options are well formed
     Smartcar._validateConstructorOptions(options);
 
-    this.clientId = options.clientId;
+    if (!options.applicationId && options.clientId && !hasWarnedClientIdDeprecation) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        'The "clientId" parameter is deprecated, please use the "applicationId" parameter instead.',
+      );
+      hasWarnedClientIdDeprecation = true;
+    }
+
+    const applicationId = options.applicationId || options.clientId;
+    this.applicationId = applicationId;
+    this.clientId = applicationId;
     this.redirectUri = options.redirectUri;
     this.scope = options.scope;
     this.onComplete = options.onComplete;
@@ -176,8 +189,8 @@ class Smartcar {
    * @param {Object} options - the SDK configuration object
    */
   static _validateConstructorOptions(options) {
-    if (!options.clientId) {
-      throw new TypeError('A client ID option must be provided');
+    if (!options.applicationId && !options.clientId) {
+      throw new TypeError('An applicationId option must be provided');
     }
 
     if (options.redirectUri) {

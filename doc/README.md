@@ -49,7 +49,8 @@ Initializes Smartcar class.
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | options | <code>Object</code> |  | the SDK configuration object |
-| options.clientId | <code>String</code> |  | the application's client id |
+| [options.applicationId] | <code>String</code> |  | the application's id. Either `applicationId` or `clientId` is required. |
+| [options.clientId] | <code>String</code> |  | Deprecated alias for `applicationId`. Either `applicationId` or `clientId` is required. |
 | options.redirectUri | <code>String</code> |  | the registered redirect uri of the application |
 | [options.scope] | <code>Array.&lt;String&gt;</code> |  | requested permission scopes |
 | [options.onComplete] | [<code>OnComplete</code>](#OnComplete) |  | called on completion of Smartcar Connect |

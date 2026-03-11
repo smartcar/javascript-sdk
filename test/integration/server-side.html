@@ -11,7 +11,7 @@
     // this file tests redirect scheme when developer hosts redirect and client
     // at same origin (e.g. a server side rendered app)
     const options = {
-      clientId: 'clientId', // required
+      applicationId: 'applicationId', // required
       redirectUri, // checked against event origin for security
       // redirect page to arbitrary url for testing
       onComplete: () => location.replace('on-post-message-url'),
