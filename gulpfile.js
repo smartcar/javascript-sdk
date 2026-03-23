@@ -137,33 +137,45 @@ const publisher = awspublish.create({
  * to identify the file as `text/html`.
  */
 gulp.task('publish:cdn:html', function() {
-  return gulp
-    .src(`dist/cdn/v${majorVersion}/redirect`)
-    .pipe(rename({prefix: `v${majorVersion}/`}))
-    .pipe(publisher.publish({'content-type': 'text/html'}))
-    .pipe(awspublish.reporter());
+  return new Promise((resolve, reject) => {
+    gulp
+      .src(`dist/cdn/v${majorVersion}/redirect`)
+      .pipe(rename({prefix: `v${majorVersion}/`}))
+      .pipe(publisher.publish({'content-type': 'text/html'}))
+      .pipe(awspublish.reporter())
+      .on('finish', resolve)
+      .on('error', reject);
+  });
 });
 
 /**
  * Publish JS to the CDN in the major version folder (e.g. /v2/redirect.js).
  */
 gulp.task('publish:cdn:redirect', function() {
-  return gulp
-    .src(`dist/cdn/v${majorVersion}/*.js`)
-    .pipe(rename({prefix: `v${majorVersion}/`}))
-    .pipe(publisher.publish())
-    .pipe(awspublish.reporter());
+  return new Promise((resolve, reject) => {
+    gulp
+      .src(`dist/cdn/v${majorVersion}/*.js`)
+      .pipe(rename({prefix: `v${majorVersion}/`}))
+      .pipe(publisher.publish())
+      .pipe(awspublish.reporter())
+      .on('finish', resolve)
+      .on('error', reject);
+  });
 });
 
 /**
  * Publish SDK to the CDN in the version folder (e.g. /2.2.0/sdk.js).
  */
 gulp.task('publish:cdn:sdk', function() {
-  return gulp
-    .src(`dist/cdn/${version}/sdk.js`)
-    .pipe(rename({prefix: `${version}/`}))
-    .pipe(publisher.publish())
-    .pipe(awspublish.reporter());
+  return new Promise((resolve, reject) => {
+    gulp
+      .src(`dist/cdn/${version}/sdk.js`)
+      .pipe(rename({prefix: `${version}/`}))
+      .pipe(publisher.publish())
+      .pipe(awspublish.reporter())
+      .on('finish', resolve)
+      .on('error', reject);
+  });
 });
 
 /**
