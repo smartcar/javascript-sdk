@@ -4,14 +4,13 @@
   <title>SDK Server Side Rendered Test</title>
   <script src="sdk.js"></script>
   <script>
-    const clientPort = 3000;
-    // should have same port as client since testing server side
-    const redirectUri = `http://localhost:${clientPort}`;
+    // should have same origin as client since testing server side
+    const redirectUri = window.location.origin;
 
     // this file tests redirect scheme when developer hosts redirect and client
     // at same origin (e.g. a server side rendered app)
     const options = {
-      clientId: 'clientId', // required
+      applicationId: 'applicationId', // required
       redirectUri, // checked against event origin for security
       // redirect page to arbitrary url for testing
       onComplete: () => location.replace('on-post-message-url'),

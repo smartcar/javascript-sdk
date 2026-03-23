@@ -49,7 +49,8 @@ Initializes Smartcar class.
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | options | <code>Object</code> |  | the SDK configuration object |
-| options.clientId | <code>String</code> |  | the application's client id |
+| options.applicationId | <code>String</code> |  | the application's id |
+| [options.clientId] | <code>String</code> |  | Deprecated alias for applicationId |
 | options.redirectUri | <code>String</code> |  | the registered redirect uri of the application |
 | [options.scope] | <code>Array.&lt;String&gt;</code> |  | requested permission scopes |
 | [options.onComplete] | [<code>OnComplete</code>](#OnComplete) |  | called on completion of Smartcar Connect |
@@ -78,7 +79,7 @@ Generates Smartcar OAuth URL.
 ```js
 https://connect.smartcar.com/oauth/authorize?
 response_type=code
-&client_id=8229df9f-91a0-4ff0-a1ae-a1f38ee24d07
+&application_id=8229df9f-91a0-4ff0-a1ae-a1f38ee24d07
 &scope=read_odometer read_vehicle_info
 &redirect_uri=https://example.com/home
 &state=0facda3319
@@ -206,6 +207,7 @@ Invalid subscription error returned by Connect.
 | code | <code>String</code> | the authorization code to be exchanged from a backend sever for an access token |
 | [state] | <code>Object</code> | contains state if it was set on the initial authorization request |
 | [virtualKeyUrl] | <code>String</code> | virtual key URL used by Tesla to register Smartcar's virtual key on a vehicle. This registration will be required in order to use any commands on a Tesla vehicle. It is an optional argument as it is only included in specific cases. |
+| userId | <code>String</code> | A unique identifier for the vehicle owner that granted access. |
 
 <a name="WindowOptions"></a>
 

@@ -2,6 +2,8 @@
 
 /* eslint-env node */
 
+let hasWarnedClientIdDeprecation = false;
+
 class Smartcar {
   /**
    * @callback OnComplete
@@ -16,6 +18,7 @@ class Smartcar {
    * Smartcar's virtual key on a vehicle. This registration will be required in order to use
    * any commands on a Tesla vehicle. It is an optional argument as it is only included in
    * specific cases.
+   * @param {String} userId - A unique identifier for the vehicle owner that granted access.
    */
 
   /**
@@ -23,7 +26,8 @@ class Smartcar {
    *
    * @constructor
    * @param {Object} options - the SDK configuration object
-   * @param {String} options.clientId - the application's client id
+    * @param {String} options.applicationId - the application's id
+    * @param {String} [options.clientId] - Deprecated alias for applicationId
    * @param {String} options.redirectUri - the registered redirect uri of the
    * application
    * @param {String[]} [options.scope] - requested permission scopes
@@ -47,7 +51,17 @@ class Smartcar {
     // ensure options are well formed
     Smartcar._validateConstructorOptions(options);
 
-    this.clientId = options.clientId;
+    if (!options.applicationId && options.clientId && !hasWarnedClientIdDeprecation) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        'The "clientId" parameter is deprecated, please use the "applicationId" parameter instead.',
+      );
+      hasWarnedClientIdDeprecation = true;
+    }
+
+    const applicationId = options.applicationId || options.clientId;
+    this.applicationId = applicationId;
+    this.clientId = applicationId;
     this.redirectUri = options.redirectUri;
     this.scope = options.scope;
     this.onComplete = options.onComplete;
@@ -144,6 +158,8 @@ class Smartcar {
 
         const virtualKeyUrl = message.virtualKeyUrl;
 
+        const userId = message.userId;
+
         /**
          * Call `onComplete` with parameters even if developer is not using
          * a Smartcar-hosted redirect. Regardless of if they are using a
@@ -156,7 +172,7 @@ class Smartcar {
          * parameters they must also handle populating the corresponding query
          * parameters in their redirect uri.
          */
-        this.onComplete(err, message.code, originalState, virtualKeyUrl);
+        this.onComplete(err, message.code, originalState, virtualKeyUrl, userId);
       }
     };
 
@@ -173,8 +189,8 @@ class Smartcar {
    * @param {Object} options - the SDK configuration object
    */
   static _validateConstructorOptions(options) {
-    if (!options.clientId) {
-      throw new TypeError('A client ID option must be provided');
+    if (!options.applicationId && !options.clientId) {
+      throw new TypeError('An applicationId option must be provided');
     }
 
     if (options.redirectUri) {
@@ -283,7 +299,7 @@ class Smartcar {
    * @example
    * https://connect.smartcar.com/oauth/authorize?
    * response_type=code
-   * &client_id=8229df9f-91a0-4ff0-a1ae-a1f38ee24d07
+   * &application_id=8229df9f-91a0-4ff0-a1ae-a1f38ee24d07
    * &scope=read_odometer read_vehicle_info
    * &redirect_uri=https://example.com/home
    * &state=0facda3319
@@ -299,7 +315,7 @@ class Smartcar {
     let link = '';
     link += 'https://connect.smartcar.com/oauth/authorize';
     link += `?response_type=${this.responseType}`;
-    link += `&client_id=${this.clientId}`;
+    link += `&application_id=${this.applicationId}`;
 
     if (this.redirectUri) {
       link += `&redirect_uri=${encodeURIComponent(this.redirectUri)}`;

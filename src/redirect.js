@@ -34,6 +34,7 @@
     model: params.get('model'),
     year: params.get('year'),
     virtualKeyUrl: params.get('virtual_key_url'),
+    userId: params.get('user_id'),
   };
 
   // if no `app_origin` given, post to same origin as redirect page (assuming

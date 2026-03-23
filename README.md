@@ -9,7 +9,7 @@ The [Smartcar API](https://smartcar.com/docs) lets you read vehicle data
 
 To make requests to a vehicle from a web application, the end user must connect their vehicle using [Smartcar Connect](https://smartcar.com/docs/api#smartcar-connect). The Smartcar JavaScript SDK provides an easy way to launch and handle Connect to retrieve the resulting `code`.
 
-Before integrating with the JavaScript SDK, you'll need to register an application in the [Smartcar dashboard](https://dashboard.smartcar.com). Once you have registered an application, you will have a Client ID and Client Secret, which will allow you to authorize users.
+Before integrating with the JavaScript SDK, you'll need to register an application in the [Smartcar dashboard](https://dashboard.smartcar.com). Once you have registered an application, you will have an Application ID, which will allow you to launch Connect and authorize users.
 
 ## Installation
 
@@ -24,7 +24,7 @@ npm install @smartcar/auth
 ### Smartcar CDN
 
 ```html
-<script src="https://javascript-sdk.smartcar.com/2.12.0/sdk.js"></script>
+<script src="https://javascript-sdk.smartcar.com/2.13.0/sdk.js"></script>
 ```
 
 ## SDK reference
@@ -81,7 +81,7 @@ Once you have constructed your redirect URI, make sure to register it on the [Sm
 
 ```javascript
 const smartcar = new Smartcar({
-  clientId: '<your-client-id>',
+  applicationId: '<your-application-id>',
   redirectUri: '<your-redirect-uri>',
   scope: ['read_vehicle_info', 'read_odometer'],
   onComplete: function(err, code) {
@@ -93,6 +93,8 @@ const smartcar = new Smartcar({
   },
 });
 ```
+
+`applicationId` is the preferred option name. For backward compatibility, `clientId` is also supported. You must provide one of `applicationId` or `clientId`.
 
 **Reference:** [`new Smartcar(options)`](doc#new_Smartcar_new)
 
@@ -140,7 +142,7 @@ To use the JavaScript SDK for this flow, do the following:
 
 ```javascript
 const smartcar = new Smartcar({
-  clientId: '<your-client-id>',
+  applicationId: '<your-application-id>',
   redirectUri: '<your-backend-redirect-uri>',
   scope: ['read_vehicle_info', 'read_odometer'],
   onComplete: function() {},
@@ -178,4 +180,4 @@ https://application-backend.com/page?error=access_denied&error_description=User+
 [tag-image]: https://img.shields.io/github/tag/smartcar/javascript-sdk.svg
 
 <!-- Please do not modify or remove this, it is used by the build process -->
-[version]: 2.12.0
+[version]: 2.13.0

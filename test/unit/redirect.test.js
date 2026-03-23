@@ -97,6 +97,7 @@ describe('redirect', () => {
         vin: null,
         year: null,
         virtualKeyUrl: null,
+        userId: null,
       },
       selfHostedOrigin,
     );
@@ -127,6 +128,7 @@ describe('redirect', () => {
         vin: null,
         year: null,
         virtualKeyUrl: null,
+        userId: null,
       },
       appOrigin,
     );
@@ -145,6 +147,7 @@ describe('redirect', () => {
     const model = 'M3';
     const year = '2013';
     const virtualKeyUrl = 'https://www.tesla.com/_ak/smartcar.com';
+    const userId = 'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c';
 
     const params = new URLSearchParams();
     params.set('code', code);
@@ -156,6 +159,7 @@ describe('redirect', () => {
     params.set('model', model);
     params.set('year', year);
     params.set('virtual_key_url', virtualKeyUrl);
+    params.set('user_id', userId);
 
     const cdnOrigin = `${CDN_ORIGIN}/redirect?app_origin=${appOrigin}&${params.toString()}`;
 
@@ -178,6 +182,7 @@ describe('redirect', () => {
         vin,
         year,
         virtualKeyUrl,
+        userId,
       },
       appOrigin,
     );
