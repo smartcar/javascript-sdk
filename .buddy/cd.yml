@@ -16,9 +16,10 @@
     shell: "BASH"
 
   - action: "Publish Release"
-    type: "BUILD"
+    type: "AWS_CLI_2"
     docker_image_name: "library/node"
     docker_image_tag: "20"
+    integration: "AWS_Production_Internal"
     setup_commands:
     - "apt-get update || true"
     - "apt-get install -y jq"
