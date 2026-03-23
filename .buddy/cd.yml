@@ -27,3 +27,29 @@
     volume_mappings:
     - "/:/buddy/javascript-sdk"
     shell: "BASH"
+
+- pipeline: "Deploy CDN"
+  events:
+  - type: CLICK
+  fail_on_prepare_env_warning: true
+  actions:
+  - action: "Install Dependencies"
+    type: "BUILD"
+    docker_image_name: "library/node"
+    docker_image_tag: "20"
+    execute_commands:
+    - "npm ci"
+    volume_mappings:
+    - "/:/buddy/javascript-sdk"
+    shell: "BASH"
+
+  - action: "Build and Publish CDN"
+    type: "BUILD"
+    docker_image_name: "library/node"
+    docker_image_tag: "20"
+    execute_commands:
+    - "npx gulp build"
+    - "npx gulp publish:cdn"
+    volume_mappings:
+    - "/:/buddy/javascript-sdk"
+    shell: "BASH"
