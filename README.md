@@ -9,7 +9,7 @@ The [Smartcar API](https://smartcar.com/docs) lets you read vehicle data
 
 To make requests to a vehicle from a web application, the end user must connect their vehicle using [Smartcar Connect](https://smartcar.com/docs/api#smartcar-connect). The Smartcar JavaScript SDK provides an easy way to launch and handle Connect to retrieve the resulting `code`.
 
-Before integrating with the JavaScript SDK, you'll need to register an application in the [Smartcar dashboard](https://dashboard.smartcar.com). Once you have registered an application, you will have an Application ID, which will allow you launch Connect and authorize users.
+Before integrating with the JavaScript SDK, you'll need to register an application in the [Smartcar dashboard](https://dashboard.smartcar.com). Once you have registered an application, you will have an Application ID, which will allow you to launch Connect and authorize users.
 
 ## Installation
 
