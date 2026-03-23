@@ -23,7 +23,12 @@
     integration: "AWS_Production_Internal"
     setup_commands:
     - "apt-get update || true"
-    - "apt-get install -y jq"
+    - "apt-get install -y curl xz-utils jq git"
+    - "curl -fsSL https://nodejs.org/dist/v20.19.0/node-v20.19.0-linux-x64.tar.xz -o /tmp/node-v20.19.0-linux-x64.tar.xz"
+    - "tar -xJf /tmp/node-v20.19.0-linux-x64.tar.xz -C /usr/local --strip-components=1"
+    - "git --version"
+    - "node --version"
+    - "npm --version"
     execute_commands:
     - "npx semantic-release --extends ./build/sr-configs/publish.js"
     volume_mappings:
