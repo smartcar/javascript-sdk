@@ -1,9 +1,7 @@
-- pipeline: CD
+- pipeline: Deploy to CDN
+  refs:
+  - refs/heads/master
   fail_on_prepare_env_warning: true
-  events:
-  - type: PUSH
-    refs:
-    - refs/heads/master
   actions:
   - action: Install Dependencies
     type: BUILD
@@ -12,9 +10,9 @@
     shell: BASH
     docker_image_name: library/node
     docker_image_tag: 20
-  - action: Publish Release
+  - action: Build and Publish to CDN
     type: AWS_CLI_2
-    integration: AWS_Production_Internal
+    integration: aws-ios-sdk
     shell: BASH
     setup_commands:
     - apt-get update || true
@@ -25,5 +23,6 @@
     - node --version
     - npm --version
     execute_commands:
-    - npx semantic-release --extends ./build/sr-configs/publish.js
+    - npx gulp build:cdn
+    - npx gulp publish:cdn
     region: us-west-2
