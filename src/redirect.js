@@ -35,8 +35,11 @@
     year: params.get('year'),
     virtualKeyUrl: params.get('virtual_key_url'),
     userId: params.get('user_id'),
-    externalId: params.get('external_id'),
   };
+
+  if (params.has('external_id')) {
+    message.externalId = params.get('external_id');
+  }
 
   // if no `app_origin` given, post to same origin as redirect page (assuming
   // server side rendered architecture)

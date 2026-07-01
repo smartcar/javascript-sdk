@@ -138,7 +138,7 @@ describe('sdk', () => {
     });
 
     test('warns when responseType is none and no redirectUri is provided with onComplete', () => {
-      const spy = jest.spyOn(global.console, 'warn').mockImplementation(() => {});
+      const spy = jest.spyOn(global.console, 'warn').mockImplementation();
 
       // eslint-disable-next-line no-new
       new Smartcar({
@@ -499,6 +499,7 @@ describe('sdk', () => {
           expect.anything(),
           undefined,
           'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
+          undefined,
         );
       });
 
@@ -528,7 +529,7 @@ describe('sdk', () => {
 
       smartcar.messageHandler(event);
 
-      expect(smartcar.onComplete).toBeCalledWith(null, 'super-secret-code', 'some-state', 'https://www.tesla.com/_ak/smartcar.com', 'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c');
+      expect(smartcar.onComplete).toBeCalledWith(null, 'super-secret-code', 'some-state', 'https://www.tesla.com/_ak/smartcar.com', 'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c', undefined);
     });
 
     test('fires onComplete w/o error when error: null in postMessage', () => {
@@ -562,6 +563,7 @@ describe('sdk', () => {
         'some-state',
         undefined,
         'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
+        undefined,
       );
     });
 
@@ -596,6 +598,7 @@ describe('sdk', () => {
         'some-state',
         undefined,
         'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
+        undefined,
       );
     });
 
@@ -641,6 +644,7 @@ describe('sdk', () => {
           'some-state',
           undefined,
           'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
+          undefined,
         );
       });
 
@@ -789,6 +793,7 @@ describe('sdk', () => {
           'some-state',
           undefined,
           'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
+          undefined,
         );
       });
 
@@ -826,6 +831,7 @@ describe('sdk', () => {
           'some-state',
           undefined,
           'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
+          undefined,
         );
       });
 
@@ -864,6 +870,7 @@ describe('sdk', () => {
           'some-state',
           undefined,
           'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
+          undefined,
         );
       });
   });
