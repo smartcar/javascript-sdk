@@ -137,6 +137,23 @@ describe('sdk', () => {
       /* eslint-enable */
     });
 
+    test('warns when responseType is none and no redirectUri is provided with onComplete', () => {
+      const spy = jest.spyOn(global.console, 'warn').mockImplementation(() => {});
+
+      // eslint-disable-next-line no-new
+      new Smartcar({
+        applicationId: 'my-id',
+        responseType: 'none',
+        onComplete: jest.fn(),
+      });
+
+      expect(spy).toHaveBeenCalledWith(
+        'The "onComplete" callback will not fire for responseType "none" unless a redirectUri is provided.',
+      );
+
+      spy.mockRestore();
+    });
+
     test('initializes correctly w/ self hosted redirect', () => {
       const options = {
         applicationId: 'applicationId',

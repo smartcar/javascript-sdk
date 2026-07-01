@@ -229,6 +229,11 @@ class Smartcar {
           );
         }
       }
+    } else if (options.responseType === 'none' && options.onComplete) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        'The "onComplete" callback will not fire for responseType "none" unless a redirectUri is provided.',
+      );
     }
 
   }
