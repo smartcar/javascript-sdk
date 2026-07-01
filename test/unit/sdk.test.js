@@ -1026,6 +1026,15 @@ describe('sdk', () => {
       );
     });
 
+    test('constructor errors on invalid responseType', () => {
+      expect(
+        () =>
+          new Smartcar({
+            applicationId: 'applicationId',
+            responseType: 'invalid',
+          }),
+      ).toThrow('The "responseType" option must be one of: code, none');
+    });
 
     test('generate link when vehicleInfo={...} included', () => {
       const options = {
@@ -1278,6 +1287,22 @@ describe('sdk', () => {
     expect(link).toBe(expectedLink);
   });
 
+  test('generates link with externalId', () => {
+    const smartcar = new Smartcar({
+      applicationId: 'applicationId',
+      redirectUri: 'https://smartcar.com',
+      scope: ['read_vehicle_info', 'read_odometer'],
+      onComplete: jest.fn(),
+      externalId: 'test-external-id',
+    });
+
+    const link = smartcar.getAuthUrl();
+
+    const expectedLink =
+      `https://connect.smartcar.com/oauth/authorize?response_type=code&application_id=applicationId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=auto&scope=read_vehicle_info%20read_odometer&mode=live&state=${getEncodedDefaultState(smartcar.instanceId)}&external_id=test-external-id`;
+    expect(link).toBe(expectedLink);
+  });
+
   test('generates link without redirectUri and scope', () => {
     const smartcar = new Smartcar({
       applicationId: 'applicationId',
@@ -1324,6 +1349,16 @@ describe('sdk', () => {
       });
 
       smartcar.openDialog(dialogOptions);
+      expect(window.open).toHaveBeenCalled();
+    });
+
+    test('openDialog works when called without arguments', () => {
+      const mockOpen = jest.fn();
+      window.open = mockOpen;
+
+      const smartcar = new Smartcar(options);
+      smartcar.openDialog();
+
       expect(window.open).toHaveBeenCalled();
     });
 
