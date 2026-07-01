@@ -10,8 +10,8 @@ class Smartcar {
    * @param {?Error} error - something went wrong in Connect; this
    * normally indicates that the user denied access to your application or does not
    * have a connected vehicle
-   * @param {String} code - the authorization code to be exchanged from a
-   * backend sever for an access token
+   * @param {String} [code] - the authorization code to be exchanged from a
+   * backend server for an access token; undefined for response_type=none flows
    * @param {Object} [state] - contains state if it was set on the initial
    * authorization request
    * @param {String} [virtualKeyUrl] - virtual key URL used by Tesla to register
@@ -19,6 +19,7 @@ class Smartcar {
    * any commands on a Tesla vehicle. It is an optional argument as it is only included in
    * specific cases.
    * @param {String} userId - A unique identifier for the vehicle owner that granted access.
+   * @param {String} [externalId] - The external_id returned by Connect.
    */
 
   /**
@@ -36,6 +37,10 @@ class Smartcar {
    * Launch Smartcar Connect in [test mode](https://smartcar.com/docs/guides/testing/).
    * @param {String} [options.mode='live'] - Determine what mode Smartcar Connect should be
    * launched in. Should be one of test, live or simulated.
+   * @param {String} [options.responseType='code'] - OAuth response type. Use 'none' for
+   * redirect-less M2M flows; defaults to 'code'.
+   * @param {String} [options.externalId] - An optional external identifier passed through
+   * to Connect and returned in the onComplete callback.
  */
   constructor(options) {
     // polyfill String.prototype.startsWith for IE11 support
@@ -80,7 +85,8 @@ class Smartcar {
         'The "mode" parameter MUST be one of the following: \'test\', \'live\', \'simulated\'',
       );
     }
-    this.responseType = 'code';
+    this.responseType = options.responseType || 'code';
+    this.externalId = options.externalId;
     // identifier for matching message event and multiple Smartcar instances
     // it is a string composed of a timestamp and a 8-digit random number
     this.instanceId = (new Date()).getTime() + String(Math.random()).slice(2, 10);
@@ -160,6 +166,8 @@ class Smartcar {
 
         const userId = message.userId;
 
+        const externalId = message.externalId;
+
         /**
          * Call `onComplete` with parameters even if developer is not using
          * a Smartcar-hosted redirect. Regardless of if they are using a
@@ -172,7 +180,7 @@ class Smartcar {
          * parameters they must also handle populating the corresponding query
          * parameters in their redirect uri.
          */
-        this.onComplete(err, message.code, originalState, virtualKeyUrl, userId);
+        this.onComplete(err, message.code, originalState, virtualKeyUrl, userId, externalId);
       }
     };
 
@@ -191,6 +199,13 @@ class Smartcar {
   static _validateConstructorOptions(options) {
     if (!options.applicationId && !options.clientId) {
       throw new TypeError('An applicationId option must be provided');
+    }
+
+    const VALID_RESPONSE_TYPES = ['code', 'none'];
+    if (options.responseType && !VALID_RESPONSE_TYPES.includes(options.responseType)) {
+      throw new Error(
+        `The "responseType" option must be one of: ${VALID_RESPONSE_TYPES.join(', ')}`,
+      );
     }
 
     if (options.redirectUri) {
@@ -380,6 +395,10 @@ class Smartcar {
       link += `&user=${encodeURIComponent(options.user)}`;
     }
 
+    if (this.externalId) {
+      link += `&external_id=${encodeURIComponent(this.externalId)}`;
+    }
+
     return link;
   }
 
@@ -409,6 +428,7 @@ class Smartcar {
    * the popup window
    */
   openDialog(options) {
+    options = options || {};
     const windowOptions = Smartcar._getWindowOptions(options.windowOptions || {});
     const href = this.getAuthUrl(options);
     window.open(href, 'Connect your car', windowOptions);

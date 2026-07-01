@@ -56,6 +56,8 @@ Initializes Smartcar class.
 | [options.onComplete] | [<code>OnComplete</code>](#OnComplete) |  | called on completion of Smartcar Connect |
 | [options.testMode] | <code>Boolean</code> | <code>false</code> | Deprecated, please use `mode` instead. Launch Smartcar Connect in [test mode](https://smartcar.com/docs/guides/testing/). |
 | [options.mode] | <code>String</code> | <code>&#x27;live&#x27;</code> | Determine what mode Smartcar Connect should be launched in. Should be one of test, live or simulated. |
+| [options.responseType] | <code>String</code> | <code>&#x27;code&#x27;</code> | OAuth response type. Use `'none'` for redirect-less M2M flows. Must be one of `'code'` or `'none'`. |
+| [options.externalId] | <code>String</code> |  | An optional external identifier passed through to Connect and returned in the onComplete callback. |
 
 <a name="Smartcar+getAuthUrl"></a>
 
@@ -204,10 +206,11 @@ Invalid subscription error returned by Connect.
 | Param | Type | Description |
 | --- | --- | --- |
 | error | <code>Error</code> | something went wrong in Connect; this normally indicates that the user denied access to your application or does not have a connected vehicle |
-| code | <code>String</code> | the authorization code to be exchanged from a backend sever for an access token |
+| [code] | <code>String</code> | the authorization code to be exchanged from a backend server for an access token; `undefined` for `response_type=none` flows |
 | [state] | <code>Object</code> | contains state if it was set on the initial authorization request |
 | [virtualKeyUrl] | <code>String</code> | virtual key URL used by Tesla to register Smartcar's virtual key on a vehicle. This registration will be required in order to use any commands on a Tesla vehicle. It is an optional argument as it is only included in specific cases. |
-| userId | <code>String</code> | A unique identifier for the vehicle owner that granted access. |
+| userId | <code>String</code> | A unique Smartcar identifier for the vehicle owner that granted access. |
+| [externalId] | <code>String</code> | The external_id returned by Connect. |
 
 <a name="WindowOptions"></a>
 
