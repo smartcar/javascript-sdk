@@ -1303,6 +1303,54 @@ describe('sdk', () => {
     expect(link).toBe(expectedLink);
   });
 
+  test('generates link with externalId set to null to clear it', () => {
+    const smartcar = new Smartcar({
+      applicationId: 'applicationId',
+      redirectUri: 'https://smartcar.com',
+      scope: ['read_vehicle_info', 'read_odometer'],
+      onComplete: jest.fn(),
+      externalId: null,
+    });
+
+    const link = smartcar.getAuthUrl();
+
+    const expectedLink =
+      `https://connect.smartcar.com/oauth/authorize?response_type=code&application_id=applicationId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=auto&scope=read_vehicle_info%20read_odometer&mode=live&state=${getEncodedDefaultState(smartcar.instanceId)}&external_id=null`;
+    expect(link).toBe(expectedLink);
+  });
+
+  test('generates link with externalId set to \'null\' to clear it', () => {
+    const smartcar = new Smartcar({
+      applicationId: 'applicationId',
+      redirectUri: 'https://smartcar.com',
+      scope: ['read_vehicle_info', 'read_odometer'],
+      onComplete: jest.fn(),
+      externalId: 'null',
+    });
+
+    const link = smartcar.getAuthUrl();
+
+    const expectedLink =
+      `https://connect.smartcar.com/oauth/authorize?response_type=code&application_id=applicationId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=auto&scope=read_vehicle_info%20read_odometer&mode=live&state=${getEncodedDefaultState(smartcar.instanceId)}&external_id=null`;
+    expect(link).toBe(expectedLink);
+  });
+
+  test('generates link without externalId when not provided', () => {
+    const smartcar = new Smartcar({
+      applicationId: 'applicationId',
+      redirectUri: 'https://smartcar.com',
+      scope: ['read_vehicle_info', 'read_odometer'],
+      onComplete: jest.fn(),
+    });
+
+    const link = smartcar.getAuthUrl();
+
+    const expectedLink =
+      `https://connect.smartcar.com/oauth/authorize?response_type=code&application_id=applicationId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=auto&scope=read_vehicle_info%20read_odometer&mode=live&state=${getEncodedDefaultState(smartcar.instanceId)}`;
+    expect(link).not.toContain('external_id');
+    expect(link).toBe(expectedLink);
+  });
+
   test('generates link without redirectUri and scope', () => {
     const smartcar = new Smartcar({
       applicationId: 'applicationId',

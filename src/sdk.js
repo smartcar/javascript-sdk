@@ -40,7 +40,8 @@ class Smartcar {
    * @param {String} [options.responseType='code'] - OAuth response type. Use 'none' for
    * redirect-less M2M flows; defaults to 'code'.
    * @param {String} [options.externalId] - An optional external identifier passed through
-   * to Connect and returned in the onComplete callback.
+   * to Connect and returned in the onComplete callback. Pass `null` to explicitly clear a
+   * previously set externalId; omit the option (`undefined`) to leave it unset.
  */
   constructor(options) {
     // polyfill String.prototype.startsWith for IE11 support
@@ -400,8 +401,11 @@ class Smartcar {
       link += `&user=${encodeURIComponent(options.user)}`;
     }
 
-    if (this.externalId) {
-      link += `&external_id=${encodeURIComponent(this.externalId)}`;
+    if (this.externalId !== undefined) {
+      const externalId = this.externalId === null
+        ? 'null'
+        : encodeURIComponent(this.externalId);
+      link += `&external_id=${externalId}`;
     }
 
     return link;
