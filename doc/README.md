@@ -57,7 +57,7 @@ Initializes Smartcar class.
 | [options.testMode] | <code>Boolean</code> | <code>false</code> | Deprecated, please use `mode` instead. Launch Smartcar Connect in [test mode](https://smartcar.com/docs/guides/testing/). |
 | [options.mode] | <code>String</code> | <code>&#x27;live&#x27;</code> | Determine what mode Smartcar Connect should be launched in. Should be one of test, live or simulated. |
 | [options.responseType] | <code>String</code> | <code>&#x27;code&#x27;</code> | OAuth response type. Use 'none' for redirect-less M2M flows; defaults to 'code'. |
-| [options.externalId] | <code>String</code> |  | An optional external identifier passed through to Connect and returned in the onComplete callback. |
+| [options.externalId] | <code>String</code> |  | An optional external identifier passed through to Connect and returned in the onComplete callback. Pass `null` to explicitly clear a previously set externalId; omit the option (`undefined`) to leave it unset. |
 
 <a name="Smartcar+getAuthUrl"></a>
 
