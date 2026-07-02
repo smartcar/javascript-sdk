@@ -7,8 +7,7 @@
   actions:
   - action: Install Dependencies
     type: BUILD
-    execute_commands:
-    - npm ci
+    commands: npm ci
     shell: BASH
     docker_image_name: library/node
     docker_image_tag: 20
@@ -16,14 +15,13 @@
     type: AWS_CLI_2
     integration: AWS_Production_Internal
     shell: BASH
-    setup_commands:
-    - apt-get update || true
-    - apt-get install -y curl xz-utils jq git
-    - curl -fsSL https://nodejs.org/dist/v20.19.0/node-v20.19.0-linux-x64.tar.xz -o /tmp/node-v20.19.0-linux-x64.tar.xz
-    - tar -xJf /tmp/node-v20.19.0-linux-x64.tar.xz -C /usr/local --strip-components=1
-    - git --version
-    - node --version
-    - npm --version
-    execute_commands:
-    - npx semantic-release --extends ./build/sr-configs/publish.js
+    setup_commands: |-
+      apt-get update || true
+      apt-get install -y curl xz-utils jq git
+      curl -fsSL https://nodejs.org/dist/v20.19.0/node-v20.19.0-linux-x64.tar.xz -o /tmp/node-v20.19.0-linux-x64.tar.xz
+      tar -xJf /tmp/node-v20.19.0-linux-x64.tar.xz -C /usr/local --strip-components=1
+      git --version
+      node --version
+      npm --version
+    commands: npx semantic-release --extends ./build/sr-configs/publish.js
     region: us-west-2
