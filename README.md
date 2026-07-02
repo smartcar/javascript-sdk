@@ -7,7 +7,7 @@ The official Smartcar JavaScript SDK.
 The [Smartcar API](https://smartcar.com/docs) lets you read vehicle data
 (location, odometer) and send commands to vehicles (lock, unlock) using HTTP requests.
 
-To make requests to a vehicle from a web application, the end user must connect their vehicle using [Smartcar Connect](https://smartcar.com/docs/api#smartcar-connect). The Smartcar JavaScript SDK provides an easy way to launch and handle Connect to retrieve the resulting `code`.
+To make requests to a vehicle from a web application, the end user must connect their vehicle using [Smartcar Connect](https://smartcar.com/docs/connect/what-is-connect). The Smartcar JavaScript SDK provides an easy way to launch and handle Connect to retrieve the resulting `code`, or to complete a redirect-less M2M authorization flow using `response_type=none`.
 
 Before integrating with the JavaScript SDK, you'll need to register an application in the [Smartcar dashboard](https://dashboard.smartcar.com). Once you have registered an application, you will have an Application ID, which will allow you to launch Connect and authorize users.
 
@@ -24,7 +24,7 @@ npm install @smartcar/auth
 ### Smartcar CDN
 
 ```html
-<script src="https://javascript-sdk.smartcar.com/2.13.1/sdk.js"></script>
+<script src="https://javascript-sdk.smartcar.com/2.14.0/sdk.js"></script>
 ```
 
 ## SDK reference
@@ -132,6 +132,34 @@ const url = smartcar.getAuthUrl();
 
 **Reference:** [`smartcar.getAuthUrl(options)`](doc#Smartcar+getAuthUrl)
 
+### response_type=none flow
+
+For M2M use cases, you can launch Connect with `responseType: 'none'` to complete authorization without exchanging the authorization code in the browser. This mode is intended for M2M Auth flow that does not require a vehicle-scope authorization code.
+
+If you provide a `redirectUri`, Connect redirects the user after authorization completes and `onComplete` fires as normal. If you do not provide a `redirectUri`, the user lands on a Smartcar-hosted page after authorization completes.
+
+It is recommended that you pass an `externalId` to associate the vehicle connection with an identifier in your system. It will be returned in the `onComplete` callback.
+
+```javascript
+const smartcar = new Smartcar({
+  applicationId: '<your-application-id>',
+  scope: ['read_vehicle_info', 'read_odometer'],
+  redirectUri: '<your-redirect-uri>'
+  responseType: 'none',
+  externalId: '<your-external-id>',
+});
+```
+
+Launch Connect as usual:
+
+```javascript
+smartcar.openDialog();
+```
+
+Use `externalId` to correlate the completed authorization with a user in your system in webhook delivieres or by making a request to the `/connections` endpoint filtered by the user's `externalId`.
+
+**Reference:** [`new Smartcar(options)`](doc#new_Smartcar_new)
+
 ### Server-side redirect handling
 
 In a traditional OAuth implementation, the redirect URI is normally set to your application's back end, rather than Smartcar's special JavaScript SDK redirect page described in the flow above. Instead of using the JavaScript SDK redirect page, you can still choose to use the traditional server-side architecture (described below). In this architecture you would receive the authorization code on a back-end route instead of the client-side `onComplete` callback.
@@ -180,4 +208,4 @@ https://application-backend.com/page?error=access_denied&error_description=User+
 [tag-image]: https://img.shields.io/github/tag/smartcar/javascript-sdk.svg
 
 <!-- Please do not modify or remove this, it is used by the build process -->
-[version]: 2.13.1
+[version]: 2.14.0

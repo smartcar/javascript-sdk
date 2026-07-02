@@ -25,4 +25,5 @@
     execute_commands:
     - npx gulp build:cdn
     - npx gulp publish:cdn
+    - aws cloudfront create-invalidation --distribution-id E31YSGLVNQFV7R --paths "/v2/redirect.js"
     region: us-west-2

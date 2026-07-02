@@ -137,6 +137,23 @@ describe('sdk', () => {
       /* eslint-enable */
     });
 
+    test('warns when responseType is none and no redirectUri is provided with onComplete', () => {
+      const spy = jest.spyOn(global.console, 'warn').mockImplementation();
+
+      // eslint-disable-next-line no-new
+      new Smartcar({
+        applicationId: 'my-id',
+        responseType: 'none',
+        onComplete: jest.fn(),
+      });
+
+      expect(spy).toHaveBeenCalledWith(
+        'The "onComplete" callback will not fire for responseType "none" unless a redirectUri is provided.',
+      );
+
+      spy.mockRestore();
+    });
+
     test('initializes correctly w/ self hosted redirect', () => {
       const options = {
         applicationId: 'applicationId',
@@ -482,6 +499,7 @@ describe('sdk', () => {
           expect.anything(),
           undefined,
           'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
+          undefined,
         );
       });
 
@@ -511,7 +529,7 @@ describe('sdk', () => {
 
       smartcar.messageHandler(event);
 
-      expect(smartcar.onComplete).toBeCalledWith(null, 'super-secret-code', 'some-state', 'https://www.tesla.com/_ak/smartcar.com', 'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c');
+      expect(smartcar.onComplete).toBeCalledWith(null, 'super-secret-code', 'some-state', 'https://www.tesla.com/_ak/smartcar.com', 'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c', undefined);
     });
 
     test('fires onComplete w/o error when error: null in postMessage', () => {
@@ -545,6 +563,7 @@ describe('sdk', () => {
         'some-state',
         undefined,
         'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
+        undefined,
       );
     });
 
@@ -579,6 +598,7 @@ describe('sdk', () => {
         'some-state',
         undefined,
         'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
+        undefined,
       );
     });
 
@@ -624,6 +644,7 @@ describe('sdk', () => {
           'some-state',
           undefined,
           'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
+          undefined,
         );
       });
 
@@ -772,6 +793,7 @@ describe('sdk', () => {
           'some-state',
           undefined,
           'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
+          undefined,
         );
       });
 
@@ -809,6 +831,7 @@ describe('sdk', () => {
           'some-state',
           undefined,
           'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
+          undefined,
         );
       });
 
@@ -847,6 +870,7 @@ describe('sdk', () => {
           'some-state',
           undefined,
           'e9e10eb2-63d7-42ab-96fd-bbe7f4abff4c',
+          undefined,
         );
       });
   });
@@ -1002,6 +1026,15 @@ describe('sdk', () => {
       );
     });
 
+    test('constructor errors on invalid responseType', () => {
+      expect(
+        () =>
+          new Smartcar({
+            applicationId: 'applicationId',
+            responseType: 'invalid',
+          }),
+      ).toThrow('The "responseType" option must be one of: code, none');
+    });
 
     test('generate link when vehicleInfo={...} included', () => {
       const options = {
@@ -1254,6 +1287,70 @@ describe('sdk', () => {
     expect(link).toBe(expectedLink);
   });
 
+  test('generates link with externalId', () => {
+    const smartcar = new Smartcar({
+      applicationId: 'applicationId',
+      redirectUri: 'https://smartcar.com',
+      scope: ['read_vehicle_info', 'read_odometer'],
+      onComplete: jest.fn(),
+      externalId: 'test-external-id',
+    });
+
+    const link = smartcar.getAuthUrl();
+
+    const expectedLink =
+      `https://connect.smartcar.com/oauth/authorize?response_type=code&application_id=applicationId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=auto&scope=read_vehicle_info%20read_odometer&mode=live&state=${getEncodedDefaultState(smartcar.instanceId)}&external_id=test-external-id`;
+    expect(link).toBe(expectedLink);
+  });
+
+  test('generates link with externalId set to null to clear it', () => {
+    const smartcar = new Smartcar({
+      applicationId: 'applicationId',
+      redirectUri: 'https://smartcar.com',
+      scope: ['read_vehicle_info', 'read_odometer'],
+      onComplete: jest.fn(),
+      externalId: null,
+    });
+
+    const link = smartcar.getAuthUrl();
+
+    const expectedLink =
+      `https://connect.smartcar.com/oauth/authorize?response_type=code&application_id=applicationId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=auto&scope=read_vehicle_info%20read_odometer&mode=live&state=${getEncodedDefaultState(smartcar.instanceId)}&external_id=null`;
+    expect(link).toBe(expectedLink);
+  });
+
+  test('generates link with externalId set to \'null\' to clear it', () => {
+    const smartcar = new Smartcar({
+      applicationId: 'applicationId',
+      redirectUri: 'https://smartcar.com',
+      scope: ['read_vehicle_info', 'read_odometer'],
+      onComplete: jest.fn(),
+      externalId: 'null',
+    });
+
+    const link = smartcar.getAuthUrl();
+
+    const expectedLink =
+      `https://connect.smartcar.com/oauth/authorize?response_type=code&application_id=applicationId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=auto&scope=read_vehicle_info%20read_odometer&mode=live&state=${getEncodedDefaultState(smartcar.instanceId)}&external_id=null`;
+    expect(link).toBe(expectedLink);
+  });
+
+  test('generates link without externalId when not provided', () => {
+    const smartcar = new Smartcar({
+      applicationId: 'applicationId',
+      redirectUri: 'https://smartcar.com',
+      scope: ['read_vehicle_info', 'read_odometer'],
+      onComplete: jest.fn(),
+    });
+
+    const link = smartcar.getAuthUrl();
+
+    const expectedLink =
+      `https://connect.smartcar.com/oauth/authorize?response_type=code&application_id=applicationId&redirect_uri=https%3A%2F%2Fsmartcar.com&approval_prompt=auto&scope=read_vehicle_info%20read_odometer&mode=live&state=${getEncodedDefaultState(smartcar.instanceId)}`;
+    expect(link).not.toContain('external_id');
+    expect(link).toBe(expectedLink);
+  });
+
   test('generates link without redirectUri and scope', () => {
     const smartcar = new Smartcar({
       applicationId: 'applicationId',
@@ -1300,6 +1397,16 @@ describe('sdk', () => {
       });
 
       smartcar.openDialog(dialogOptions);
+      expect(window.open).toHaveBeenCalled();
+    });
+
+    test('openDialog works when called without arguments', () => {
+      const mockOpen = jest.fn();
+      window.open = mockOpen;
+
+      const smartcar = new Smartcar(options);
+      smartcar.openDialog();
+
       expect(window.open).toHaveBeenCalled();
     });
 

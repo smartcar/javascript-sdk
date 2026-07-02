@@ -37,6 +37,10 @@
     userId: params.get('user_id'),
   };
 
+  if (params.has('external_id')) {
+    message.externalId = params.get('external_id');
+  }
+
   // if no `app_origin` given, post to same origin as redirect page (assuming
   // server side rendered architecture)
   const targetOrigin = params.get('app_origin') || origin;
