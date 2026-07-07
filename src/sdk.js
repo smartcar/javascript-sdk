@@ -230,13 +230,7 @@ class Smartcar {
           );
         }
       }
-    } else if (options.responseType === 'none' && options.onComplete) {
-      // eslint-disable-next-line no-console
-      console.warn(
-        'The "onComplete" callback will not fire for responseType "none" unless a redirectUri is provided.',
-      );
     }
-
   }
 
   /**
@@ -330,6 +324,7 @@ class Smartcar {
    * &flags=country:DE color:00819D
    * &user=2dad4eaf-9094-4bff-bb0f-ffbbdde8b562
    */
+  // eslint-disable-next-line complexity
   getAuthUrl(options) {
     options = options || {};
 
@@ -406,6 +401,10 @@ class Smartcar {
         ? 'null'
         : encodeURIComponent(this.externalId);
       link += `&external_id=${externalId}`;
+    }
+
+    if (this.responseType === 'none' && !this.redirectUri) {
+      link += `&app_origin=${encodeURIComponent(window.location.origin)}`;
     }
 
     return link;

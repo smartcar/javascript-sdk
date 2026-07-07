@@ -137,23 +137,6 @@ describe('sdk', () => {
       /* eslint-enable */
     });
 
-    test('warns when responseType is none and no redirectUri is provided with onComplete', () => {
-      const spy = jest.spyOn(global.console, 'warn').mockImplementation();
-
-      // eslint-disable-next-line no-new
-      new Smartcar({
-        applicationId: 'my-id',
-        responseType: 'none',
-        onComplete: jest.fn(),
-      });
-
-      expect(spy).toHaveBeenCalledWith(
-        'The "onComplete" callback will not fire for responseType "none" unless a redirectUri is provided.',
-      );
-
-      spy.mockRestore();
-    });
-
     test('initializes correctly w/ self hosted redirect', () => {
       const options = {
         applicationId: 'applicationId',
@@ -1362,6 +1345,45 @@ describe('sdk', () => {
     const expectedLink =
       `https://connect.smartcar.com/oauth/authorize?response_type=code&application_id=applicationId&approval_prompt=auto&mode=live&state=${getEncodedDefaultState(smartcar.instanceId)}`;
     expect(link).toBe(expectedLink);
+  });
+
+  test('generates link with app_origin when responseType is none', () => {
+    const smartcar = new Smartcar({
+      applicationId: 'applicationId',
+      responseType: 'none',
+      externalId: 'test-external-id',
+    });
+
+    const link = smartcar.getAuthUrl();
+
+    const expectedLink =
+      `https://connect.smartcar.com/oauth/authorize?response_type=none&application_id=applicationId&approval_prompt=auto&mode=live&state=${getEncodedDefaultState(smartcar.instanceId)}&external_id=test-external-id&app_origin=${encodeURIComponent(window.location.origin)}`;
+    expect(link).toBe(expectedLink);
+  });
+
+  test('generates link without app_origin when responseType is code', () => {
+    const smartcar = new Smartcar({
+      applicationId: 'applicationId',
+      redirectUri: 'https://smartcar.com',
+      onComplete: jest.fn(),
+    });
+
+    const link = smartcar.getAuthUrl();
+
+    expect(link).not.toContain('app_origin');
+  });
+
+  test('generates link without app_origin when responseType is none but redirectUri is set', () => {
+    const smartcar = new Smartcar({
+      applicationId: 'applicationId',
+      redirectUri: 'https://smartcar.com',
+      responseType: 'none',
+      onComplete: jest.fn(),
+    });
+
+    const link = smartcar.getAuthUrl();
+
+    expect(link).not.toContain('app_origin');
   });
 
   describe('openDialog and addClickHandler', () => {
