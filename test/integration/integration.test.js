@@ -32,7 +32,7 @@ const chromeOptions = new chrome.Options()
   .setUserPreferences({credential_enable_service: false});
 
 if (HEADLESS) {
-  firefoxOptions.headless();
+  firefoxOptions.addArguments('--headless');
   chromeOptions.addArguments('headless');
 }
 
