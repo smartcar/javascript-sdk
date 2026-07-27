@@ -1,0 +1,60 @@
+# Canonical Smartcar Dependabot config (ENG-2182).
+# Synced across active repos — do NOT hand-edit per-repo; change the template
+# and re-sync so the ignore-list stays consistent org-wide.
+#
+# The `ignore:` block is the single source of truth for deferred carve-outs.
+# Each TEMPORARY entry cites the ticket that owns it; removing the entry is a
+# close-out step on that ticket (see ENG-2182 for the management policy).
+version: 2
+
+updates:
+  # ---------- npm (app + lib dependencies) ----------
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+    # Published libs release via semantic-release: a runtime-dep security fix
+    # MUST publish (fix:) so the cascade reaches consumers; dev-dep bumps must
+    # NOT (chore:). Services ignore the distinction — harmless there.
+    commit-message:
+      prefix: "fix(deps)"
+      prefix-development: "chore(deps)"
+    groups:
+      # One PR/week for all non-major bumps → CI runs once, not per-dependency.
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
+    ignore:
+      # ===== PERMANENT (policy — never remove) =====
+      # Internal packages cascade via semantic-release, not Dependabot.
+      - dependency-name: "@smartcar/*"
+      # Majors are taken deliberately via carve-out tickets, never automatically.
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+      # sequelize stays on v6 — v7 is out of dependabot scope (ENG-1200).
+      - dependency-name: "sequelize"
+
+      # ===== TEMPORARY (remove when the linked carve-out lands) =====
+      - dependency-name: "jsdoc"              # ENG-1266
+      - dependency-name: "mocha"              # ENG-1265
+      - dependency-name: "ava"                # ENG-1299
+      - dependency-name: "@workos-inc/node"   # ENG-1332
+      - dependency-name: "google-spreadsheet" # ENG-1333 (db-passthrough)
+
+  # ---------- GitHub Actions (workflow hygiene) ----------
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 3
+    labels:
+      - dependencies
+    groups:
+      github-actions:
+        patterns: ["*"]
