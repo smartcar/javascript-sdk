@@ -1,10 +1,13 @@
 # Canonical Smartcar Dependabot config (ENG-2182).
-# Synced across active repos — do NOT hand-edit per-repo; change the template
-# and re-sync so the ignore-list stays consistent org-wide.
 #
-# The `ignore:` block is the single source of truth for deferred carve-outs.
-# Each TEMPORARY entry cites the ticket that owns it; removing the entry is a
-# close-out step on that ticket (see ENG-2182 for the management policy).
+# This is a BASELINE for repos that don't already have a thoughtful config.
+# Repos with deliberate, service-specific configs (framework groupings, runtime
+# version ceilings, or intentionally-disabled updates) should KEEP them — do not
+# flatten those to this template.
+#
+# The `ignore:` block's TEMPORARY entries are the single source of truth for
+# deferred carve-outs; removing an entry is a close-out step on its ticket
+# (see ENG-2182 for the management policy).
 version: 2
 
 updates:
@@ -19,16 +22,34 @@ updates:
       - dependencies
     # Published libs release via semantic-release: a runtime-dep security fix
     # MUST publish (fix:) so the cascade reaches consumers; dev-dep bumps must
-    # NOT (chore:). Services ignore the distinction — harmless there.
+    # NOT (chore:). The prod/dev group split below lines up with this, so each
+    # PR carries the right prefix automatically. Services ignore the distinction.
     commit-message:
       prefix: "fix(deps)"
       prefix-development: "chore(deps)"
     groups:
-      # One PR/week for all non-major bumps → CI runs once, not per-dependency.
-      minor-and-patch:
-        update-types:
-          - minor
-          - patch
+      # Split production vs development so runtime changes get their own
+      # (riskier) review, and — for libs — publish under fix: while dev-only
+      # bumps stay chore: (no needless release). One PR each per week.
+      production-minor-patch:
+        applies-to: version-updates
+        dependency-type: production
+        update-types: ["minor", "patch"]
+      development-minor-patch:
+        applies-to: version-updates
+        dependency-type: development
+        update-types: ["minor", "patch"]
+      # Batch all security fixes into ONE PR instead of one-per-advisory.
+      security-updates:
+        applies-to: security-updates
+        patterns: ["*"]
+      # ---- OPTIONAL per-repo lockstep group (uncomment + adapt) ----
+      # For packages that MUST move together (e.g. @sentry/node +
+      # @sentry/profiling-node, which track each other's version) — group them
+      # INCLUDING majors so a bump never splits across PRs:
+      # sentry:
+      #   patterns: ["@sentry/*"]
+      #   update-types: ["major", "minor", "patch"]
     ignore:
       # ===== PERMANENT (policy — never remove) =====
       # Internal packages cascade via semantic-release, not Dependabot.
@@ -38,6 +59,13 @@ updates:
         update-types: ["version-update:semver-major"]
       # sequelize stays on v6 — v7 is out of dependabot scope (ENG-1200).
       - dependency-name: "sequelize"
+      # ---- OPTIONAL per-repo version ceilings (uncomment + adapt; always say WHY) ----
+      # For a dep that can't cross a major on THIS service's runtime, pin below
+      # it so the grouped bump still resolves. Examples seen in the fleet:
+      # - dependency-name: "uuid"           # v12 is ESM-only; CJS service on Node 20
+      #   versions: [">=12"]
+      # - dependency-name: "connect-redis"  # v9 drops ioredis → breaks session writes
+      #   versions: [">=9"]
 
       # ===== TEMPORARY (remove when the linked carve-out lands) =====
       - dependency-name: "jsdoc"              # ENG-1266
